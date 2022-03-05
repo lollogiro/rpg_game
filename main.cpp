@@ -14,6 +14,7 @@ int main(int argc, char** argv){
     do{
         userInput = getch();
 
+
     }while(userInput != 'q');
     endwin();
 }

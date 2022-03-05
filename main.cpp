@@ -12,6 +12,7 @@ int main(int argc, char** argv){
     curs_set(0);
     char userInput;
     do{
+
         userInput = getch();
 
     }while(userInput != 'q');

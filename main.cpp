@@ -6,7 +6,14 @@
 
 int main(int argc, char** argv){
     initscr();
-    noecho();
+    //noecho();
+    //raw();
+    halfdelay(0.5);
+    curs_set(0);
+    char userInput;
+    do{
+        userInput = getch();
 
+    }while(userInput != 'q');
     endwin();
 }

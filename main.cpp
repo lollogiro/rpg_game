@@ -7,13 +7,15 @@
 int main(int argc, char** argv){
     initscr();
     //noecho();
-    //raw();
-    halfdelay(0.5);
+    raw();
+    halfdelay(2);//0.2 sec
     curs_set(0);
-    char userInput;
-    do{
+    char userInput = 'a'; //random assignation
+    int i = 0;
+    while(userInput != 'q'){
         userInput = getch();
-        //
-    }while(userInput != 'q');
+        printf("%d ",i=i+1);
+        refresh();
+    }
     endwin();
 }

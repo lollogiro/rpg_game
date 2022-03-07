@@ -22,7 +22,7 @@ int main(int argc, char** argv){
 
 
     Player player = Player('@', win);
-    player.printEntity();
+    player.printPlayer();
 
     char userInput = 'a'; //random assignation
     while(userInput != 'q'){

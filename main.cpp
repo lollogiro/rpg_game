@@ -20,6 +20,7 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
+
     Player player = Player('@', win);
     player.printEntity();
 

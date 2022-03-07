@@ -29,7 +29,7 @@ public:
         this->win = win;
     }
 
-    void printEntity(){
+    void printPlayer(){
         mvwaddch(win, posY, posX, mapSymbol);
         wrefresh(win);
     }

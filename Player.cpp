@@ -13,6 +13,7 @@ protected:
     WINDOW *win;
 
 public:
+    //da usare quando si transita tra livelli
     Player(char mapSymbol, int posX, int posY, int lifePoints, WINDOW *win) {
         this->mapSymbol = mapSymbol;
         this->posX = posX;
@@ -21,6 +22,7 @@ public:
         this->win = win;
     }
 
+    //utilizzato nell prima inizializzazione
     Player(char mapSymbol, WINDOW *win) {
         this->mapSymbol = mapSymbol;
         this->posX = 1;

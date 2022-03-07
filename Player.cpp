@@ -36,6 +36,57 @@ public:
         wrefresh(win);
     }
 
+    void movePlayerUp(){
+        mvwaddch(win, posY, posX, ' ');
+        posY--;
+        if(posY < 1) posY = 1;
+        wrefresh(win);
+    }
+
+    void movePlayerDown(){
+        mvwaddch(win, posY, posX, ' ');
+        posY++;
+        if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
+        wrefresh(win);
+    }
+
+    void movePlayerLeft(){
+        mvwaddch(win, posY, posX, ' ');
+        posX--;
+        if(posX < 1) posX = 1;
+        wrefresh(win);
+    }
+
+    void movePlayerRight(){
+        mvwaddch(win, posY, posX, ' ');
+        posX++;
+        if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
+        wrefresh(win);
+    }
+
+    void displayPlayerMove(){
+        int mv = wgetch(win);
+        switch(mv){
+            case KEY_UP:
+                movePlayerUp();
+                break;
+            case KEY_DOWN:
+                movePlayerDown();
+                break;
+            case KEY_LEFT:
+                movePlayerLeft();
+                break;
+            case KEY_RIGHT:
+                movePlayerRight();
+                break;
+            case ' ':
+                //TODO implementare metodo per sparare
+            default:
+                break;
+        }
+    }
+
+    //metodi get solo per test
     char getMapSymbol() const {
         return mapSymbol;
     }

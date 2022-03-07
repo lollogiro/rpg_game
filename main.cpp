@@ -11,10 +11,9 @@ int main(int argc, char** argv){
     halfdelay(2);//0.2 sec
     curs_set(0);
     char userInput = 'a'; //random assignation
-    int i = 0;
+
     while(userInput != 'q'){
         userInput = getch();
-        printf("%d ",i=i+1);
         refresh();
     }
     endwin();

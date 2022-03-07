@@ -4,6 +4,8 @@
 
 #include <curses.h>
 
+using namespace std;
+
 class Player {
 protected:
     char mapSymbol;
@@ -22,7 +24,7 @@ public:
         this->win = win;
     }
 
-    //utilizzato nell prima inizializzazione
+    //utilizzato nella prima inizializzazione
     Player(char mapSymbol, WINDOW *win) {
         this->mapSymbol = mapSymbol;
         this->posX = 1;
@@ -64,9 +66,8 @@ public:
         wrefresh(win);
     }
 
-    void displayPlayerMove(){
-        int mv = wgetch(win);
-        switch(mv){
+    void displayPlayerMove(int userInput){
+        switch(userInput){
             case KEY_UP:
                 movePlayerUp();
                 break;
@@ -79,8 +80,8 @@ public:
             case KEY_RIGHT:
                 movePlayerRight();
                 break;
-            case ' ':
-                //TODO implementare metodo per sparare
+            /*case ' ':
+                //TODO implementare metodo per sparare*/
             default:
                 break;
         }

@@ -3,17 +3,19 @@
 //
 
 #include <curses.h>
+#include "Player.h"
 
-#include "Player.cpp"
+using namespace std;
 
 int main(int argc, char** argv){
     initscr();
-    //noecho();
+    noecho();
     raw();
     halfdelay(2);//0.2 sec
     curs_set(0);
 
     WINDOW* win = newwin(30, 60, 5, 10);
+    keypad(win, true);
     refresh();
     box(win, 0, 0);
     wrefresh(win);
@@ -21,13 +23,20 @@ int main(int argc, char** argv){
     refresh();
 
 
-    Player player = Player('@', win);
-    player.printPlayer();
+    Player* player = new Player('@', win);
 
-    char userInput = 'a'; //random assignation
+    player->printPlayer();
+
+    int userInput = 'a';
+
+    /*do{
+        player->printPlayer();
+    }while(player->displayPlayerMove() != 'q');*/
+
     while(userInput != 'q'){
-        userInput = getch();
-        refresh();
+        player->printPlayer();
+        userInput = wgetch(win);
+        player->displayPlayerMove(userInput);
     }
 
     endwin();

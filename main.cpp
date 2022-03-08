@@ -22,8 +22,6 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    //prova commit
-
     Player* player = new Player('@', win);
 
     player->printPlayer();

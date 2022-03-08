@@ -22,16 +22,11 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-
     Player* player = new Player('@', win);
 
     player->printPlayer();
 
     int userInput = 'a';
-
-    /*do{
-        player->printPlayer();
-    }while(player->displayPlayerMove() != 'q');*/
 
     while(userInput != 'q'){
         player->printPlayer();

@@ -11,7 +11,7 @@ int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(2);//0.2 sec
+    halfdelay(5);//0.5 sec
     curs_set(0);
 
     WINDOW* win = newwin(30, 60, 5, 10);

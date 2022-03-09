@@ -66,6 +66,31 @@ public:
         wrefresh(win);
     }
 
+    void createBullet(int bulletDirection){
+        
+    }
+
+    void shootABullet(){
+        int bulletDirection = wgetch(win);
+        switch (bulletDirection) {
+            case KEY_UP:
+                printf("Bullet Up ");
+                break;
+            case KEY_DOWN:
+                printf("Bullet Down ");
+                break;
+            case KEY_LEFT:
+                printf("Bullet Left ");
+                break;
+            case KEY_RIGHT:
+                printf("Bullet Right ");
+                break;
+            default:
+                printf("Bullet Time Expired ");
+                break;
+        }
+    }
+
     void displayPlayerMove(int userInput){
         switch(userInput){
             case KEY_UP:
@@ -80,8 +105,8 @@ public:
             case KEY_RIGHT:
                 movePlayerRight();
                 break;
-            /*case ' ':
-                //TODO implementare metodo per sparare*/
+            case ' ':
+                shootABullet();
             default:
                 break;
         }

@@ -76,7 +76,7 @@ public:
                     while(bullet->moveBulletUp()){
                         wgetch(win);
                         bullet->printBullet();
-                        //TODO richiama funzione check
+                        //TODO richiama funzione check collisione
                     }
                     delete bullet;
                 }
@@ -88,7 +88,7 @@ public:
                     while(bullet->moveBulletDown()){
                         wgetch(win);
                         bullet->printBullet();
-                        //TODO richiama funzione check
+                        //TODO richiama funzione check collisione
                     }
                     delete bullet;
                 }
@@ -100,7 +100,7 @@ public:
                     while(bullet->moveBulletLeft()){
                         wgetch(win);
                         bullet->printBullet();
-                        //TODO richiama funzione check
+                        //TODO richiama funzione check collisione
                     }
                     delete bullet;
                 }
@@ -112,7 +112,7 @@ public:
                     while(bullet->moveBulletRight()){
                         wgetch(win);
                         bullet->printBullet();
-                        //TODO richiama funzione check
+                        //TODO richiama funzione check collisione
                     }
                     delete bullet;
                 }

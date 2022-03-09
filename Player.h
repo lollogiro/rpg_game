@@ -3,6 +3,7 @@
 //
 
 #include <curses.h>
+#include "Bullet.h"
 
 using namespace std;
 
@@ -67,24 +68,14 @@ public:
     }
 
     void createBullet(int bulletDirection){
-        
+        //TODO switch che generi un proiettile in base alla direzione
+        //TODO in ogni switch richiamare moveBullet(Bullet* bullet), il quale si occupa di muovere il Bullet e di richiamare funzione check collisione
     }
 
     void shootABullet(){
         int bulletDirection = wgetch(win);
         switch (bulletDirection) {
-            case KEY_UP:
-                printf("Bullet Up ");
-                break;
-            case KEY_DOWN:
-                printf("Bullet Down ");
-                break;
-            case KEY_LEFT:
-                printf("Bullet Left ");
-                break;
-            case KEY_RIGHT:
-                printf("Bullet Right ");
-                break;
+            case KEY_UP | KEY_DOWN | KEY_LEFT | KEY_RIGHT:
             default:
                 printf("Bullet Time Expired ");
                 break;

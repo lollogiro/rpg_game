@@ -74,7 +74,6 @@ public:
                     Bullet* bullet = new Bullet('|', posX, posY-1, 2, 'P', win);
                     bullet->printBullet();
                     while(bullet->moveBulletUp()){
-                        wgetch(win);
                         bullet->printBullet();
                         //TODO richiama funzione check collisione
                     }
@@ -86,7 +85,6 @@ public:
                     Bullet* bullet = new Bullet('|', posX, posY+1, 2, 'P', win);
                     bullet->printBullet();
                     while(bullet->moveBulletDown()){
-                        wgetch(win);
                         bullet->printBullet();
                         //TODO richiama funzione check collisione
                     }
@@ -98,7 +96,6 @@ public:
                     Bullet* bullet = new Bullet('-', posX-1, posY, 2, 'P', win);
                     bullet->printBullet();
                     while(bullet->moveBulletLeft()){
-                        wgetch(win);
                         bullet->printBullet();
                         //TODO richiama funzione check collisione
                     }
@@ -110,7 +107,6 @@ public:
                     Bullet* bullet = new Bullet('-', posX+1, posY, 2, 'P', win);
                     bullet->printBullet();
                     while(bullet->moveBulletRight()){
-                        wgetch(win);
                         bullet->printBullet();
                         //TODO richiama funzione check collisione
                     }

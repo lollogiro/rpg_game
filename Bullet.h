@@ -9,6 +9,7 @@
 
 class Bullet {
 protected:
+    char bulletChar;
     int posX;
     int posY;
     int damage;
@@ -16,44 +17,49 @@ protected:
     WINDOW* win;
 
 public:
-    Bullet(int posX, int posY, int damage, char owner, WINDOW* win){
-        this.posX = posX;
-        this.posY = posY;
-        this.damage = damage;
-        this.owner = owner;
-        this.win = win;
+    Bullet(char bulletChar, int posX, int posY, int damage, char owner, WINDOW* win){
+        this->bulletChar = bulletChar;
+        this->posX = posX;
+        this->posY = posY;
+        this->damage = damage;
+        this->owner = owner;
+        this->win = win;
     }
 
     void printBullet(){
-        mvwaddch(win, posY, posX, mapSymbol);
+        mvwaddch(win, posY, posX, bulletChar);
         wrefresh(win);
     }
 
-    void moveBulletUp(){
+    bool moveBulletUp(){
         mvwaddch(win, posY, posX, ' ');
         posY--;
-        if(posY < 1) posY = 1;
+        if(posY < 1) return false;
+        else return true;
         wrefresh(win);
     }
 
-    void moveBulletDown(){
+    bool moveBulletDown(){
         mvwaddch(win, posY, posX, ' ');
         posY++;
-        if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
+        if(posY > (getmaxy(win) - 2)) return false;
+        else return true;
         wrefresh(win);
     }
 
-    void moveBulletLeft(){
+    bool moveBulletLeft(){
         mvwaddch(win, posY, posX, ' ');
         posX--;
-        if(posX < 1) posX = 1;
+        if(posX < 1) return false;
+        else return true;
         wrefresh(win);
     }
 
-    void moveBulletRight(){
+    bool moveBulletRight(){
         mvwaddch(win, posY, posX, ' ');
         posX++;
-        if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
+        if(posX > (getmaxx(win) - 2)) return false;
+        else return true;
         wrefresh(win);
     }
 

@@ -9,7 +9,7 @@ using namespace std;
 
 class Player {
 protected:
-    char mapSymbol;
+    char mapChar;
     int posX;
     int posY;
     int lifePoints;
@@ -17,8 +17,8 @@ protected:
 
 public:
     //da usare quando si transita tra livelli
-    Player(char mapSymbol, int posX, int posY, int lifePoints, WINDOW *win) {
-        this->mapSymbol = mapSymbol;
+    Player(char mapChar, int posX, int posY, int lifePoints, WINDOW *win) {
+        this->mapChar = mapChar;
         this->posX = posX;
         this->posY = posY;
         this->lifePoints = lifePoints;
@@ -26,8 +26,8 @@ public:
     }
 
     //utilizzato nella prima inizializzazione
-    Player(char mapSymbol, WINDOW *win) {
-        this->mapSymbol = mapSymbol;
+    Player(char mapChar, WINDOW *win) {
+        this->mapChar = mapChar;
         this->posX = 1;
         this->posY = getmaxy(win)-2;
         this->lifePoints = 20;
@@ -35,7 +35,7 @@ public:
     }
 
     void printPlayer(){
-        mvwaddch(win, posY, posX, mapSymbol);
+        mvwaddch(win, posY, posX, mapChar);
         wrefresh(win);
     }
 
@@ -68,16 +68,79 @@ public:
     }
 
     void createBullet(int bulletDirection){
-        //TODO switch che generi un proiettile in base alla direzione
-        //TODO in ogni switch richiamare moveBullet(Bullet* bullet), il quale si occupa di muovere il Bullet e di richiamare funzione check collisione
+        switch (bulletDirection) {
+            case KEY_UP:
+                if(posY > 1){
+                    Bullet* bullet = new Bullet('|', posX, posY-1, 2, 'P', win);
+                    bullet->printBullet();
+                    while(bullet->moveBulletUp()){
+                        wgetch(win);
+                        bullet->printBullet();
+                        //TODO richiama funzione check
+                    }
+                    delete bullet;
+                }
+                break;
+            case KEY_DOWN:
+                if(posY < getmaxy(win)-2){
+                    Bullet* bullet = new Bullet('|', posX, posY+1, 2, 'P', win);
+                    bullet->printBullet();
+                    while(bullet->moveBulletDown()){
+                        wgetch(win);
+                        bullet->printBullet();
+                        //TODO richiama funzione check
+                    }
+                    delete bullet;
+                }
+                break;
+            case KEY_LEFT:
+                if(posX > 1){
+                    Bullet* bullet = new Bullet('-', posX-1, posY, 2, 'P', win);
+                    bullet->printBullet();
+                    while(bullet->moveBulletLeft()){
+                        wgetch(win);
+                        bullet->printBullet();
+                        //TODO richiama funzione check
+                    }
+                    delete bullet;
+                }
+                break;
+            case KEY_RIGHT:
+                if(posX < getmaxx(win)-2){
+                    Bullet* bullet = new Bullet('-', posX+1, posY, 2, 'P', win);
+                    bullet->printBullet();
+                    while(bullet->moveBulletRight()){
+                        wgetch(win);
+                        bullet->printBullet();
+                        //TODO richiama funzione check
+                    }
+                    delete bullet;
+                }
+                break;
+        }
     }
 
     void shootABullet(){
         int bulletDirection = wgetch(win);
         switch (bulletDirection) {
-            case KEY_UP | KEY_DOWN | KEY_LEFT | KEY_RIGHT:
+            case KEY_UP:
+                printf("Bullet ");
+                createBullet(bulletDirection);
+                break;
+            case KEY_DOWN:
+                printf("Bullet ");
+                createBullet(bulletDirection);
+                break;
+            case KEY_LEFT:
+                printf("Bullet ");
+                createBullet(bulletDirection);
+                break;
+            case KEY_RIGHT:
+                printf("Bullet ");
+                createBullet(bulletDirection);
+                break;
             default:
-                printf("Bullet Time Expired ");
+                //Tempo scaduto per dare una direzione e sparare il proiettile
                 break;
         }
     }
@@ -104,8 +167,8 @@ public:
     }
 
     //metodi get solo per test
-    char getMapSymbol() const {
-        return mapSymbol;
+    char getMapChar() const {
+        return mapChar;
     }
 
     int getPosX() const {

@@ -11,7 +11,7 @@ int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(5);//0.5 sec
+    halfdelay(4);//0.4 sec
     curs_set(0);
 
     WINDOW* win = newwin(30, 60, 5, 10);
@@ -32,6 +32,7 @@ int main(int argc, char** argv){
         player->printPlayer();
         userInput = wgetch(win);
         player->displayPlayerMove(userInput);
+        //TODO: aggiornare la posizione dei proiettili, creando prima una lista di proiettili
     }
 
     endwin();

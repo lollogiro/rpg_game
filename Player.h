@@ -7,8 +7,6 @@
 
 using namespace std;
 
-
-
 class Player {
 protected:
     char mapChar;
@@ -71,26 +69,49 @@ public:
         wrefresh(win);
     }
 
-    void createBullet(struct bulletAxisDirection axisDirection){
+    void createBullet(bulletAxisDirection axisDirection){
         if(bullets == NULL){
-            bullets = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection, 'P', win, NULL);
+            bullets = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection.offset_x, axisDirection.offset_y, 'P', win, NULL);
         }else{
             Bullet* tmp = bullets;
             while(tmp->getNext() != NULL){
                 tmp = tmp->getNext();
             }
-            Bullet* tmpForSet = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection, 'P', win, NULL);
+            Bullet* tmpForSet = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection.offset_x, axisDirection.offset_y, 'P', win, NULL);
             tmp->setNext(tmpForSet);
         }
     }
 
-    //TODO: implementare il metodo update bullet che va a scorrere la lista dei bullets e applica il metodo moveBullet
+    void updateBulletPosition(){
+        Bullet* tmp = bullets;
+        while(tmp != NULL) {
+            mvwaddch(win, tmp->getPosY(), tmp->getPosX(), ' ');
+            tmp->setPosX(tmp->getPosX() + tmp->getAxisDirectionX());
+            tmp->setPosY(tmp->getPosY() + tmp->getAxisDirectionY());
+            tmp = tmp->getNext();
+        }
+    }
 
-    //TODO: implementarre metodo per eliminare i bullet non più validi dalla lista, dato che il print ad un certo punto non li printa più, modificare i moveBullet se non permettono la generazione di questo errore.
+    //TODO: scrivere una funzione che elimini iterativamente dalla lista di proiettili quelli che sono in una posizione non valida
+    /*Bullet* deleteBullet(){
+
+    }
+
+    void checkBulletPositionValidity(){
+        bullets = deleteBullet();
+    }*/
+
+    void printPlayerBullet(){
+        Bullet* tmp = bullets;
+        while(tmp != NULL){
+            tmp->printBullet();
+            tmp = tmp->getNext();
+        }
+    }
 
     void shootABullet(){
         int bulletDirection = wgetch(win);
-        struct bulletAxisDirection axisDirection;
+        bulletAxisDirection axisDirection;
         switch (bulletDirection) {
             case KEY_UP:
                 axisDirection.offset_x = 0;

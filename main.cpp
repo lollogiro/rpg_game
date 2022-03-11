@@ -11,7 +11,7 @@ int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(4);//0.4 sec
+    halfdelay(5);//0.5 sec
     curs_set(0);
 
     WINDOW* win = newwin(30, 60, 5, 10);
@@ -30,9 +30,14 @@ int main(int argc, char** argv){
 
     while(userInput != 'q'){
         player->printPlayer();
+        player->printPlayerBullet();
         userInput = wgetch(win);
         player->displayPlayerMove(userInput);
-        //TODO: aggiornare la posizione dei proiettili, creando prima una lista di proiettili
+        player->updateBulletPosition();
+        //player->checkBulletPositionValidity();
+
+        //TODO funzione che faccia il check nel caso in cui un nemico colpisca il player e il contrario, in base al char owner, controllare la lista dell'entità opposta
+
     }
 
     endwin();

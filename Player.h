@@ -90,16 +90,29 @@ public:
             tmp->setPosY(tmp->getPosY() + tmp->getAxisDirectionY());
             tmp = tmp->getNext();
         }
+        deleteNotValidBullet();
     }
 
-    //TODO: scrivere una funzione che elimini iterativamente dalla lista di proiettili quelli che sono in una posizione non valida
-    /*Bullet* deleteBullet(){
-
+    void deleteNotValidBullet(){
+        if(bullets != NULL){
+            Bullet* tmp = bullets;
+            Bullet* prec = NULL;
+            while(tmp != NULL){
+                if(tmp->getPosX() < 1 || tmp->getPosX() > (getmaxx(win) - 2) || tmp->getPosY() < 1 || tmp->getPosY() > (getmaxy(win) - 2)){
+                    mvwaddch(win, tmp->getPosY()-tmp->getAxisDirectionY(), tmp->getPosX()-tmp->getAxisDirectionX(), ' ');
+                    Bullet* old = tmp;
+                    if(prec == NULL) bullets = bullets->getNext();
+                    else prec->setNext(tmp->getNext());
+                    tmp = tmp->getNext();
+                    delete old;
+                }
+                else{
+                    prec = tmp;
+                    tmp = tmp->getNext();
+                }
+            }
+        }
     }
-
-    void checkBulletPositionValidity(){
-        bullets = deleteBullet();
-    }*/
 
     void printPlayerBullet(){
         Bullet* tmp = bullets;

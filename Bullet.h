@@ -1,7 +1,3 @@
-//
-// Created by lollo on 09/03/2022.
-//
-
 #ifndef PROGETTO_PROGRAMMAZIONE_BULLET_H
 #define PROGETTO_PROGRAMMAZIONE_BULLET_H
 
@@ -13,7 +9,7 @@ struct bulletAxisDirection{
 };
 
 class Bullet {
-protected:
+protected://maybe it can be public, so we may not use getter and setter
     char bulletChar;
     int posX;
     int posY;

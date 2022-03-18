@@ -1,7 +1,3 @@
-//
-// Created by lollo on 07/03/2022.
-//
-
 #include <curses.h>
 #include "Bullet.h"
 

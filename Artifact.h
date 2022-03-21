@@ -8,24 +8,38 @@
 
 class Artifact {
 protected:
+    char symbol;
     int lifepoint;
     int x;
     int y;
 public:
-    Artifact(int x, int y, int lifepoint){
+    Artifact(int x, int y, int lifepoint, char symbol){
+        strcpy(this->symbol,symbol);
         this->x=x;
         this->y=y;
         this->lifepoint=lifepoint;
-        WINDOW *min;
+        WINDOW *win;
     }
     void printarifact(){
-        printf("a");
+        mvwddch(win ,y, x, symbol);
+        wrefresh(win);
     }
 int control()
 {
 
 }
-
+ char getsymbol const {
+        return symbol;
+    }
+int getx const{
+    return x;
+}
+ int gety const{
+     return y
+ }
+  int getlifepoint const{
+      return lifepoint;
+  }
 
 };
 

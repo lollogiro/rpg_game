@@ -21,7 +21,10 @@ public:
     void printarifact(){
         printf("a");
     }
+int control()
+{
 
+}
 
 
 };

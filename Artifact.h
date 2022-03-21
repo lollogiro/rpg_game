@@ -7,7 +7,23 @@
 
 
 class Artifact {
-    //
+protected:
+    int lifepoint;
+    int x;
+    int y;
+public:
+    Artifact(int x, int y, int lifepoint){
+        this->x=x;
+        this->y=y;
+        this->lifepoint=lifepoint;
+        WINDOW *min;
+    }
+    void printarifact(){
+        printf("a");
+    }
+
+
+
 };
 
 

@@ -19,7 +19,10 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    Level* levels = new Level(1);
+    Level* levels = new Level(1, win);
+    char* closedDoor = "closed";
+    char* openedDoor = "      ";
+
 
     Player* player = new Player('@', win);
 
@@ -30,11 +33,14 @@ int main(int argc, char** argv){
 
     while(userInput != 'q'){
         if(levels->alreadyPassed){
-            //TODO: funzione nella classe Level che deve stampare degli spazi dove c'è la porta
+            levels->printDoor(openedDoor);
         }else{
-            //TODO: checkare nella classe Level se non sono gia stampate delle X
-            //TODO: in caso funzione nella classe Level che deve stampare delle X dove c'è la porta
+
+            levels->printDoor(closedDoor);
         }
+
+        //TODO: check if the door is open and the player is going out there
+        //TODO: if the upper method is true, move to the next or prev level
 
         player->printPlayer();
         player->printPlayerBullet();
@@ -43,12 +49,12 @@ int main(int argc, char** argv){
         //TODO: check if any bullet touched other entities
         //TODO: if the upper method is true update entities' lifepoints
 
-        //TODO: check if the door is open and the player is going out there
-        //TODO: if the upper method is true, move to the next or prev level
-
         //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
 
         //TODO: checkare se il player è sopra un artefatto o un potere, in caso fare opportune considerazioni
+
+        //TODO: passare anche un parametro che segnala se il livello è stato passato, affinché il player possa muoversi anche nello spazio vuoto
+
 
         player->displayPlayerMove(userInput);
         player->updateBulletPosition();

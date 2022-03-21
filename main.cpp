@@ -33,21 +33,26 @@ int main(int argc, char** argv){
 
     while(userInput != 'q'){
         if(levels->alreadyPassed){
-            levels->printDoor(openedDoor);
+            levels->printHigherDoor(openedDoor);
         }else{
-
-            levels->printDoor(closedDoor);
+            levels->printHigherDoor(closedDoor);
         }
-
-        //TODO: check if the door is open and the player is going out there
-        //TODO: if the upper method is true, move to the next or prev level
+        if(levels->levelNumber > 1){
+            levels->printLowerDoor(openedDoor);
+        }
+        if(player->getPosY() == 0){
+            //TODO: muoversi al livello successivo, creandolo se non ancora inizializzato
+        }
+        else if(player->getPosY() == getmaxy(win)-1){
+            //TODO: muoversi al livello precedente
+        }
 
         player->printPlayer();
         player->printPlayerBullet();
         userInput = wgetch(win);
 
-        //TODO: check if any bullet touched other entities
-        //TODO: if the upper method is true update entities' lifepoints
+        //TODO: checkare collisioni con altre entità
+        //TODO: in caso modificare lifepoints delle varie entità
 
         //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
 
@@ -55,8 +60,8 @@ int main(int argc, char** argv){
 
         //TODO: passare anche un parametro che segnala se il livello è stato passato, affinché il player possa muoversi anche nello spazio vuoto
 
-
-        player->displayPlayerMove(userInput);
+        //TODO: modificare spostamenti se il livello è > 1
+        player->displayPlayerMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1));
         player->updateBulletPosition();
     }
 

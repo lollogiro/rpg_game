@@ -26,11 +26,19 @@ public:
         this->precLevel = NULL;
     }
 
-    void printDoor(char* doorString){
+    void printHigherDoor(char* doorString){
         int startPosition = ((getmaxx(win)-2)/2)-2;
         int endPosition = ((getmaxx(win)-2)/2)+3;
         for (int i = startPosition; i <= endPosition; ++i) {
             mvwaddch(win, 0, i, doorString[i-startPosition]);
+        }
+    }
+
+    void printLowerDoor(char* doorString){
+        int startPosition = ((getmaxx(win)-2)/2)-2;
+        int endPosition = ((getmaxx(win)-2)/2)+3;
+        for (int i = startPosition; i <= endPosition; ++i) {
+            mvwaddch(win, getmaxy(win)-1, i, doorString[i-startPosition]);
         }
     }
 

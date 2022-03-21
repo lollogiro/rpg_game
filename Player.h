@@ -37,31 +37,36 @@ public:
         wrefresh(win);
     }
 
-    void movePlayerUp(){
+    void movePlayerUp(bool openedDoor){
         mvwaddch(win, posY, posX, ' ');
         posY--;
-        if(posY < 1) posY = 1;
+        if(posY < 1 && openedDoor && posX <= ((getmaxx(win)-2)/2)+3 && posX >= ((getmaxx(win)-2)/2)-2){
+            posY = 0;
+        }
+        else if(posY < 1) posY = 1;
         wrefresh(win);
     }
 
-    void movePlayerDown(){
+    void movePlayerDown(bool levelGreaterThanOne){
         mvwaddch(win, posY, posX, ' ');
         posY++;
         if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
         wrefresh(win);
     }
 
-    void movePlayerLeft(){
+    void movePlayerLeft(bool openedDoor, bool levelGreaterThanOne){
         mvwaddch(win, posY, posX, ' ');
         posX--;
         if(posX < 1) posX = 1;
+        else if(openedDoor && posX == ((getmaxx(win)-2)/2)-3) posX = ((getmaxx(win)-2)/2)-2;
         wrefresh(win);
     }
 
-    void movePlayerRight(){
+    void movePlayerRight(bool openedDoor, bool levelGreaterThanOne){
         mvwaddch(win, posY, posX, ' ');
         posX++;
         if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
+        else if(openedDoor && posX == ((getmaxx(win)-2)/2)+4) posX = ((getmaxx(win)-2)/2)+3;
         wrefresh(win);
     }
 
@@ -148,19 +153,19 @@ public:
         }
     }
 
-    void displayPlayerMove(int userInput){
+    void displayPlayerMove(int userInput, bool openedDoor, bool levelGreaterThanOne){
         switch(userInput){
             case KEY_UP:
-                movePlayerUp();
+                movePlayerUp(openedDoor);
                 break;
             case KEY_DOWN:
-                movePlayerDown();
+                movePlayerDown(levelGreaterThanOne);
                 break;
             case KEY_LEFT:
-                movePlayerLeft();
+                movePlayerLeft(openedDoor, levelGreaterThanOne);
                 break;
             case KEY_RIGHT:
-                movePlayerRight();
+                movePlayerRight(openedDoor, levelGreaterThanOne);
                 break;
             case ' ':
                 shootABullet();

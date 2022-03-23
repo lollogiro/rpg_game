@@ -42,6 +42,14 @@ public:
         }
     }
 
+    //TODO: printArtifacts
+
+    //TODO: checkCollisionsPlayerEnemies
+
+    //TODO: checkPlayerOnArtifact, in caso eliminare Artifact da lista
+
+    //TODO: printSecretDoor, modificare spostamenti anche per secretDoor, aperta se artifacts == NULL
+
 };
 
 

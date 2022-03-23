@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    Level* levels = new Level(1, win);
+    Level* levels = new Level(2, win);
     char* closedDoor = "closed";
     char* openedDoor = "      ";
 

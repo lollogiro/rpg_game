@@ -5,7 +5,8 @@
 #ifndef PROGETTO_PROGRAMMAZIONE_1_ARTIFACT_H
 #define PROGETTO_PROGRAMMAZIONE_1_ARTIFACT_H
 
-#include ncurses
+#include <curses.h>
+#include <stdlib.h>
 
 class Artifact {
 protected:
@@ -30,7 +31,11 @@ public:
 
     Artifact initializeArtifact(Artifact* artifacts){
         int y, x;
-        y= rand() % getmaxy();
+
+            y = rand() % (getmaxy(window) - 2) +1;
+
+        x=rand()%(getmaxx(window)-2) +1;
+
     }
 
 

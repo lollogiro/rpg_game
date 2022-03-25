@@ -25,10 +25,11 @@ protected:
          mvwddch(window ,y, x, symbol);
          wrefresh(window);
     }
-     power initializePower(Power* powers){
+     power initializePower(Power* powers, Artifact artifact){
          int y, x;
          y = rand() % (getmaxy(window) - 2) +1;
          x=rand()%(getmaxx(window)-2) +1;
+         if (x!=artifact.getx()&&y!=artifact.gety())
 
      }
 

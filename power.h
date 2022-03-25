@@ -10,10 +10,32 @@
 protected:
     int x;
     int y;
-    int symbol;
+    char symbol;
     window *window;
  public:
-    power()
+    power(int x, int y, char symbol)
+    {
+        this->x=x;
+        this->y=y;
+        this->symbol=symbol;
+    }
+
+
+    void print artifact(){
+         mvwddch(window ,y, x, symbol);
+         wrefresh(window);
+    }
+
+     char getsymbol const {
+         return symbol;
+     }
+     int getx const{
+         return x;
+     }
+     int gety const{
+         return y;
+     }
+
 
 
 };

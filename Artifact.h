@@ -15,19 +15,16 @@ protected:
     window *window
 public:
     Artifact(int x, int y, int lifepoint, char symbol){
-        strcpy(this->symbol,symbol);
+        this->symbol,symbol);
         this->x=x;
         this->y=y;
         this->lifepoint=lifepoint;
     }
     void printarifact(){
-        mvwddch(win ,y, x, symbol);
-        wrefresh(win);
+        mvwddch(window ,y, x, symbol);
+        wrefresh(window);
     }
-int control()
-{
 
-}
  char getsymbol const {
         return symbol;
     }
@@ -35,7 +32,7 @@ int getx const{
     return x;
 }
  int gety const{
-     return y
+     return y;
  }
   int getlifepoint const{
       return lifepoint;

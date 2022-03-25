@@ -5,6 +5,7 @@
 #ifndef PROGETTO_PROGRAMMAZIONE_1_ARTIFACT_H
 #define PROGETTO_PROGRAMMAZIONE_1_ARTIFACT_H
 
+#include ncurses
 
 class Artifact {
 protected:
@@ -12,7 +13,9 @@ protected:
     int lifepoint;
     int x;
     int y;
-    window *window
+    window *window;
+    Artifact* next;
+
 public:
     Artifact(int x, int y, int lifepoint, char symbol){
         this->symbol,symbol);
@@ -20,10 +23,16 @@ public:
         this->y=y;
         this->lifepoint=lifepoint;
     }
-    void printarifact(){
+    void printArtifact(){
         mvwddch(window ,y, x, symbol);
         wrefresh(window);
     }
+
+    Artifact initializeArtifact(Artifact* artifacts){
+        int y, x;
+        y= rand() % getmaxy();
+    }
+
 
  char getsymbol const {
         return symbol;

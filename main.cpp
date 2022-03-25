@@ -12,6 +12,8 @@ int main(int argc, char** argv){
     halfdelay(2);//0.5 sec
     curs_set(0);
 
+    srand(time(0));
+
     WINDOW* win = newwin(30, 60, 5, 10);
     keypad(win, true);
     refresh();
@@ -34,9 +36,10 @@ int main(int argc, char** argv){
 
     while(userInput != 'q'){
 
-        userInput = wgetch(win);
 
-        enemy.di
+        userInput = wgetch(win);
+        enemy.EnemyMovement();
+
 
     }
 

@@ -6,6 +6,7 @@
 #define PROGETTO_PROGRAMMAZIONE_ENEMY_H
 
 #include <ncurses.h>
+#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 
@@ -47,6 +48,7 @@ public:
         mvwaddch(win, posY, posX, ' ');
         posY--;
         if(posY < 1) posY = 1;
+        printPlayer();
         wrefresh(win);
     }
 
@@ -54,13 +56,16 @@ public:
         mvwaddch(win, posY, posX, ' ');
         posY++;
         if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
+        printPlayer();
         wrefresh(win);
+
     }
 
     void movePlayerLeft(){
         mvwaddch(win, posY, posX, ' ');
         posX--;
         if(posX < 1) posX = 1;
+        printPlayer();
         wrefresh(win);
     }
 
@@ -68,6 +73,7 @@ public:
         mvwaddch(win, posY, posX, ' ');
         posX++;
         if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
+        printPlayer();
         wrefresh(win);
     }
 
@@ -82,6 +88,37 @@ public:
             y=rand()%(getmaxy(win)-2)+1;
         }
         return Enemy('E', x, y, 20, win);
+    }
+    
+    void EnemyMovement(){
+        int steps= (rand() % 6)+1;
+        int direction= rand()%4;
+        switch (direction) {
+            case 0:
+                for (int i=0; i<steps;i++){
+                    movePlayerUp();
+                    halfdelay(5);//0.5 sec
+                }
+                break;
+            case 1:
+                for (int i=0 ;i<steps;i++){
+                    movePlayerDown();
+                    halfdelay(5);//0.5 sec
+                }
+                break;
+            case 2:
+                for (int i=0; i<steps;i++){
+                    movePlayerLeft();
+                    halfdelay(5);//0.5 sec
+                }
+                break;
+            case 3:
+                for (int i=0; i<steps;i++){
+                    movePlayerRight();
+                    halfdelay(5);//0.5 sec
+                }
+                break;
+        }
     }
 
 };

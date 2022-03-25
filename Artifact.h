@@ -12,13 +12,13 @@ protected:
     int lifepoint;
     int x;
     int y;
+    window *window
 public:
     Artifact(int x, int y, int lifepoint, char symbol){
         strcpy(this->symbol,symbol);
         this->x=x;
         this->y=y;
         this->lifepoint=lifepoint;
-        WINDOW *win;
     }
     void printarifact(){
         mvwddch(win ,y, x, symbol);

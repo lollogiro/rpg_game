@@ -25,6 +25,12 @@ protected:
          mvwddch(window ,y, x, symbol);
          wrefresh(window);
     }
+     power initializePower(Power* powers){
+         int y, x;
+         y = rand() % (getmaxy(window) - 2) +1;
+         x=rand()%(getmaxx(window)-2) +1;
+
+     }
 
      char getsymbol const {
          return symbol;

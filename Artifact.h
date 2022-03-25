@@ -32,8 +32,7 @@ public:
     Artifact initializeArtifact(Artifact* artifacts){
         int y, x;
 
-            y = rand() % (getmaxy(window) - 2) +1;
-
+        y = rand() % (getmaxy(window) - 2) +1;
         x=rand()%(getmaxx(window)-2) +1;
 
     }

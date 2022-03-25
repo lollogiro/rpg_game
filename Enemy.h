@@ -6,8 +6,21 @@
 #define PROGETTO_PROGRAMMAZIONE_ENEMY_H
 
 #include <ncurses.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+
 
 using namespace std;
+
+struct Player{
+    char playersymbol;
+    WINDOW* win;
+    int posy;
+    int posx;
+};
+
 class Enemy {
 protected:
     char mapChar;
@@ -17,8 +30,12 @@ protected:
     WINDOW *win;
 
 public:
-    Enemy(char mapChar, int EposX, int EposY, int ElifePoints, WINDOW *win){
-
+    Enemy(char mapChar, int posX, int posY, int lifePoints, WINDOW *win){
+        this->mapChar = mapChar;
+        this->posX = posX;
+        this->posY = posY;
+        this->lifePoints = lifePoints;
+        this->win = win;
     }
 
     void printPlayer(){
@@ -54,7 +71,18 @@ public:
         wrefresh(win);
     }
 
-
+    Enemy initializeEnemy(WINDOW* win){
+        srand (time(NULL));
+        int x=rand()%(getmaxx(win)-2)+1;
+        int y=0;
+        if (x<(getmaxx(win)-2)/3){
+            y=rand()%((getmaxy(win)-2)/2)+1;
+        }
+        else {
+            y=rand()%(getmaxy(win)-2)+1;
+        }
+        return Enemy('E', x, y, 20, win);
+    }
 
 };
 

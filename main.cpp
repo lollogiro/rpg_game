@@ -4,12 +4,7 @@
 
 #include <curses.h>
 #include "Enemy.h"
-struct Player{
-    char playersymbol;
-    WINDOW* win;
-    int posy;
-    int posx;
-};
+
 int main(int argc, char** argv){
     initscr();
     noecho();
@@ -25,7 +20,12 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    Player test = { '@',win,15,30 };
+    Enemy enemy = enemy.initializeEnemy(win);
+
+
+    Player test = { '@',win,getmaxy(win)-2,1 };
+
+    enemy.printPlayer();
 
 
     mvwaddch(test.win, test.posy, test.posx, test.playersymbol);
@@ -34,7 +34,9 @@ int main(int argc, char** argv){
 
     while(userInput != 'q'){
 
-    userInput = wgetch(win);
+        userInput = wgetch(win);
+
+        enemy.di
 
     }
 

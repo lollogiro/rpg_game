@@ -57,7 +57,6 @@ public:
         posY++;
         if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
         printPlayer();
-        wrefresh(win);
 
     }
 
@@ -66,7 +65,7 @@ public:
         posX--;
         if(posX < 1) posX = 1;
         printPlayer();
-        wrefresh(win);
+
     }
 
     void movePlayerRight(){
@@ -74,7 +73,6 @@ public:
         posX++;
         if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
         printPlayer();
-        wrefresh(win);
     }
 
     Enemy initializeEnemy(WINDOW* win){
@@ -91,31 +89,31 @@ public:
     }
     
     void EnemyMovement(){
-        int steps= (rand() % 6)+1;
+        int steps= (rand()%5)+1;
         int direction= rand()%4;
         switch (direction) {
             case 0:
                 for (int i=0; i<steps;i++){
+                    halfdelay(5);
                     movePlayerUp();
-                    halfdelay(5);//0.5 sec
                 }
                 break;
             case 1:
                 for (int i=0 ;i<steps;i++){
+                    halfdelay(5);
                     movePlayerDown();
-                    halfdelay(5);//0.5 sec
                 }
                 break;
             case 2:
                 for (int i=0; i<steps;i++){
+                    halfdelay(5);
                     movePlayerLeft();
-                    halfdelay(5);//0.5 sec
                 }
                 break;
             case 3:
                 for (int i=0; i<steps;i++){
+                    halfdelay(5);
                     movePlayerRight();
-                    halfdelay(5);//0.5 sec
                 }
                 break;
         }

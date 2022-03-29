@@ -37,20 +37,21 @@ public:
         wrefresh(win);
     }
 
-    void movePlayerUp(bool openedDoor){
+    void movePlayerUp(bool openedDoor, bool secretDoor){
         mvwaddch(win, posY, posX, ' ');
         posY--;
-        if(posY < 1 && openedDoor && posX <= ((getmaxx(win)-2)/2)+3 && posX >= ((getmaxx(win)-2)/2)-2){
-            posY = 0;
-        }
-        else if(posY < 1) posY = 1;
+        if((posY < 1 && !openedDoor) || (posY < 1 && openedDoor && (posX < ((getmaxx(win)-2)/2)-2 || posX > ((getmaxx(win)-2)/2)+3))) posY = 1;
+        else if(posY < 0 && openedDoor && posX >= ((getmaxx(win)-2)/2)-2 && posX <= ((getmaxx(win)-2)/2)+3) posY = 0;
+        else if(posX == getmaxx(win)-1 && secretDoor && (posY < ((getmaxy(win)-2)/2)-2 || posY > ((getmaxy(win)-2)/2)+3)) posY++;
         wrefresh(win);
     }
 
-    void movePlayerDown(bool levelGreaterThanOne){
+    void movePlayerDown(bool levelGreaterThanOne, bool secretDoor){
         mvwaddch(win, posY, posX, ' ');
         posY++;
-        if(posY > (getmaxy(win) - 2)) posY = getmaxy(win) - 2;
+        if((posY > getmaxy(win)-2 && !levelGreaterThanOne) || (posY > getmaxy(win)-2 && levelGreaterThanOne && (posX < ((getmaxx(win)-2)/2)-2 || posX > ((getmaxx(win)-2)/2)+3))) posY = getmaxy(win) - 2;
+        else if(posY > getmaxy(win)-1 && levelGreaterThanOne && posX >= ((getmaxx(win)-2)/2)-2 && posX <= ((getmaxx(win)-2)/2)+3) posY = getmaxy(win)-1;
+        else if(posX == getmaxx(win)-1 && secretDoor && (posY < ((getmaxy(win)-2)/2)-2 || posY > ((getmaxy(win)-2)/2)+3)) posY--;
         wrefresh(win);
     }
 
@@ -58,15 +59,19 @@ public:
         mvwaddch(win, posY, posX, ' ');
         posX--;
         if(posX < 1) posX = 1;
-        else if(openedDoor && posX == ((getmaxx(win)-2)/2)-3) posX = ((getmaxx(win)-2)/2)-2;
+        else if(posY == 0 && openedDoor && posX < ((getmaxx(win)-2)/2)-2) posX++;
+        else if(posY == getmaxy(win)-1 && levelGreaterThanOne && posX < ((getmaxx(win)-2)/2)-2) posX++;
         wrefresh(win);
     }
 
-    void movePlayerRight(bool openedDoor, bool levelGreaterThanOne){
+    void movePlayerRight(bool openedDoor, bool levelGreaterThanOne, bool secretDoor){
         mvwaddch(win, posY, posX, ' ');
         posX++;
-        if(posX > (getmaxx(win) - 2)) posX = getmaxx(win) - 2;
-        else if(openedDoor && posX == ((getmaxx(win)-2)/2)+4) posX = ((getmaxx(win)-2)/2)+3;
+        if(posX > (getmaxx(win) - 2) && !secretDoor) posX = getmaxx(win) - 2;
+        else if(posX > getmaxx(win)-2 && secretDoor && (posY < ((getmaxy(win)-2)/2)-2 || posY > ((getmaxy(win)-2)/2)+3)) posX--;
+        else if(posX > getmaxx(win)-1 && secretDoor && (posY >= ((getmaxy(win)-2)/2)-2 && posY <= ((getmaxy(win)-2)/2)+3)) posX--;
+        else if(posY == 0 && openedDoor && posX > ((getmaxx(win)-2)/2)+3) posX--;
+        else if(posY == getmaxy(win)-1 && levelGreaterThanOne && posX > ((getmaxx(win)-2)/2)+3) posX--;
         wrefresh(win);
     }
 
@@ -153,19 +158,19 @@ public:
         }
     }
 
-    void displayPlayerMove(int userInput, bool openedDoor, bool levelGreaterThanOne){
+    void displayPlayerMove(int userInput, bool openedDoor, bool levelGreaterThanOne, bool secretDoor){
         switch(userInput){
             case KEY_UP:
-                movePlayerUp(openedDoor);
+                movePlayerUp(openedDoor, secretDoor);
                 break;
             case KEY_DOWN:
-                movePlayerDown(levelGreaterThanOne);
+                movePlayerDown(levelGreaterThanOne, secretDoor);
                 break;
             case KEY_LEFT:
                 movePlayerLeft(openedDoor, levelGreaterThanOne);
                 break;
             case KEY_RIGHT:
-                movePlayerRight(openedDoor, levelGreaterThanOne);
+                movePlayerRight(openedDoor, levelGreaterThanOne, secretDoor);
                 break;
             case ' ':
                 shootABullet();

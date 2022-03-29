@@ -26,7 +26,7 @@ public:
         this->precLevel = NULL;
     }
 
-    void printHigherDoor(char* doorString){
+    void printHigherDoor(char doorString[]){
         int startPosition = ((getmaxx(win)-2)/2)-2;
         int endPosition = ((getmaxx(win)-2)/2)+3;
         for (int i = startPosition; i <= endPosition; ++i) {
@@ -34,7 +34,7 @@ public:
         }
     }
 
-    void printLowerDoor(char* doorString){
+    void printLowerDoor(char doorString[]){
         int startPosition = ((getmaxx(win)-2)/2)-2;
         int endPosition = ((getmaxx(win)-2)/2)+3;
         for (int i = startPosition; i <= endPosition; ++i) {
@@ -42,13 +42,44 @@ public:
         }
     }
 
-    //TODO: printArtifacts
+    void printSecretDoor(char doorString[]){
+        int startPosition = ((getmaxy(win)-2)/2)-2;
+        int endPosition = ((getmaxy(win)-2)/2)+3;
+        for (int i = startPosition; i <= endPosition; ++i) {
+            mvwaddch(win, i, getmaxx(win)-1, doorString[i-startPosition]);
+        }
+    }
+
+    //TODO: stampare in una box piccola differente, tanti artefatti e un solo nemico al suo interno
+    void printSecretRoom(){
+
+    }
+
+    //TODO: riempire con artifacts, powers e enemies
+    void initializeLevel(){
+        //richiamerà printEntities, una volta con artifacts, una volta con powers e una volta con enemies, infine con il player.
+    }
+
+    //TODO: printEntities
+    //while che sfrutterà la funzione padre printEntity, scorrendo tutta la lista di entità passata
 
     //TODO: checkCollisionsPlayerEnemies
+    //checkBulletHit(), a cui si passano due entità shooterEntity, controllando se i proiettili della prima entità beccano le seconde entità
+    //da richiamare una volta con primo argomento player e una volta con secondo argomento enemy, al suo interno ci sarà un while che scorrerà
+    //per ogni nodo del primo argomento, tutti i nodi del secondo.
 
     //TODO: checkPlayerOnArtifact, in caso eliminare Artifact da lista
+    /*
+    Artifact* checkPlayerOnArtifact(Player* player, Artifact* artifacts){
+        while(artifacts != NULL){
+            if(artifacts->getPosX() == player->getPosx() && artifacts->getPosY() == player->getPosY()){
+                //eliminazione da lista iterativa
+            }
+        }
+    }
+    */
 
-    //TODO: printSecretDoor, modificare spostamenti anche per secretDoor, aperta se artifacts == NULL
+
 
 };
 

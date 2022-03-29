@@ -11,7 +11,7 @@ int main(int argc, char** argv){
     halfdelay(2);//0.5 sec
     curs_set(0);
 
-    WINDOW* win = newwin(30, 60, 5, 10);
+    WINDOW* win = newwin(30, 120, 5, 20);
     keypad(win, true);
     refresh();
     box(win, 0, 0);
@@ -19,50 +19,70 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
+    //TODO: passare anche artifacts, enemies e powers
     Level* levels = new Level(2, win);
-    char* closedDoor = "closed";
-    char* openedDoor = "      ";
+    levels->alreadyPassed = true;
 
+    char closedDoor[] = "closed";
+    char openedDoor[] = "      ";
+    char secretDoor[] = "secret";
 
     Player* player = new Player('@', win);
 
-    //TODO: create a Level class, in the main create a List of Level
-    //TODO: Level attributes: prec, next, list of powers, list of artifacts, list of enemies, already entered flag, total numbers of powers so with 3/4 the secret door can be open
-
-    int userInput = 'a';
+    int userInput = '0';
 
     while(userInput != 'q'){
-        if(levels->alreadyPassed){
-            levels->printHigherDoor(openedDoor);
-        }else{
-            levels->printHigherDoor(closedDoor);
+        if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
+        else levels->printHigherDoor(closedDoor);
+
+        if(levels->levelNumber > 1) levels->printLowerDoor(openedDoor);
+
+        //TODO: sostituire condizione con powers == NULL
+        if(levels->levelNumber == 1) levels->printSecretDoor(openedDoor);
+        else levels->printSecretDoor(secretDoor);
+
+        if(player->getPosX() == getmaxx(win)-1){
+            //TODO: generare la secretRoom, con all'interno i suoi artefatti e UN nemico
         }
-        if(levels->levelNumber > 1){
-            levels->printLowerDoor(openedDoor);
-        }
+
         if(player->getPosY() == 0){
             //TODO: muoversi al livello successivo, creandolo se non ancora inizializzato
+            /*
+            if(levels->nextLevel == NULL){
+                Level* tmp = new Level(levels->levelNumber+1, win);
+                levels->nextLevel = tmp;
+                tmp->precLevel = levels;
+                levels = levels->nextLevel;
+                delete(tmp);
+            }else{
+                levels = levels->nextLevel;
+            }
+            //generare nemici, artefatti e poteri, stamparli tutti per la prima volta
+            */
         }
         else if(player->getPosY() == getmaxy(win)-1){
-            //TODO: muoversi al livello precedente
+            //TODO: spostarsi al livello precedente, pulendo la window e stampare entità ancora presenti
+            //levels = levels->precLevel;
+            //TODO: pulire window dal livello da cui stiamo uscendo e stampare entità ancora presenti nel livello in cui stiamo entrando
         }
+
+        //TODO: levels->checkCollisions();
+        //TODO: levels->updateEntitiesLifepoints();
 
         player->printPlayer();
         player->printPlayerBullet();
         userInput = wgetch(win);
 
-        //TODO: checkare collisioni con altre entità
-        //TODO: in caso modificare lifepoints delle varie entità
-
         //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
+        //TODO: checkare se il player è sopra un artefatto o un potere, in caso aumentare i lifepoints del player
 
-        //TODO: checkare se il player è sopra un artefatto o un potere, in caso fare opportune considerazioni
-
-        //TODO: passare anche un parametro che segnala se il livello è stato passato, affinché il player possa muoversi anche nello spazio vuoto
-
-        //TODO: modificare spostamenti se il livello è > 1
-        player->displayPlayerMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1));
+        player->displayPlayerMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->levelNumber == 1));//sostituire secretDoor con levels->enemies == NULL
         player->updateBulletPosition();
+
+        //if(enemies != NULL) enemies->displayEnemiesMove
+        //enemies->updateEnemiesBulletPosition
+
+        //if powers == NULL && artifacts == NULL -> levels->alreadyPassed = True
     }
 
     endwin();

@@ -28,7 +28,6 @@ int main(int argc, char** argv){
     Artifact.printArtifact();
     Power.printPower();
 
-
     while(userInput != 'q'){
 
         userInput = wgetch(win);

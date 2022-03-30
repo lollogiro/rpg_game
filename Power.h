@@ -6,14 +6,15 @@
 #define PROGETTO_PROGRAMMAZIONE_1_POWER_H
 
 #endif //PROGETTO_PROGRAMMAZIONE_1_POWER_H
- class power{
+
+class Power {
 protected:
     int x;
     int y;
     char symbol;
     window *window;
  public:
-    power(int x, int y, char symbol)
+    Power(int x, int y, char symbol)
     {
         this->x=x;
         this->y=y;
@@ -21,11 +22,7 @@ protected:
     }
 
 
-    void print artifact(){
-         mvwddch(window ,y, x, symbol);
-         wrefresh(window);
-    }
-     power initializePower(Power* powers, Artifact artifact){
+      Power initializePower(Power* powers, Artifact artifact){
          int y, x;
          do{
          y = rand() % (getmaxy(window) - 2) +1;
@@ -33,6 +30,11 @@ protected:
          }while(x!=artifact.getx()&&y!=artifact.gety)
 
      }
+
+    void printPower(){
+        mvwddch(window ,y, x, symbol);
+        wrefresh(window);
+    }
 
      char getsymbol const {
          return symbol;

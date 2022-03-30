@@ -25,8 +25,8 @@ int main(int argc, char** argv){
     //TODO: Level attributes: prec, next, list of powers, list of artifacts, list of enemies, already entered flag, total numbers of powers so with 3/4 the secret door can be open
 
     int userInput = 'a';
-    printArtfact();
-    printPower();
+    Artifact.printArtifact();
+    Power.printPower();
 
 
     while(userInput != 'q'){

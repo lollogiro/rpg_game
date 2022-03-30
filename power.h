@@ -27,9 +27,10 @@ protected:
     }
      power initializePower(Power* powers, Artifact artifact){
          int y, x;
+         do{
          y = rand() % (getmaxy(window) - 2) +1;
          x=rand()%(getmaxx(window)-2) +1;
-         if (x!=artifact.getx()&&y!=artifact.gety())
+         }while(x!=artifact.getx()&&y!=artifact.gety)
 
      }
 

@@ -33,7 +33,6 @@ public:
         int y, x;
         y = rand() % (getmaxy(window) - 2) +1;
         x=rand()%(getmaxx(window)-2) +1;
-
     }
 
 

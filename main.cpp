@@ -9,7 +9,7 @@ int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(2);//0.5 sec
+    halfdelay(5);//0.5 sec
     curs_set(0);
 
     srand(time(0));
@@ -32,6 +32,7 @@ int main(int argc, char** argv){
 
     mvwaddch(test.win, test.posy, test.posx, test.playersymbol);
 
+
     int userInput = 'a';
 
     while(userInput != 'q'){
@@ -39,7 +40,6 @@ int main(int argc, char** argv){
 
         userInput = wgetch(win);
         enemy.EnemyMovement();
-        wrefresh(win);
 
 
     }

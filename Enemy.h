@@ -87,34 +87,56 @@ public:
         }
         return Enemy('E', x, y, 20, win);
     }
-    
+    void FollowPlayer(){
+        int x= abs(posX-0);
+
+        int y= abs(posY-((getmaxy(win)-2));
+        movepla
+        if (y>x){
+            if (posX-0>0){
+                movePlayerLeft();
+            }
+            else{
+                movePlayerRight();
+
+            }
+        }
+        else{
+            if (posy-(getmaxy(win)-2)>0){
+                movePlayerDown();
+            }
+            else{
+                movePlayerdown();
+            }
+        }
+    }
     void EnemyMovement(){
-        int steps= (rand()%5)+1;
+        //int steps= (rand()%5)+1;
         int direction= rand()%4;
         switch (direction) {
             case 0:
-                for (int i=0; i<steps;i++){
-                    halfdelay(5);
+                //for (int i=0; i<steps;i++){
+
                     movePlayerUp();
-                }
+                //}
                 break;
             case 1:
-                for (int i=0 ;i<steps;i++){
-                    halfdelay(5);
+                // for (int i=0 ;i<steps;i++){
+
                     movePlayerDown();
-                }
+                //}
                 break;
             case 2:
-                for (int i=0; i<steps;i++){
-                    halfdelay(5);
+                //for (int i=0; i<steps;i++){
+
                     movePlayerLeft();
-                }
+                //}
                 break;
             case 3:
-                for (int i=0; i<steps;i++){
-                    halfdelay(5);
+                //for (int i=0; i<steps;i++){
+
                     movePlayerRight();
-                }
+                //}
                 break;
         }
     }

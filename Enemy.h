@@ -87,26 +87,27 @@ public:
         }
         return Enemy('E', x, y, 20, win);
     }
+    void movechoser(){
+        int x= rand()%3;
+        if
+    }
     void FollowPlayer(){
-        int x= abs(posX-0);
-
-        int y= abs(posY-((getmaxy(win)-2));
-        movepla
-        if (y>x){
-            if (posX-0>0){
+        int x = abs(posX-0);
+        int y = abs(posY - (getmaxy(win)-2));
+        if (y>=x && posX-0>4){
+            if (posX-abs(0)>=5){
                 movePlayerLeft();
             }
             else{
                 movePlayerRight();
-
             }
         }
-        else{
-            if (posy-(getmaxy(win)-2)>0){
-                movePlayerDown();
+        if (x>y && posY-(getmaxy(win)-2)>4){
+            if (posY-abs((getmaxy(win)-2))>0){
+                movePlayerUp();
             }
-            else{
-                movePlayerdown();
+            else {
+                movePlayerDown();
             }
         }
     }

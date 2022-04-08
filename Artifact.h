@@ -31,14 +31,14 @@ public:
         do {
             y = rand() % (getmaxy(window) - 2) + 1;
             x = rand() % (getmaxx(window) - 2) + 1;
-        }while(checkArtifactPosition(x,y,artifacts))
+        }while(!checkArtifactPosition(x,y,artifacts)
     }
 
     bool checkArtifactPosition(int x, int y, Artifact* a){
         bool check=true;
-        while(check){
+        while(check && a!NULL){
             if(x==a->x && y==a->y){
-                check=false
+                check=false;
             }
             a=a->next;
 

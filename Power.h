@@ -23,7 +23,7 @@ protected:
     }
 
 
-      Power initializePower(Power* powers, Artifact* artifact){
+      Power initializePower(Power* powers, Power* powers){
          int y, x;
          do{
          y = rand() % (getmaxy(window) - 2) +1;
@@ -31,6 +31,26 @@ protected:
          }while(x!=artifact.getx()&&y!=artifact.gety)
 
      }
+    bool checkPowerPosition(int x, int y, Power* p, Artifact* a){
+        bool check=true;
+        while(check&&a!=NULL){
+            if(x==a->x && y==a->y){
+                check=false
+            }
+            a=a->next;
+
+        }
+        while (check && p!=NULL)
+        {
+            if(x==p->x x=p->x)
+            {
+                check=false;
+            }
+            p=p->next;
+        }
+
+        return check;
+    }
 
     void printPower(){
         mvwddch(window ,y, x, symbol);

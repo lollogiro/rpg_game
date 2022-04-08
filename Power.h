@@ -25,13 +25,15 @@ protected:
     }
 
 
-      Power initializePower(Power* powers, Power* powers){
+      Power* initializePower(Artifact* artifacts, Power* powers){
          int y, x;
          do{
          y = rand() % (getmaxy(window) - 2) +1;
          x=rand()%(getmaxx(window)-2) +1;
-         }while(x!=artifact.getx()&&y!=artifact.gety)
-
+         }while(!checkPowerPosition(x,y,powers,artifacts);
+        Power* tmp= new Power(x,y,'p');
+         tmp->next=powers;
+         return tmp;
      }
     bool checkPowerPosition(int x, int y, Power* p, Artifact* a){
         bool check=true;

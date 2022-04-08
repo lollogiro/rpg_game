@@ -30,6 +30,15 @@ int main(int argc, char** argv){
 
     Artifact* a = NULL;
     Power* p= NULL;
+    for (int i = 0; i < 2; ++i) {
+        a=a->initializeArtifact(a);
+        a->printArtifact()
+
+    }
+    for (int i = 0; i < 2; ++i) {
+       p=p->initializePower(a,p) ;
+       p->printPower()
+    }
 
 
 

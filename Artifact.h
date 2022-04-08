@@ -27,12 +27,15 @@ public:
     }
 
 
-    Artifact initializeArtifact(Artifact* artifacts){
+    Artifact* initializeArtifact(Artifact* artifacts){
         int y, x;
         do {
             y = rand() % (getmaxy(window) - 2) + 1;
             x = rand() % (getmaxx(window) - 2) + 1;
-        }while(!checkArtifactPosition(x,y,artifacts)
+        }while(!checkArtifactPosition(x,y,artifacts);
+        Artifact* tmp= new Artifact(x,y,'a');
+        tmp->next= artifacts
+        return tmp;
     }
 
     bool checkArtifactPosition(int x, int y, Artifact* a){

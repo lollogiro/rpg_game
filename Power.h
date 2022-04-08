@@ -7,6 +7,8 @@
 
 #endif //PROGETTO_PROGRAMMAZIONE_1_POWER_H
 
+#include "Artifact.h"
+
 class Power {
 protected:
     int x;
@@ -34,7 +36,7 @@ protected:
     bool checkPowerPosition(int x, int y, Power* p, Artifact* a){
         bool check=true;
         while(check&&a!=NULL){
-            if(x==a->x && y==a->y){
+            if(x==a->getx() && y==a->gety()){
                 check=false
             }
             a=a->next;

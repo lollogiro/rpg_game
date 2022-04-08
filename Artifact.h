@@ -8,6 +8,7 @@
 #include <curses.h>
 #include <stdlib.h>
 
+
 class Artifact {
 protected:
     char symbol;

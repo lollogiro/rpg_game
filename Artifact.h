@@ -28,8 +28,22 @@ public:
 
     Artifact initializeArtifact(Artifact* artifacts){
         int y, x;
-        y=rand() % (getmaxy(window) - 2) +1;
-        x=rand()%(getmaxx(window)-2) +1;
+        do {
+            y = rand() % (getmaxy(window) - 2) + 1;
+            x = rand() % (getmaxx(window) - 2) + 1;
+        }while(checkArtifactPosition(x,y,artifacts))
+    }
+
+    bool checkArtifactPosition(int x, int y, Artifact* a){
+        bool check=true;
+        while(check){
+            if(x==a->x && y==a->y){
+                check=false
+            }
+            a=a->next;
+
+        }
+        return check;
     }
 
     void printArtifact(){

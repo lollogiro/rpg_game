@@ -13,6 +13,7 @@ protected:
     int y;
     char symbol;
     window *window;
+    Power* next;
  public:
     Power(int x, int y, char symbol)
     {
@@ -22,7 +23,7 @@ protected:
     }
 
 
-      Power initializePower(Power* powers, Artifact artifact){
+      Power initializePower(Power* powers, Artifact* artifact){
          int y, x;
          do{
          y = rand() % (getmaxy(window) - 2) +1;

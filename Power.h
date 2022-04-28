@@ -39,7 +39,7 @@ protected:
         bool check=true;
         while(check&&a!=NULL){
             if(x==a->getx() && y==a->gety()){
-                check=false
+                check=false;
             }
             a=a->next;
 

@@ -20,7 +20,7 @@ protected:
 
 public:
     Artifact(int x, int y, int lifepoint, char symbol){
-        this->symbol,symbol);
+        this->symbol=symbol;
         this->x=x;
         this->y=y;
         this->lifepoint=lifepoint;
@@ -34,7 +34,7 @@ public:
             x = rand() % (getmaxx(window) - 2) + 1;
         }while(!checkArtifactPosition(x,y,artifacts);
         Artifact* tmp= new Artifact(x,y,'a');
-        tmp->next= artifacts
+        tmp->next= artifacts;
         return tmp;
     }
 

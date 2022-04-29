@@ -43,7 +43,7 @@ public:
     void printPower(Power* powers){
         Power* tmp = powers;
         while(tmp != NULL){
-            mvwaddch(win, posY, posX, symbol);
+            mvwaddch(tmp->win, tmp->posY, tmp->posX, tmp->symbol);
             wrefresh(win);
             tmp = tmp->next;
         }

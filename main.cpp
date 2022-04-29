@@ -1,4 +1,5 @@
 #include <curses.h>
+#include <time.h>
 #include "Player.h"
 #include "Level.h"
 
@@ -8,8 +9,9 @@ int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(2);//0.5 sec
+    halfdelay(2);//0.2 sec
     curs_set(0);
+    srand(time(NULL));
 
     WINDOW* win = newwin(30, 120, 5, 20);
     keypad(win, true);
@@ -20,7 +22,9 @@ int main(int argc, char** argv){
     refresh();
 
     //TODO: passare anche artifacts, enemies e powers
-    Level* levels = new Level(2, win);
+    Artifact* artifacts = NULL;
+    Power* powers = NULL;
+    Level* levels = new Level(1, artifacts, powers, win);
     levels->alreadyPassed = true;
 
     char closedDoor[] = "closed";
@@ -30,6 +34,11 @@ int main(int argc, char** argv){
     Player* player = new Player('@', win);
 
     int userInput = '0';
+
+    //inizializzazione powers e artifacts del primo livello
+    levels->initializeLevel();
+    levels->printEntities();
+
 
     while(userInput != 'q'){
         if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
@@ -78,6 +87,7 @@ int main(int argc, char** argv){
 
         player->displayPlayerMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->levelNumber == 1));//sostituire secretDoor con levels->enemies == NULL
         player->updateBulletPosition();
+        levels->printEntities();
 
         //if(enemies != NULL) enemies->displayEnemiesMove
         //enemies->updateEnemiesBulletPosition

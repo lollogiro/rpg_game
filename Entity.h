@@ -1,0 +1,14 @@
+//
+// Created by lollo on 29/04/2022.
+//
+
+#ifndef PROGETTO_PROGRAMMAZIONE_ENTITY_H
+#define PROGETTO_PROGRAMMAZIONE_ENTITY_H
+
+
+class Entity {
+
+};
+
+
+#endif //PROGETTO_PROGRAMMAZIONE_ENTITY_H

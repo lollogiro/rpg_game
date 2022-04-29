@@ -11,64 +11,64 @@
 
 class Power {
 protected:
-    int x;
-    int y;
+    int posX;
+    int posY;
     char symbol;
-    window *window;
+    WINDOW *win;
     Power* next;
  public:
-    Power(int x, int y, char symbol)
+    Power(int posX, int posY, char symbol)
     {
-        this->x=x;
-        this->y=y;
+        this->posX=posX;
+        this->posY=posY;
         this->symbol=symbol;
     }
 
 
-      Power* initializePower(Artifact* artifacts, Power* powers){
-         int y, x;
+      Power* initializePower(Artifact* artifacts, Power* powers,WINDOW *win){
+         int posYNew, posXNew;
          do{
-         y = rand() % (getmaxy(window) - 2) +1;
-         x=rand()%(getmaxx(window)-2) +1;
-         }while(!checkPowerPosition(x,y,powers,artifacts);
-        Power* tmp= new Power(x,y,'p');
+         y = rand() % (getmaxy(win) - 2) +1;
+         x=rand()%(getmaxx(win)-2) +1;
+         }while(!checkPowerPosition(posXNew,posYNew,powers,artifacts);
+        Power* tmp= new Power(posXNew,posYNew,'p');
          tmp->next=powers;
          return tmp;
      }
-    bool checkPowerPosition(int x, int y, Power* p, Artifact* a){
+    bool checkPowerPosition(int posXPower, int posYPower, Power* powers, Artifact* artifacts){
         bool check=true;
         while(check&&a!=NULL){
-            if(x==a->getx() && y==a->gety()){
+            if(posX==artifacts->getx() && posY==artifacts->gety()){
                 check=false;
             }
-            a=a->next;
+            artifacts=artifacts->next;
 
         }
-        while (check && p!=NULL)
+        while (check && powers!=NULL)
         {
-            if(x==p->x x=p->x)
+            if(posXPower==powers->posX && posYPower=powers->posY)
             {
                 check=false;
             }
-            p=p->next;
+            powers=powers->next;
         }
 
         return check;
     }
 
     void printPower(){
-        mvwddch(window ,y, x, symbol);
-        wrefresh(window);
+        mvwddch(win, posY, posX, symbol);
+        wrefresh(win);
     }
 
      char getsymbol const {
          return symbol;
      }
-     int getx const{
-         return x;
+     int getPosX const{
+         return posX;
      }
-     int gety const{
-         return y;
+     int getPosY const{
+         return posY;
      }
 
 };

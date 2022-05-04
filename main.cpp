@@ -39,8 +39,7 @@ int main(int argc, char** argv){
 
 
         userInput = wgetch(win);
-        enemy.EnemyMovement();
-
+        enemy.MoveChoser();
 
     }
 

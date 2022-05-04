@@ -9,7 +9,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-
+#include "bullet.h"
 
 
 
@@ -87,10 +87,17 @@ public:
         }
         return Enemy('E', x, y, 20, win);
     }
-    void movechoser(){
+
+    void MoveChoser(){
         int x= rand()%3;
-        if
+        if (x=2){
+            FollowPlayer();
+        }
+        else{
+            EnemyRandomMovement();
+        }
     }
+
     void FollowPlayer(){
         int x = abs(posX-0);
         int y = abs(posY - (getmaxy(win)-2));
@@ -111,7 +118,7 @@ public:
             }
         }
     }
-    void EnemyMovement(){
+    void EnemyRandomMovement(){
         //int steps= (rand()%5)+1;
         int direction= rand()%4;
         switch (direction) {
@@ -141,6 +148,10 @@ public:
                 break;
         }
     }
+
+    /*void EnemyBullet{
+
+    };*/
 
 };
 

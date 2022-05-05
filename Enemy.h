@@ -88,9 +88,9 @@ public:
         return Enemy('E', x, y, 20, win);
     }
 
-    void MoveChoser(){
+    void MoveChoser(){ //decide randomicamente tra il movimento random e tra il movimento verso il player
         int x= rand()%3;
-        if (x=2){
+        if (x!=2){
             FollowPlayer();
         }
         else{
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    void FollowPlayer(){
+    void FollowPlayer(){ //il nemico si muove di 1 step verso il giocatore
         int x = abs(posX-0);
         int y = abs(posY - (getmaxy(win)-2));
         if (y>=x && posX-0>4){
@@ -118,7 +118,7 @@ public:
             }
         }
     }
-    void EnemyRandomMovement(){
+    void EnemyRandomMovement(){ //muove il nemico di 1 step in una direzione randomica
         //int steps= (rand()%5)+1;
         int direction= rand()%4;
         switch (direction) {

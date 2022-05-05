@@ -4,12 +4,13 @@
 
 #include <curses.h>
 #include "Enemy.h"
+#include "bullet.h"
 
 int main(int argc, char** argv){
     initscr();
     noecho();
     raw();
-    halfdelay(5);//0.5 sec
+    //halfdelay(5);//0.5 sec
     curs_set(0);
 
     srand(time(0));
@@ -39,7 +40,7 @@ int main(int argc, char** argv){
 
 
         userInput = wgetch(win);
-        enemy.MoveChoser();
+        enemy.FollowPlayer();
 
     }
 

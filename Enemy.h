@@ -97,54 +97,61 @@ public:
             EnemyRandomMovement();
         }
     }
-
-    void FollowPlayer(){ //il nemico si muove di 1 step verso il giocatore
-        int x = abs(posX-0);
-        int y = abs(posY - (getmaxy(win)-2));
-        if (y>=x && posX-0>4){
-            if (posX-abs(0)>=5){
-                movePlayerLeft();
-            }
-            else{
+    void FollowPlayer(){
+        int xDiff = abs(posX-0);
+        int yDiff = abs(posY - (getmaxy(win)-2));
+        int xPlayer = 1;
+        int yPlayer = getmaxy(win)-2;
+        if (yDiff==0 && xDiff>0){
+            if (xPlayer>posX){
                 movePlayerRight();
             }
+            else{
+                movePlayerLeft();
+            }
+
         }
-        if (x>y && posY-(getmaxy(win)-2)>4){
-            if (posY-abs((getmaxy(win)-2))>0){
+        else if (xDiff==0 && yDiff>0){
+            if(yPlayer>posY){
+                movePlayerDown();
+            }
+            else{
                 movePlayerUp();
             }
+        }
+        else {
+            if (xDiff>yDiff){
+                if(yPlayer>posY) movePlayerDown();
+                else movePlayerUp();
+            }
             else {
-                movePlayerDown();
+                if (xPlayer>posX) movePlayerRight();
+                else movePlayerLeft();
             }
         }
     }
+
     void EnemyRandomMovement(){ //muove il nemico di 1 step in una direzione randomica
         //int steps= (rand()%5)+1;
         int direction= rand()%4;
         switch (direction) {
             case 0:
-                //for (int i=0; i<steps;i++){
 
-                    movePlayerUp();
-                //}
+                    if (posY==1) movePlayerDown();
+                    else movePlayerUp();
+
                 break;
             case 1:
-                // for (int i=0 ;i<steps;i++){
-
-                    movePlayerDown();
-                //}
+                    if (posY==getmaxy(win)-2) movePlayerUp();
+                    else movePlayerDown();
                 break;
             case 2:
-                //for (int i=0; i<steps;i++){
-
-                    movePlayerLeft();
-                //}
+                    if (posX==1) movePlayerRight();
+                    else movePlayerLeft();
                 break;
             case 3:
-                //for (int i=0; i<steps;i++){
-
-                    movePlayerRight();
-                //}
+                    if (posX==getmaxx(win)-2) movePlayerLeft();
+                    else movePlayerRight();
                 break;
         }
     }

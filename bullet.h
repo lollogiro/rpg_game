@@ -20,7 +20,7 @@ protected://maybe it can be public, so we may not use getter and setter
     int posY;
     int damage;
     bulletAxisDirection axisDirection;
-    char owner;//P(Player) o N(Nemico)
+    char owner;//P(Player) o E(Enemy)
     WINDOW* win;
     Bullet* next;
 

@@ -36,12 +36,13 @@ int main(int argc, char** argv){
 
 
     int userInput = 'a';
-
     while(userInput != 'q'){
 
-
+        enemy.printPlayerBullet();
         userInput = wgetch(win);
+        enemy.updateBulletPosition();
         enemy.MoveChoser();
+
 
     }
 

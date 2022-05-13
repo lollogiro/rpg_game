@@ -28,6 +28,7 @@ protected:
     int posX;
     int posY;
     int lifePoints;
+    Bullet* bullets;
     WINDOW *win;
 
 public:
@@ -36,6 +37,7 @@ public:
         this->posX = posX;
         this->posY = posY;
         this->lifePoints = lifePoints;
+        this->bullets=NULL;
         this->win = win;
     }
 
@@ -97,27 +99,42 @@ public:
             EnemyRandomMovement();
         }
     }
-    void FollowPlayer(){
+    void FollowPlayer(){ //segue il player
         int xDiff = abs(posX-0);
         int yDiff = abs(posY - (getmaxy(win)-2));
         int xPlayer = 1;
         int yPlayer = getmaxy(win)-2;
+        bulletAxisDirection axisDirection;
         if (yDiff==0 && xDiff>0){
             if (xPlayer>posX){
-                movePlayerRight();
+                movePlayerRight(); //muove il giocatore a destra e spara
+                axisDirection.offset_x = 1;
+                axisDirection.offset_y = 0;
+                createBullet(axisDirection);
             }
             else{
-                movePlayerLeft();
+                movePlayerLeft(); //muove il giocatore a sinistra e spara
+                axisDirection.offset_x = -1;
+                axisDirection.offset_y = 0;
+                createBullet(axisDirection);
             }
+            deleteNotValidBullet();
 
         }
         else if (xDiff==0 && yDiff>0){
             if(yPlayer>posY){
-                movePlayerDown();
+                movePlayerDown(); //muove il giocatore sotto e spara
+                axisDirection.offset_x = 0;
+                axisDirection.offset_y = 1;
+                createBullet(axisDirection);
             }
             else{
-                movePlayerUp();
+                movePlayerUp(); //muove il giocatore sopra e spara
+                axisDirection.offset_x = 0;
+                axisDirection.offset_y = -1;
+                createBullet(axisDirection);
             }
+            deleteNotValidBullet();
         }
         else {
             if (xDiff>yDiff){
@@ -131,36 +148,118 @@ public:
         }
     }
 
-    void EnemyRandomMovement(){ //muove il nemico di 1 step in una direzione randomica
-        //int steps= (rand()%5)+1;
-        int direction= rand()%4;
+
+    void EnemyRandomMovement() { //muove di 1 step in una direzione randomica
+        int direction = rand() % 6;
+        bulletAxisDirection axisDirection;
+        int RandomBullet = rand() % 4;
         switch (direction) {
             case 0:
-
-                    if (posY==1) movePlayerDown();
-                    else movePlayerUp();
-
+                if (posY == 1) movePlayerDown();
+                else movePlayerUp();
                 break;
             case 1:
-                    if (posY==getmaxy(win)-2) movePlayerUp();
-                    else movePlayerDown();
+                if (posY == getmaxy(win) - 2) movePlayerUp();
+                else movePlayerDown();
                 break;
             case 2:
-                    if (posX==1) movePlayerRight();
-                    else movePlayerLeft();
+                if (posX == 1) movePlayerRight();
+                else movePlayerLeft();
                 break;
             case 3:
-                    if (posX==getmaxx(win)-2) movePlayerLeft();
-                    else movePlayerRight();
+                if (posX == getmaxx(win) - 2) movePlayerLeft();
+                else movePlayerRight();
                 break;
+            case 4:
+
+                if (RandomBullet == 0) { //shoots up
+                    axisDirection.offset_x = 0;
+                    axisDirection.offset_y = -1;
+                    createBullet(axisDirection);
+                }
+                if (RandomBullet == 1){ //shoots down
+                    axisDirection.offset_x = 0;
+                    axisDirection.offset_y = 1;
+                    createBullet(axisDirection);
+                }
+                deleteNotValidBullet();
+                break;
+            case 5:
+
+                if (RandomBullet == 0) { //shoots right
+                    axisDirection.offset_x = 1;
+                    axisDirection.offset_y = 0;
+                    createBullet(axisDirection);
+
+                }
+                if (RandomBullet == 1){ //shoots left
+                    axisDirection.offset_x = -1;
+                    axisDirection.offset_y = 0;
+                    createBullet(axisDirection);
+                }
+                deleteNotValidBullet();
+                break;
+
         }
     }
 
-    /*void EnemyBullet{
+    void createBullet(bulletAxisDirection axisDirection){
+        if(bullets == NULL){
+            bullets = new Bullet('*', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection.offset_x, axisDirection.offset_y, 'E', win, NULL);
+        }else{
+            Bullet* tmp = bullets;
+            while(tmp->getNext() != NULL){
+                tmp = tmp->getNext();
+            }
+            Bullet* tmpForSet = new Bullet('*', posX+axisDirection.offset_x, posY+axisDirection.offset_y, 2, axisDirection.offset_x, axisDirection.offset_y, 'E', win, NULL);
+            tmp->setNext(tmpForSet);
+        }
+    }
 
-    };*/
+    void updateBulletPosition(){
+        Bullet* tmp = bullets;
+        while(tmp != NULL) {
+            mvwaddch(win, tmp->getPosY(), tmp->getPosX(), ' ');
+            tmp->setPosX(tmp->getPosX() + tmp->getAxisDirectionX());
+            tmp->setPosY(tmp->getPosY() + tmp->getAxisDirectionY());
+            tmp = tmp->getNext();
+        }
+        deleteNotValidBullet();
+    }
+
+    void deleteNotValidBullet(){
+        if(bullets != NULL){
+            Bullet* tmp = bullets;
+            Bullet* prec = NULL;
+            while(tmp != NULL){
+                if(tmp->getPosX() < 1 || tmp->getPosX() > (getmaxx(win) - 2) || tmp->getPosY() < 1 || tmp->getPosY() > (getmaxy(win) - 2)){
+                    mvwaddch(win, tmp->getPosY()-tmp->getAxisDirectionY(), tmp->getPosX()-tmp->getAxisDirectionX(), ' ');
+                    Bullet* old = tmp;
+                    if(prec == NULL) bullets = bullets->getNext();
+                    else prec->setNext(tmp->getNext());
+                    tmp = tmp->getNext();
+                    delete old;
+                }
+                else{
+                    prec = tmp;
+                    tmp = tmp->getNext();
+                }
+            }
+        }
+    }
+
+    void printPlayerBullet(){
+        Bullet* tmp = bullets;
+        while(tmp != NULL){
+            tmp->printBullet();
+            tmp = tmp->getNext();
+        }
+    }
+
+
 
 };
+
 
 
 

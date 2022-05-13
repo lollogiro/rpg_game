@@ -119,7 +119,6 @@ public:
                 createBullet(axisDirection);
             }
             deleteNotValidBullet();
-
         }
         else if (xDiff==0 && yDiff>0){
             if(yPlayer>posY){

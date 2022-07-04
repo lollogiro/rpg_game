@@ -1,11 +1,15 @@
+#include <iostream>
 #include <curses.h>
 #include <time.h>
-#include "Player.h"
+#include "Entity.h"
+#include "LivingEntity.h"
+#include "Artifact.h"
+#include "Power.h"
 #include "Level.h"
 
 using namespace std;
 
-int main(int argc, char** argv){
+int main() {
     initscr();
     noecho();
     raw();
@@ -21,9 +25,9 @@ int main(int argc, char** argv){
     wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    //TODO: passare anche artifacts, enemies e powers
     Artifact* artifacts = NULL;
     Power* powers = NULL;
+
     Level* levels = new Level(1, artifacts, powers, win);
     levels->alreadyPassed = true;
 
@@ -31,16 +35,17 @@ int main(int argc, char** argv){
     char openedDoor[] = "      ";
     char secretDoor[] = "secret";
 
-    Player* player = new Player('@', win);
+    LivingEntity* player = new LivingEntity('@', 1, getmaxy(win)-2, win, 30, NULL);
 
     int userInput = '0';
 
-    //inizializzazione powers e artifacts del primo livello
-    levels->initializeLevel();
-    levels->printEntities();
 
+        //inizializzazione powers e artifacts del primo livello
+        levels->initializeLevel();
+        levels->printEntities();
 
     while(userInput != 'q'){
+
         if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
         else levels->printHigherDoor(closedDoor);
 
@@ -50,11 +55,12 @@ int main(int argc, char** argv){
         if(levels->levelNumber == 1) levels->printSecretDoor(openedDoor);
         else levels->printSecretDoor(secretDoor);
 
-        if(player->getPosX() == getmaxx(win)-1){
+        if(player->posX == getmaxx(win)-1){
             //TODO: generare la secretRoom, con all'interno i suoi artefatti e UN nemico
         }
 
-        if(player->getPosY() == 0){
+
+        if(player->posY == 0){
             //TODO: muoversi al livello successivo, creandolo se non ancora inizializzato
             /*
             if(levels->nextLevel == NULL){
@@ -69,7 +75,7 @@ int main(int argc, char** argv){
             //generare nemici, artefatti e poteri, stamparli tutti per la prima volta
             */
         }
-        else if(player->getPosY() == getmaxy(win)-1){
+        else if(player->posY == getmaxy(win)-1){
             //TODO: spostarsi al livello precedente, pulendo la window e stampare entità ancora presenti
             //levels = levels->precLevel;
             //TODO: pulire window dal livello da cui stiamo uscendo e stampare entità ancora presenti nel livello in cui stiamo entrando
@@ -78,16 +84,18 @@ int main(int argc, char** argv){
         //TODO: levels->checkCollisions();
         //TODO: levels->updateEntitiesLifepoints();
 
-        player->printPlayer();
-        player->printPlayerBullet();
+        player->printLivingEntity();
+        player->printEntityBullets();
         userInput = wgetch(win);
 
         //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
         //TODO: checkare se il player è sopra un artefatto o un potere, in caso aumentare i lifepoints del player
 
-        player->displayPlayerMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->levelNumber == 1));//sostituire secretDoor con levels->enemies == NULL
+        player->displayMove(userInput, /*levels->alreadyPassed*/ true, /*(levels->levelNumber > 1)*/ false, /*(levels->levelNumber == 1)*/ true);//sostituire secretDoor con levels->enemies == NULL
         player->updateBulletPosition();
+
         levels->printEntities();
+
 
         //if(enemies != NULL) enemies->displayEnemiesMove
         //enemies->updateEnemiesBulletPosition
@@ -96,4 +104,6 @@ int main(int argc, char** argv){
     }
 
     endwin();
+
+    return 0;
 }

@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "Bullet.h"
+#pragma once //altrimenti da redefinition error
 
 class LivingEntity : public Entity{
 public:
@@ -8,7 +9,6 @@ public:
 
 public:
     LivingEntity(char mapSymbol, int posX, int posY, WINDOW *win, int lifePoints, Bullet *bullets);
-    void printLivingEntity();
     void moveUp(bool openedDoor, bool secretDoor);
     void moveDown(bool levelGreaterThanOne, bool secretDoor);
     void moveLeft(bool openedDoor, bool levelGreaterThanOne);

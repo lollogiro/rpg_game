@@ -14,7 +14,6 @@ public:
 
 public:
     Power(char mapSymbol, int posX, int posY, WINDOW* win, Power* next);
-    void printPower();
     bool checkPowerPosition(int posXPower, int posYPower, Power* powers, Artifact* artifacts);
 };
 

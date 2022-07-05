@@ -9,20 +9,21 @@
 #include <iostream>
 #include "Artifact.h"
 #include "Power.h"
+#include "Enemy.h"
 
 class Level {
 public:
     int levelNumber;
-    //Enemy* enemies;
     Artifact* artifacts;
     Power* powers;
+    Enemy* enemies;
     bool alreadyPassed;
     WINDOW* win;
     Level* nextLevel;
     Level* precLevel;
 
 public:
-    Level(int levelNumber, Artifact* artifacts, Power* powers, WINDOW* win);
+    Level(int levelNumber, Artifact* artifacts, Power* powers, Enemy* enemies, WINDOW* win);
 
     void printHigherDoor(char doorString[]);
 
@@ -33,23 +34,27 @@ public:
     //TODO: stampare in una box piccola differente, tanti artefatti e un solo nemico al suo interno
     void printSecretRoom();
 
-    //TODO: riempire con artifacts, powers e enemies
-    //richiamerà printEntities, una volta con artifacts, una volta con powers e una volta con enemies, infine con il player.
     void initializeLevel();
 
     void initializeArtifact();
 
     void initializePower();
 
+    void initializeEnemy();
+
     void printArtifacts();
 
     void printPowers();
 
+    void printEnemies();
+
     void printEntities();
 
+    void printEnemiesBullets();
 
+    void updateEnemiesBullets();
 
-
+    void updateEnemiesPosition(LivingEntity* player);
 };
 
 

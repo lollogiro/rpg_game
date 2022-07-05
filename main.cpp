@@ -27,8 +27,9 @@ int main() {
 
     Artifact* artifacts = NULL;
     Power* powers = NULL;
+    Enemy* enemies = NULL;
 
-    Level* levels = new Level(1, artifacts, powers, win);
+    Level* levels = new Level(8, artifacts, powers, enemies, win);
     levels->alreadyPassed = true;
 
     char closedDoor[] = "closed";
@@ -40,9 +41,9 @@ int main() {
     int userInput = '0';
 
 
-        //inizializzazione powers e artifacts del primo livello
-        levels->initializeLevel();
-        levels->printEntities();
+    //inizializzazione powers e artifacts del primo livello
+    levels->initializeLevel();
+    levels->printEntities();
 
     while(userInput != 'q'){
 
@@ -84,8 +85,11 @@ int main() {
         //TODO: levels->checkCollisions();
         //TODO: levels->updateEntitiesLifepoints();
 
-        player->printLivingEntity();
+        player->printEntity();
         player->printEntityBullets();
+
+        levels->printEnemiesBullets();
+
         userInput = wgetch(win);
 
         //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
@@ -94,6 +98,8 @@ int main() {
         player->displayMove(userInput, /*levels->alreadyPassed*/ true, /*(levels->levelNumber > 1)*/ false, /*(levels->levelNumber == 1)*/ true);//sostituire secretDoor con levels->enemies == NULL
         player->updateBulletPosition();
 
+        levels->updateEnemiesBullets();
+        levels->updateEnemiesPosition(player);
         levels->printEntities();
 
 

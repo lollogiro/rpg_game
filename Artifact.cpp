@@ -10,10 +10,6 @@ Artifact::Artifact(char mapSymbol, int posX, int posY, WINDOW *win, int givenLif
     this->next = next;
 }
 
-void Artifact::printArtifact(){
-    Entity::printEntity();
-}
-
 bool Artifact::checkArtifactPosition(int posXToCheck, int posYToCheck, Artifact* artifacts){
     bool check = true;
     while(check && artifacts != NULL){

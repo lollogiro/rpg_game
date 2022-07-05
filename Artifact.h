@@ -14,7 +14,6 @@ public:
 
 public:
     Artifact(char mapSymbol, int posX, int posY, WINDOW *win, int givenLifePoints, Artifact *next);
-    void printArtifact();
     bool checkArtifactPosition(int posXToCheck, int posYToCheck, Artifact* artifacts);
 };
 

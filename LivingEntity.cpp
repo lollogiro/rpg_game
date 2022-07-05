@@ -2,7 +2,6 @@
 // Created by lollo on 04/07/2022.
 //
 
-#include "Entity.h"
 #include "LivingEntity.h"
 
 LivingEntity::LivingEntity(char mapSymbol, int posX, int posY, WINDOW *win, int lifePoints, Bullet *bullets)
@@ -12,10 +11,6 @@ LivingEntity::LivingEntity(char mapSymbol, int posX, int posY, WINDOW *win, int 
 }
 
 //TODO: aggiungere inizializzazione di livello (pos=...)
-
-void LivingEntity::printLivingEntity() {
-    Entity::printEntity();
-}
 
 void LivingEntity::moveUp(bool openedDoor, bool secretDoor){
     mvwaddch(win, posY, posX, ' ');

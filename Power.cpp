@@ -9,10 +9,6 @@ Power::Power(char mapSymbol, int posX, int posY, WINDOW* win, Power* next)
     this->next = next;
 }
 
-void Power::printPower(){
-    Entity::printEntity();
-}
-
 bool Power::checkPowerPosition(int posXPower, int posYPower, Power *powers, Artifact *artifacts){
     bool check = true;
     while(check && artifacts != NULL){

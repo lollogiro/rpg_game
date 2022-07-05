@@ -3,11 +3,13 @@
 //
 
 #include "Level.h"
+#include <math.h>
 
-Level::Level(int levelNumber, Artifact* artifacts, Power* powers, WINDOW* win){
+Level::Level(int levelNumber, Artifact* artifacts, Power* powers, Enemy* enemies, WINDOW* win){
     this->levelNumber = levelNumber;
     this->artifacts = artifacts;
     this->powers = powers;
+    this->enemies = enemies;
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;
@@ -46,11 +48,16 @@ void Level::printSecretRoom(){
 //TODO: riempire con artifacts, powers e enemies
 //richiamerà printEntities, una volta con artifacts, una volta con powers e una volta con enemies, infine con il player.
 void Level::initializeLevel(){
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < (levelNumber/4)+1; ++i) {
         initializeArtifact();
     }
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         initializePower();
+    }
+    int enemiesUB = 2;
+    if(levelNumber > 3) enemiesUB = (int)log2(levelNumber);
+    for (int i = 0; i < enemiesUB; ++i) {
+        initializeEnemy();
     }
 }
 
@@ -76,12 +83,25 @@ void Level::initializePower(){
     powers = tmp;
 }
 
-//TODO: printEntities
-//while che sfrutterà la funzione padre printEntity, scorrendo tutta la lista di entità passata
+void Level::initializeEnemy(){
+    int posXNew=rand()%(getmaxx(win)-2)+1, posYNew=0;
+    do{
+        if (posXNew<(getmaxx(win)-2)/3){
+            posYNew=rand()%((getmaxy(win)-2)/2)+1;
+        }
+        else {
+            posYNew=rand()%(getmaxy(win)-2)+1;
+        }
+    }while(!enemies->checkEnemyPosition(posXNew, posYNew, enemies, powers, artifacts));
+    Enemy* tmp = new Enemy('E' ,posXNew, posYNew, win, 10, NULL, NULL);
+    tmp->next = enemies;
+    enemies = tmp;
+}
+
 void Level::printArtifacts(){
     Artifact* tmp = artifacts;
     while(tmp != NULL){
-        tmp->printArtifact();
+        tmp->printEntity();
         tmp = tmp->next;
     }
 }
@@ -89,7 +109,16 @@ void Level::printArtifacts(){
 void Level::printPowers(){
     Power* tmp = powers;
     while(tmp != NULL){
-        tmp->printPower();
+        tmp->printEntity();
+        tmp = tmp->next;
+    }
+}
+
+//TODO: void Level::printEnemies()
+void Level::printEnemies(){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        tmp->printEntity();
         tmp = tmp->next;
     }
 }
@@ -97,6 +126,31 @@ void Level::printPowers(){
 void Level::printEntities(){
     printArtifacts();
     printPowers();
+    printEnemies();
+}
+
+void Level::printEnemiesBullets(){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        tmp->printEntityBullets();
+        tmp = tmp->next;
+    }
+}
+
+void Level::updateEnemiesBullets(){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        tmp->updateBulletPosition();
+        tmp = tmp->next;
+    }
+}
+
+void Level::updateEnemiesPosition(LivingEntity* player){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        tmp->moveChooser(player);
+        tmp = tmp->next;
+    }
 }
 
 //TODO: checkCollisionsPlayerEnemies

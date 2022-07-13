@@ -3,7 +3,8 @@
 //
 
 #include "Level.h"
-#include <math.h>
+#include <cmath>
+#include <cstring>
 
 Level::Level(int levelNumber, Artifact* artifacts, Power* powers, Enemy* enemies, WINDOW* win){
     this->levelNumber = levelNumber;
@@ -45,8 +46,6 @@ void Level::printSecretRoom(){
 
 }
 
-//TODO: riempire con artifacts, powers e enemies
-//richiamerà printEntities, una volta con artifacts, una volta con powers e una volta con enemies, infine con il player.
 void Level::initializeLevel(){
     for (int i = 0; i < (levelNumber/4)+1; ++i) {
         initializeArtifact();
@@ -104,6 +103,7 @@ void Level::printArtifacts(){
         tmp->printEntity();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
 void Level::printPowers(){
@@ -112,15 +112,16 @@ void Level::printPowers(){
         tmp->printEntity();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
-//TODO: void Level::printEnemies()
 void Level::printEnemies(){
     Enemy* tmp = enemies;
     while(tmp != NULL){
         tmp->printEntity();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
 void Level::printEntities(){
@@ -135,6 +136,7 @@ void Level::printEnemiesBullets(){
         tmp->printEntityBullets();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
 void Level::updateEnemiesBullets(){
@@ -143,6 +145,7 @@ void Level::updateEnemiesBullets(){
         tmp->updateBulletPosition();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
 void Level::updateEnemiesPosition(LivingEntity* player){
@@ -151,20 +154,136 @@ void Level::updateEnemiesPosition(LivingEntity* player){
         tmp->moveChooser(player);
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
-//TODO: checkCollisionsPlayerEnemies
-//checkBulletHit(), a cui si passano due entità shooterEntity, controllando se i proiettili della prima entità beccano le seconde entità
-//da richiamare una volta con primo argomento player e una volta con secondo argomento enemy, al suo interno ci sarà un while che scorrerà
-//per ogni nodo del primo argomento, tutti i nodi del secondo.
-
-//TODO: checkPlayerOnArtifact, in caso eliminare Artifact da lista
-/*
-Artifact* Level::checkPlayerOnArtifact(LivingEntity* player, Artifact* artifacts){
-    while(artifacts != NULL){
-        if(artifacts->getPosX() == player->getPosx() && artifacts->getPosY() == player->getPosY()){
-            //eliminazione da lista iterativa
+void Level::checkCollisionsLivingEntity(LivingEntity* hit, LivingEntity* shooter){
+    int posXHit = hit->posX, posYHit = hit->posY;
+    Bullet* tmp = shooter->bullets;
+    while(tmp != NULL){
+        if(tmp->posX == posXHit && tmp->posY == posYHit){
+            hit->lifePoints -= tmp->damage;
+            tmp->posX = -1000;//per invalidare il bullet
         }
+        tmp = tmp->next;
+    }
+    delete tmp;
+}
+
+void Level::checkCollisionsArtifacts(LivingEntity* player){
+    if(artifacts != NULL){
+        Artifact* tmp = artifacts;
+        Artifact* prec = NULL;
+        while(tmp != NULL){
+            if(player->posX == tmp->posX && player->posY == tmp->posY){
+                player->lifePoints += tmp->givenLifePoints;
+                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+                Artifact* old = tmp;
+                if(prec == NULL) artifacts = artifacts->next;
+                else prec->next = tmp->next;
+                tmp = tmp->next;
+                delete old;
+            }
+            else{
+                prec = tmp;
+                tmp = tmp->next;
+            }
+        }
+        delete tmp;
     }
 }
-*/
+
+void Level::checkCollisionsPowers(LivingEntity* player){
+    if(powers != NULL){
+        Power* tmp = powers;
+        Power* prec = NULL;
+        while(tmp != NULL){
+            if(player->posX == tmp->posX && player->posY == tmp->posY){
+                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+                Power* old = tmp;
+                if(prec == NULL) powers = powers->next;
+                else prec->next = tmp->next;
+                tmp = tmp->next;
+                delete old;
+            }
+            else{
+                prec = tmp;
+                tmp = tmp->next;
+            }
+        }
+        delete tmp;
+    }
+}
+
+void Level::checkCollisions(LivingEntity* player){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        checkCollisionsLivingEntity(player, tmp);//FUNZIONA
+        checkCollisionsLivingEntity(tmp, player);
+        tmp = tmp->next;
+    }
+    delete tmp;
+    checkCollisionsArtifacts(player);
+    checkCollisionsPowers(player);
+    deleteUselessEntities(player);
+}
+
+void Level::deleteNotValidEnemies(){
+    if(enemies != NULL){
+        Enemy* tmp = enemies;
+        Enemy* prec = NULL;
+        while(tmp != NULL){
+            if(tmp->lifePoints <= 0){
+                //TODO: cancellare anche bullet dell'enemy per non sprecare memoria(?)
+                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+                Enemy* old = tmp;
+                if(prec == NULL) enemies = enemies->next;
+                else prec->next = tmp->next;
+                tmp = tmp->next;
+                delete old;
+            }
+            else{
+                prec = tmp;
+                tmp = tmp->next;
+            }
+        }
+        delete tmp;
+    }
+}
+
+bool Level::deleteUselessEntities(LivingEntity* player){
+    if(player->lifePoints <= 0){
+        //GAME OVER
+        return false;
+    }
+    deleteNotValidEnemies();
+    return true;
+}
+
+void Level::clearWindowFromEntities(LivingEntity* player){
+    Enemy* tmp = enemies;
+    while(tmp != NULL){
+        mvwaddch(win, tmp->posY, tmp->posX, ' ');
+        tmp = tmp->next;
+    }
+    delete tmp;
+    Artifact* tmp1 = artifacts;
+    while(tmp1 != NULL){
+        mvwaddch(win, tmp1->posY, tmp1->posX, ' ');
+        tmp1 = tmp1->next;
+    }
+    delete tmp1;
+    Power* tmp2 = powers;
+    while(tmp2 != NULL){
+        mvwaddch(win, tmp2->posY, tmp2->posX, ' ');
+        tmp2 = tmp2->next;
+    }
+    delete tmp2;
+    Bullet* tmp3 = player->bullets;
+    while(tmp3 != NULL){
+        tmp3->posX = -1000;
+        tmp3 = tmp3->next;
+    }
+    player->deleteNotValidBullet();
+    delete tmp3;
+}

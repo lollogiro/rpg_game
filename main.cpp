@@ -1,6 +1,7 @@
 #include <iostream>
 #include <curses.h>
-#include <time.h>
+#include <ctime>
+#include <cstring>
 #include "Entity.h"
 #include "LivingEntity.h"
 #include "Artifact.h"
@@ -18,19 +19,30 @@ int main() {
     srand(time(NULL));
 
     WINDOW* win = newwin(30, 120, 5, 20);
+
     keypad(win, true);
     refresh();
     box(win, 0, 0);
     wrefresh(win);
-    wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     refresh();
 
-    Artifact* artifacts = NULL;
-    Power* powers = NULL;
-    Enemy* enemies = NULL;
+    /*
+    WINDOW* secretWin = newwin(20,60,5,20);
+    keypad(secretWin, true);
+    refresh();
+    box(secretWin, 0, 0);
+    wrefresh(secretWin);
+    wborder(secretWin, '|', '|', '-', '-', '+', '+', '+', '+');
+    refresh();
+     */
 
-    Level* levels = new Level(8, artifacts, powers, enemies, win);
-    levels->alreadyPassed = true;
+
+    WINDOW* winTest = newwin(5, 30, 0, 0);
+    box(winTest, 0, 0);
+    wrefresh(winTest);
+    refresh();
+
+    Level* levels = new Level(1, NULL, NULL, NULL, win);
 
     char closedDoor[] = "closed";
     char openedDoor[] = "      ";
@@ -39,75 +51,92 @@ int main() {
     LivingEntity* player = new LivingEntity('@', 1, getmaxy(win)-2, win, 30, NULL);
 
     int userInput = '0';
+    bool gameState = true;
+    int wait = 0;
 
-
-    //inizializzazione powers e artifacts del primo livello
     levels->initializeLevel();
     levels->printEntities();
 
-    while(userInput != 'q'){
-
-        if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
-        else levels->printHigherDoor(closedDoor);
-
-        if(levels->levelNumber > 1) levels->printLowerDoor(openedDoor);
-
-        //TODO: sostituire condizione con powers == NULL
-        if(levels->levelNumber == 1) levels->printSecretDoor(openedDoor);
-        else levels->printSecretDoor(secretDoor);
+    while(userInput != 'q' && gameState){
+        wresize(win, 0, 0);
 
         if(player->posX == getmaxx(win)-1){
-            //TODO: generare la secretRoom, con all'interno i suoi artefatti e UN nemico
+            //togliere la win principale e stampare la secretWin, vedere se lasciarla stampata sempre e aprire solo la porta
         }
 
-
         if(player->posY == 0){
-            //TODO: muoversi al livello successivo, creandolo se non ancora inizializzato
-            /*
+            player->posX = 1;
+            player->posY = getmaxy(win)-2;
+            levels->clearWindowFromEntities(player);
             if(levels->nextLevel == NULL){
-                Level* tmp = new Level(levels->levelNumber+1, win);
+                Level* tmp = new Level(levels->levelNumber+1, NULL, NULL, NULL, win);
                 levels->nextLevel = tmp;
                 tmp->precLevel = levels;
                 levels = levels->nextLevel;
-                delete(tmp);
+                levels->initializeLevel();
+                levels->printEntities();
             }else{
                 levels = levels->nextLevel;
+                levels->printEntities();
             }
-            //generare nemici, artefatti e poteri, stamparli tutti per la prima volta
-            */
-        }
-        else if(player->posY == getmaxy(win)-1){
-            //TODO: spostarsi al livello precedente, pulendo la window e stampare entità ancora presenti
-            //levels = levels->precLevel;
-            //TODO: pulire window dal livello da cui stiamo uscendo e stampare entità ancora presenti nel livello in cui stiamo entrando
+        }else if(player->posY == getmaxy(win)-1){
+            player->posX = 1;
+            player->posY = getmaxy(win)-2;
+            levels->clearWindowFromEntities(player);
+            levels = levels->precLevel;
+            levels->printEntities();
         }
 
-        //TODO: levels->checkCollisions();
-        //TODO: levels->updateEntitiesLifepoints();
+        mvwprintw(winTest, 1, 1, "Lifepoints: %d",player->lifePoints);
+        mvwprintw(winTest, 2, 1, "Level: %d",levels->levelNumber);
+        mvwprintw(winTest, 3, 1, "Game state: %d",gameState);
+        wrefresh(winTest);
 
-        player->printEntity();
+        if(levels->levelNumber > 1) levels->printLowerDoor(openedDoor);
+        else {
+            box(win, 0, 0);
+            wrefresh(win);
+        }
+        if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
+        else levels->printHigherDoor(closedDoor);
+
+        if(levels->enemies == NULL) levels->printSecretDoor(openedDoor);
+        else levels->printSecretDoor(secretDoor);
+
+        levels->checkCollisions(player);
+        gameState = levels->deleteUselessEntities(player);
+
+        player->printEntity();//forse inutile
         player->printEntityBullets();
 
         levels->printEnemiesBullets();
 
         userInput = wgetch(win);
 
-        //TODO: passare al displayPlayerMove anche le posizioni dei nemici, affinché se in quelle coordinate c'è un nemico, il player non si muove
-        //TODO: checkare se il player è sopra un artefatto o un potere, in caso aumentare i lifepoints del player
+//        if(userInput == ' '){
+//            wait +=2;
+//        }
+//        else if(wait < 1){
+//            userInput = -1;
+//            wait++;
+//        }else{
+//            wait = 0;
+//        }
 
-        player->displayMove(userInput, /*levels->alreadyPassed*/ true, /*(levels->levelNumber > 1)*/ false, /*(levels->levelNumber == 1)*/ true);//sostituire secretDoor con levels->enemies == NULL
+        //PLAYER UPDATES
+        player->displayMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->enemies == NULL));//sostituire secretDoor con levels->enemies == NULL
         player->updateBulletPosition();
 
+        //ENEMIES UPDATES
         levels->updateEnemiesBullets();
         levels->updateEnemiesPosition(player);
         levels->printEntities();
 
-
-        //if(enemies != NULL) enemies->displayEnemiesMove
-        //enemies->updateEnemiesBulletPosition
-
-        //if powers == NULL && artifacts == NULL -> levels->alreadyPassed = True
+        if(levels->powers == NULL) levels->alreadyPassed = true;
     }
+
+    delete player;
+    delete levels;
 
     endwin();
 

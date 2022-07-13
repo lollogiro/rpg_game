@@ -55,6 +55,20 @@ public:
     void updateEnemiesBullets();
 
     void updateEnemiesPosition(LivingEntity* player);
+
+    void checkCollisionsLivingEntity(LivingEntity* shooted, LivingEntity* shooter);
+
+    void checkCollisionsArtifacts(LivingEntity* player);
+
+    void checkCollisionsPowers(LivingEntity* player);
+
+    void checkCollisions(LivingEntity* player);
+
+    void deleteNotValidEnemies();
+
+    bool deleteUselessEntities(LivingEntity* player);
+
+    void clearWindowFromEntities(LivingEntity* player);
 };
 
 

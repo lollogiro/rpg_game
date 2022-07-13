@@ -10,8 +10,6 @@ LivingEntity::LivingEntity(char mapSymbol, int posX, int posY, WINDOW *win, int 
     this->bullets = bullets;
 }
 
-//TODO: aggiungere inizializzazione di livello (pos=...)
-
 void LivingEntity::moveUp(bool openedDoor, bool secretDoor){
     mvwaddch(win, posY, posX, ' ');
     posY--;
@@ -52,15 +50,16 @@ void LivingEntity::moveRight(bool openedDoor, bool levelGreaterThanOne, bool sec
 
 void LivingEntity::createBullet(bulletAxisDirection axisDirection){
     if(bullets == NULL){
-        bullets = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 2, axisDirection.offset_x, axisDirection.offset_y, NULL);
+        bullets = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 10, axisDirection.offset_x, axisDirection.offset_y, NULL);
     }else{
         Bullet* tmp = bullets;
         while(tmp->next != NULL){
             tmp = tmp->next;
         }
-        Bullet* tmpForSet = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 2, axisDirection.offset_x, axisDirection.offset_y, NULL);
+        Bullet* tmpForSet = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 10, axisDirection.offset_x, axisDirection.offset_y, NULL);
         tmp->next = tmpForSet;
     }
+    deleteNotValidBullet();
 }
 
 void LivingEntity::updateBulletPosition(){
@@ -71,6 +70,7 @@ void LivingEntity::updateBulletPosition(){
         tmp->posY = tmp->posY + tmp->axisDirection.offset_y;
         tmp = tmp->next;
     }
+    delete tmp;
     deleteNotValidBullet();
 }
 
@@ -92,6 +92,7 @@ void LivingEntity::deleteNotValidBullet(){
                 tmp = tmp->next;
             }
         }
+        delete tmp;
     }
 }
 
@@ -101,6 +102,7 @@ void LivingEntity::printEntityBullets(){
         tmp->printBullet();
         tmp = tmp->next;
     }
+    delete tmp;
 }
 
 void LivingEntity::shootBullet(){

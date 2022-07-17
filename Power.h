@@ -14,7 +14,7 @@ public:
 
 public:
     Power(char mapSymbol, int posX, int posY, WINDOW* win, Power* next);
-    bool checkPowerPosition(int posXPower, int posYPower, Power* powers, Artifact* artifacts);
+    bool checkPowerPosition(int posXToCheck, int posYToCheck, Wall* interiorWalls, Power* powers, Artifact* artifacts);
 };
 
 #endif //PROGETTO_PROGRAMMAZIONE_POWER_H

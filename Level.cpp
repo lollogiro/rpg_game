@@ -5,12 +5,15 @@
 #include "Level.h"
 #include <cmath>
 #include <cstring>
+#include "constants.h"
 
-Level::Level(int levelNumber, Artifact* artifacts, Power* powers, Enemy* enemies, WINDOW* win){
+Level::Level(int levelNumber, WINDOW* win){
     this->levelNumber = levelNumber;
-    this->artifacts = artifacts;
-    this->powers = powers;
-    this->enemies = enemies;
+    this->artifacts = NULL;
+    this->powers = NULL;
+    this->enemies = NULL;
+    if(levelNumber % 2) this->walls = NULL;
+    else this->walls = template1(win);
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;
@@ -54,10 +57,11 @@ void Level::initializeLevel(){
         initializePower();
     }
     int enemiesUB = 2;
-    if(levelNumber > 3) enemiesUB = (int)log2(levelNumber);
+    if(levelNumber > 3) enemiesUB = /*(int)log2(levelNumber)*/(levelNumber/4)+1;
     for (int i = 0; i < enemiesUB; ++i) {
         initializeEnemy();
     }
+    printTemplate1(walls);
 }
 
 void Level::initializeArtifact(){
@@ -65,7 +69,7 @@ void Level::initializeArtifact(){
     do{
         posYNew = rand() % (getmaxy(win) - 2) + 1;
         posXNew = rand() % (getmaxx(win) - 2) + 1;
-    }while(!artifacts->checkArtifactPosition(posXNew, posYNew, artifacts));
+    }while(!artifacts->checkArtifactPosition(posXNew, posYNew, walls, artifacts));
     Artifact* tmp = new Artifact('A', posXNew, posYNew, win, 10, NULL);
     tmp->next = artifacts;
     artifacts = tmp;
@@ -76,7 +80,7 @@ void Level::initializePower(){
     do{
         posYNew = rand() % (getmaxy(win) - 2) + 1;
         posXNew = rand() % (getmaxx(win) - 2) + 1;
-    }while(!powers->checkPowerPosition(posXNew, posYNew, powers, artifacts));
+    }while(!powers->checkPowerPosition(posXNew, posYNew, walls, powers, artifacts));
     Power* tmp = new Power('P' ,posXNew, posYNew, win, NULL);
     tmp->next = powers;
     powers = tmp;
@@ -91,7 +95,7 @@ void Level::initializeEnemy(){
         else {
             posYNew=rand()%(getmaxy(win)-2)+1;
         }
-    }while(!enemies->checkEnemyPosition(posXNew, posYNew, enemies, powers, artifacts));
+    }while(!enemies->checkEnemyPosition(posXNew, posYNew, walls, enemies, powers, artifacts));
     Enemy* tmp = new Enemy('E' ,posXNew, posYNew, win, 10, NULL, NULL);
     tmp->next = enemies;
     enemies = tmp;
@@ -128,6 +132,8 @@ void Level::printEntities(){
     printArtifacts();
     printPowers();
     printEnemies();
+    box(win, 0, 0);
+    printTemplate1(walls);
 }
 
 void Level::printEnemiesBullets(){
@@ -142,7 +148,7 @@ void Level::printEnemiesBullets(){
 void Level::updateEnemiesBullets(){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->updateBulletPosition();
+        tmp->updateBulletPosition(walls);
         tmp = tmp->next;
     }
     delete tmp;
@@ -151,7 +157,7 @@ void Level::updateEnemiesBullets(){
 void Level::updateEnemiesPosition(LivingEntity* player){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->moveChooser(player);
+        tmp->moveChooser(player, walls);
         tmp = tmp->next;
     }
     delete tmp;
@@ -284,6 +290,12 @@ void Level::clearWindowFromEntities(LivingEntity* player){
         tmp3->posX = -1000;
         tmp3 = tmp3->next;
     }
-    player->deleteNotValidBullet();
+    player->deleteNotValidBullet(walls);
     delete tmp3;
+    Wall* tmp4 = walls;
+    while(tmp4 != NULL){
+        mvwaddch(win, tmp4->posY, tmp4->posX, ' ');
+        tmp4 = tmp4->next;
+    }
+    delete tmp4;
 }

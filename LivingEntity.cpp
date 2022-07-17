@@ -10,34 +10,55 @@ LivingEntity::LivingEntity(char mapSymbol, int posX, int posY, WINDOW *win, int 
     this->bullets = bullets;
 }
 
-void LivingEntity::moveUp(bool openedDoor, bool secretDoor){
+void LivingEntity::moveUp(bool openedDoor, bool secretDoor, Wall* interiorWalls){
     mvwaddch(win, posY, posX, ' ');
     posY--;
     if((posY < 1 && !openedDoor) || (posY < 1 && openedDoor && (posX < ((getmaxx(win)-2)/2)-2 || posX > ((getmaxx(win)-2)/2)+3))) posY = 1;
     else if(posY < 0 && openedDoor && posX >= ((getmaxx(win)-2)/2)-2 && posX <= ((getmaxx(win)-2)/2)+3) posY = 0;
     else if(posX == getmaxx(win)-1 && secretDoor && (posY < ((getmaxy(win)-2)/2)-2 || posY > ((getmaxy(win)-2)/2)+3)) posY++;
+    while(interiorWalls != NULL){
+        if(posX == interiorWalls->posX && posY == interiorWalls->posY){
+            posY++;
+            break;
+        }
+        interiorWalls = interiorWalls->next;
+    }
     wrefresh(win);
 }
 
-void LivingEntity::moveDown(bool levelGreaterThanOne, bool secretDoor){
+void LivingEntity::moveDown(bool levelGreaterThanOne, bool secretDoor, Wall* interiorWalls){
     mvwaddch(win, posY, posX, ' ');
     posY++;
     if((posY > getmaxy(win)-2 && !levelGreaterThanOne) || (posY > getmaxy(win)-2 && levelGreaterThanOne && (posX < ((getmaxx(win)-2)/2)-2 || posX > ((getmaxx(win)-2)/2)+3))) posY = getmaxy(win) - 2;
     else if(posY > getmaxy(win)-1 && levelGreaterThanOne && posX >= ((getmaxx(win)-2)/2)-2 && posX <= ((getmaxx(win)-2)/2)+3) posY = getmaxy(win)-1;
     else if(posX == getmaxx(win)-1 && secretDoor && (posY < ((getmaxy(win)-2)/2)-2 || posY > ((getmaxy(win)-2)/2)+3)) posY--;
+    while(interiorWalls != NULL){
+        if(posX == interiorWalls->posX && posY == interiorWalls->posY){
+            posY--;
+            break;
+        }
+        interiorWalls = interiorWalls->next;
+    }
     wrefresh(win);
 }
 
-void LivingEntity::moveLeft(bool openedDoor, bool levelGreaterThanOne){
+void LivingEntity::moveLeft(bool openedDoor, bool levelGreaterThanOne, Wall* interiorWalls){
     mvwaddch(win, posY, posX, ' ');
     posX--;
     if(posX < 1) posX = 1;
     else if(posY == 0 && openedDoor && posX < ((getmaxx(win)-2)/2)-2) posX++;
     else if(posY == getmaxy(win)-1 && levelGreaterThanOne && posX < ((getmaxx(win)-2)/2)-2) posX++;
+    while(interiorWalls != NULL){
+        if(posX == interiorWalls->posX && posY == interiorWalls->posY){
+            posX++;
+            break;
+        }
+        interiorWalls = interiorWalls->next;
+    }
     wrefresh(win);
 }
 
-void LivingEntity::moveRight(bool openedDoor, bool levelGreaterThanOne, bool secretDoor){
+void LivingEntity::moveRight(bool openedDoor, bool levelGreaterThanOne, bool secretDoor, Wall* interiorWalls){
     mvwaddch(win, posY, posX, ' ');
     posX++;
     if(posX > (getmaxx(win) - 2) && !secretDoor) posX = getmaxx(win) - 2;
@@ -45,10 +66,17 @@ void LivingEntity::moveRight(bool openedDoor, bool levelGreaterThanOne, bool sec
     else if(posX > getmaxx(win)-1 && secretDoor && (posY >= ((getmaxy(win)-2)/2)-2 && posY <= ((getmaxy(win)-2)/2)+3)) posX--;
     else if(posY == 0 && openedDoor && posX > ((getmaxx(win)-2)/2)+3) posX--;
     else if(posY == getmaxy(win)-1 && levelGreaterThanOne && posX > ((getmaxx(win)-2)/2)+3) posX--;
+    while(interiorWalls != NULL){
+        if(posX == interiorWalls->posX && posY == interiorWalls->posY){
+            posX--;
+            break;
+        }
+        interiorWalls = interiorWalls->next;
+    }
     wrefresh(win);
 }
 
-void LivingEntity::createBullet(bulletAxisDirection axisDirection){
+void LivingEntity::createBullet(bulletAxisDirection axisDirection, Wall* interiorWalls){
     if(bullets == NULL){
         bullets = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 10, axisDirection.offset_x, axisDirection.offset_y, NULL);
     }else{
@@ -59,10 +87,10 @@ void LivingEntity::createBullet(bulletAxisDirection axisDirection){
         Bullet* tmpForSet = new Bullet('.', posX+axisDirection.offset_x, posY+axisDirection.offset_y, win, 10, axisDirection.offset_x, axisDirection.offset_y, NULL);
         tmp->next = tmpForSet;
     }
-    deleteNotValidBullet();
+    deleteNotValidBullet(interiorWalls);
 }
 
-void LivingEntity::updateBulletPosition(){
+void LivingEntity::updateBulletPosition(Wall* interiorWalls){
     Bullet* tmp = bullets;
     while(tmp != NULL) {
         mvwaddch(win, tmp->posY, tmp->posX, ' ');
@@ -71,15 +99,24 @@ void LivingEntity::updateBulletPosition(){
         tmp = tmp->next;
     }
     delete tmp;
-    deleteNotValidBullet();
+    deleteNotValidBullet(interiorWalls);
 }
 
-void LivingEntity::deleteNotValidBullet(){
+bool LivingEntity::checkBulletOnInteriorWalls(int posXToCheck, int posYToCheck, Wall* interiorWalls){
+    while(interiorWalls != NULL){
+        if(posXToCheck == interiorWalls->posX && posYToCheck == interiorWalls->posY) return true;
+        interiorWalls = interiorWalls->next;
+    }
+    return false;
+}
+
+void LivingEntity::deleteNotValidBullet(Wall* interiorWalls){
     if(bullets != NULL){
         Bullet* tmp = bullets;
         Bullet* prec = NULL;
         while(tmp != NULL){
-            if(tmp->posX < 1 || tmp->posX > (getmaxx(win) - 2) || tmp->posY < 1 || tmp->posY > (getmaxy(win) - 2)){
+            if(tmp->posX < 1 || tmp->posX > (getmaxx(win) - 2) || tmp->posY < 1 || tmp->posY > (getmaxy(win) - 2) ||
+                    checkBulletOnInteriorWalls(tmp->posX, tmp->posY, interiorWalls)){
                 mvwaddch(win, tmp->posY-tmp->axisDirection.offset_y, tmp->posX-tmp->axisDirection.offset_x, ' ');
                 Bullet* old = tmp;
                 if(prec == NULL) bullets = bullets->next;
@@ -105,29 +142,29 @@ void LivingEntity::printEntityBullets(){
     delete tmp;
 }
 
-void LivingEntity::shootBullet(){
+void LivingEntity::shootBullet(Wall* interiorWalls){
     int bulletDirection = wgetch(win);
     bulletAxisDirection axisDirection;
     switch (bulletDirection) {
         case KEY_UP:
             axisDirection.offset_x = 0;
             axisDirection.offset_y = -1;
-            createBullet(axisDirection);
+            createBullet(axisDirection, interiorWalls);
             break;
         case KEY_DOWN:
             axisDirection.offset_x = 0;
             axisDirection.offset_y = 1;
-            createBullet(axisDirection);
+            createBullet(axisDirection, interiorWalls);
             break;
         case KEY_LEFT:
             axisDirection.offset_x = -1;
             axisDirection.offset_y = 0;
-            createBullet(axisDirection);
+            createBullet(axisDirection, interiorWalls);
             break;
         case KEY_RIGHT:
             axisDirection.offset_x = 1;
             axisDirection.offset_y = 0;
-            createBullet(axisDirection);
+            createBullet(axisDirection, interiorWalls);
             break;
         default:
             //Tempo scaduto per dare una direzione e sparare il proiettile
@@ -135,22 +172,22 @@ void LivingEntity::shootBullet(){
     }
 }
 
-void LivingEntity::displayMove(int userInput, bool openedDoor, bool levelGreaterThanOne, bool secretDoor){
+void LivingEntity::displayMove(int userInput, bool openedDoor, bool levelGreaterThanOne, bool secretDoor, Wall* interiorWalls){
     switch(userInput){
         case KEY_UP:
-            moveUp(openedDoor, secretDoor);
+            moveUp(openedDoor, secretDoor, interiorWalls);
             break;
         case KEY_DOWN:
-            moveDown(levelGreaterThanOne, secretDoor);
+            moveDown(levelGreaterThanOne, secretDoor, interiorWalls);
             break;
         case KEY_LEFT:
-            moveLeft(openedDoor, levelGreaterThanOne);
+            moveLeft(openedDoor, levelGreaterThanOne, interiorWalls);
             break;
         case KEY_RIGHT:
-            moveRight(openedDoor, levelGreaterThanOne, secretDoor);
+            moveRight(openedDoor, levelGreaterThanOne, secretDoor, interiorWalls);
             break;
         case ' ':
-            shootBullet();
+            shootBullet(interiorWalls);
         default:
             break;
     }

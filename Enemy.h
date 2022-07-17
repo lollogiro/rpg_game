@@ -13,10 +13,10 @@ public:
     Enemy* next;
 public:
     Enemy(char mapSymbol, int posX, int posY, WINDOW *win, int lifePoints, Bullet *bullets, Enemy* next);
-    bool checkEnemyPosition(int posXEnemy, int posYEnemy, Enemy *enemies, Power *powers, Artifact *artifacts);
-    void followPlayer(LivingEntity* Player);
-    void randomMovement();
-    void moveChooser(LivingEntity* player);
+    bool checkEnemyPosition(int posXToCheck, int posYToCheck, Wall *interiorWalls, Enemy *enemies, Power *powers, Artifact *artifacts);
+    void followPlayer(LivingEntity* Player, Wall* interiorWalls);
+    void randomMovement(Wall* interiorWalls);
+    void moveChooser(LivingEntity* player, Wall* interiorWalls);
 };
 
 

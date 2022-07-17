@@ -7,10 +7,12 @@
 #include "Artifact.h"
 #include "Power.h"
 #include "Level.h"
+#include "constants.h"
 
 using namespace std;
 
 int main() {
+    setlocale(LC_ALL, "");
     initscr();
     noecho();
     raw();
@@ -42,7 +44,7 @@ int main() {
     wrefresh(winTest);
     refresh();
 
-    Level* levels = new Level(1, NULL, NULL, NULL, win);
+    Level* levels = new Level(1, win);
 
     char closedDoor[] = "closed";
     char openedDoor[] = "      ";
@@ -50,15 +52,14 @@ int main() {
 
     LivingEntity* player = new LivingEntity('@', 1, getmaxy(win)-2, win, 30, NULL);
 
+    int preUserInput = '0';
     int userInput = '0';
     bool gameState = true;
-    int wait = 0;
 
     levels->initializeLevel();
     levels->printEntities();
 
     while(userInput != 'q' && gameState){
-        wresize(win, 0, 0);
 
         if(player->posX == getmaxx(win)-1){
             //togliere la win principale e stampare la secretWin, vedere se lasciarla stampata sempre e aprire solo la porta
@@ -69,7 +70,7 @@ int main() {
             player->posY = getmaxy(win)-2;
             levels->clearWindowFromEntities(player);
             if(levels->nextLevel == NULL){
-                Level* tmp = new Level(levels->levelNumber+1, NULL, NULL, NULL, win);
+                Level* tmp = new Level(levels->levelNumber+1, win);
                 levels->nextLevel = tmp;
                 tmp->precLevel = levels;
                 levels = levels->nextLevel;
@@ -85,6 +86,7 @@ int main() {
             levels->clearWindowFromEntities(player);
             levels = levels->precLevel;
             levels->printEntities();
+            if(levels->precLevel == NULL) box(levels->win, 0, 0);
         }
 
         mvwprintw(winTest, 1, 1, "Lifepoints: %d",player->lifePoints);
@@ -93,10 +95,7 @@ int main() {
         wrefresh(winTest);
 
         if(levels->levelNumber > 1) levels->printLowerDoor(openedDoor);
-        else {
-            box(win, 0, 0);
-            wrefresh(win);
-        }
+
         if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
         else levels->printHigherDoor(closedDoor);
 
@@ -111,21 +110,19 @@ int main() {
 
         levels->printEnemiesBullets();
 
+        //DA TOGLIERE
+        printTemplate1(levels->walls);
+
+        preUserInput = userInput;
         userInput = wgetch(win);
 
-//        if(userInput == ' '){
-//            wait +=2;
-//        }
-//        else if(wait < 1){
-//            userInput = -1;
-//            wait++;
-//        }else{
-//            wait = 0;
-//        }
+        if(preUserInput == ' ' && userInput == ' '){
+            userInput = '0';
+        }
 
         //PLAYER UPDATES
-        player->displayMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->enemies == NULL));//sostituire secretDoor con levels->enemies == NULL
-        player->updateBulletPosition();
+        player->displayMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->enemies == NULL), levels->walls);
+        player->updateBulletPosition(levels->walls);
 
         //ENEMIES UPDATES
         levels->updateEnemiesBullets();

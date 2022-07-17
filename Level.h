@@ -10,6 +10,7 @@
 #include "Artifact.h"
 #include "Power.h"
 #include "Enemy.h"
+#include "Wall.h"
 
 class Level {
 public:
@@ -17,13 +18,14 @@ public:
     Artifact* artifacts;
     Power* powers;
     Enemy* enemies;
+    Wall* walls;
     bool alreadyPassed;
     WINDOW* win;
     Level* nextLevel;
     Level* precLevel;
 
 public:
-    Level(int levelNumber, Artifact* artifacts, Power* powers, Enemy* enemies, WINDOW* win);
+    Level(int levelNumber, WINDOW* win);
 
     void printHigherDoor(char doorString[]);
 

@@ -9,19 +9,25 @@ Power::Power(char mapSymbol, int posX, int posY, WINDOW* win, Power* next)
     this->next = next;
 }
 
-bool Power::checkPowerPosition(int posXPower, int posYPower, Power *powers, Artifact *artifacts){
+bool Power::checkPowerPosition(int posXToCheck, int posYToCheck, Wall* interiorWalls, Power *powers, Artifact *artifacts){
     bool check = true;
     while(check && artifacts != NULL){
-        if(posXPower == artifacts->posX && posYPower == artifacts->posY){
+        if(posXToCheck == artifacts->posX && posYToCheck == artifacts->posY){
             check=false;
         }
         artifacts = artifacts->next;
     }
     while (check && powers != NULL){
-        if(posXPower == powers->posX && posYPower == powers->posY){
+        if(posXToCheck == powers->posX && posYToCheck == powers->posY){
             check=false;
         }
         powers = powers->next;
+    }
+    while (check && interiorWalls != NULL){
+        if(posXToCheck == interiorWalls->posX && posYToCheck == interiorWalls->posY){
+            check=false;
+        }
+        interiorWalls = interiorWalls->next;
     }
     return check;
 }

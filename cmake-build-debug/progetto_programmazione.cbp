@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="progetto_programmazione"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="progetto_programmazione">
+				<Option output="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/progetto_programmazione" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/10"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/10"/>
+					<Add directory="/usr/include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 progetto_programmazione"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="progetto_programmazione/fast">
+				<Option output="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/progetto_programmazione" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/10"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/10"/>
+					<Add directory="/usr/include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 progetto_programmazione/fast"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Artifact.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Artifact.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Bullet.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Bullet.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Enemy.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Enemy.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Entity.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Entity.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Level.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Level.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/LivingEntity.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/LivingEntity.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Power.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Power.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Wall.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/Wall.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/constants.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/constants.h">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/main.cpp">
+			<Option target="progetto_programmazione"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/lollo/Desktop/progetto_programmazione/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -138,7 +138,7 @@ void Enemy::randomMovement(Wall* interiorWalls) { //muove di 1 step in una direz
 }
 
 void Enemy::moveChooser(LivingEntity* player, Wall* interiorWalls){ //decide randomicamente tra il movimento random e tra il movimento verso il player
-    int x= rand()%3;
+    int x= rand()%5;
     if (x!=2){
         followPlayer(player, interiorWalls);
     }

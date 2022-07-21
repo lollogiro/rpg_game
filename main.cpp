@@ -110,12 +110,8 @@ int main() {
 
         levels->printEnemiesBullets();
 
-        //DA TOGLIERE
-        printTemplate1(levels->walls);
-
         preUserInput = userInput;
         userInput = wgetch(win);
-
         if(preUserInput == ' ' && userInput == ' '){
             userInput = '0';
         }

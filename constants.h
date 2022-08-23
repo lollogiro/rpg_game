@@ -12,6 +12,14 @@ Wall* template1(WINDOW* win);
 
 void printTemplate1(Wall* tmp1);
 
+void printTemplate2(Wall* tmp2);
+
+void printTemplate3(Wall* tmp3);
+
+void printTemplate4(Wall* tmp4);
+
+
+
 Wall* template2(WINDOW* win);
 
 Wall* template3(WINDOW* win);

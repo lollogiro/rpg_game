@@ -12,8 +12,24 @@ Level::Level(int levelNumber, WINDOW* win){
     this->artifacts = NULL;
     this->powers = NULL;
     this->enemies = NULL;
-    if(levelNumber % 2) this->walls = NULL;
-    else this->walls = template1(win);
+    //al posto dell'if switch
+    switch(levelNumber % 4) {
+        case 0:
+            this->walls = template1(win);
+            break;
+        case 1:
+            this->walls = template2(win);
+            break;
+        case 2:
+            this->walls = template3(win);
+            break;
+        case 3:
+            this->walls = template4(win);
+            break;
+        default:
+        break;
+    }
+
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;
@@ -58,10 +74,11 @@ void Level::initializeLevel(){
     }
     int enemiesUB = 2;
     if(levelNumber > 3) enemiesUB = /*(int)log2(levelNumber)*/(levelNumber/4)+1;
-    for (int i = 0; i < enemiesUB; ++i) {
-        initializeEnemy();
-    }
-    printTemplate1(walls);
+//    for (int i = 0; i < enemiesUB; ++i) {
+//        initializeEnemy();
+//    }
+
+
 }
 
 void Level::initializeArtifact(){
@@ -133,7 +150,23 @@ void Level::printEntities(){
     printPowers();
     printEnemies();
     box(win, 0, 0);
-    printTemplate1(walls);
+    switch(levelNumber % 4) {
+        case 0:
+            printTemplate1(template1(win));
+            break;
+        case 1:
+            printTemplate2(template2(win));
+            break;
+        case 2:
+            printTemplate3(template3(win));
+            break;
+        case 3:
+            printTemplate4(template4(win));
+            break;
+        default:
+            break;
+    }
+
 }
 
 void Level::printEnemiesBullets(){

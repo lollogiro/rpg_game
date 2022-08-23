@@ -2,134 +2,220 @@
 #include <curses.h>
 #include <ctime>
 #include <cstring>
-#include "Entity.h"
-#include "LivingEntity.h"
-#include "Artifact.h"
-#include "Power.h"
-#include "Level.h"
-#include "constants.h"
+#include <unistd.h>
+#include "Entity.hpp"
+#include "Player.hpp"
+#include "Artifact.hpp"
+#include "Power.hpp"
+#include "Level.hpp"
+#include "GameState.hpp"
+#include "constants.hpp"
 
 using namespace std;
 
 int main() {
-    setlocale(LC_ALL, "");
-    initscr();
-    noecho();
-    raw();
-    halfdelay(2);//0.2 sec
-    curs_set(0);
-    srand(time(NULL));
+    //inizializzazione variabili della libreria curses/ncurses
+    initializeCurses();
 
+    //inizializzazione WINDOW principale di gioco
     WINDOW* win = newwin(30, 120, 5, 20);
-
     keypad(win, true);
-    refresh();
-    box(win, 0, 0);
     wrefresh(win);
     refresh();
 
-    /*
-    WINDOW* secretWin = newwin(20,60,5,20);
-    keypad(secretWin, true);
-    refresh();
-    box(secretWin, 0, 0);
-    wrefresh(secretWin);
-    wborder(secretWin, '|', '|', '-', '-', '+', '+', '+', '+');
-    refresh();
-     */
-
-
-    WINDOW* winTest = newwin(5, 30, 0, 0);
-    box(winTest, 0, 0);
+    //inizializzazione WINDOW che segna i LifePoints, il livello e lo stato di gioco(solo per test)
+    WINDOW* winTest = newwin(5, 30, (getmaxy(stdscr)-mainWinHeight)/4*2, 2);
     wrefresh(winTest);
     refresh();
 
-    Level* levels = new Level(1, win);
-
-    char closedDoor[] = "closed";
-    char openedDoor[] = "      ";
-    char secretDoor[] = "secret";
-
-    LivingEntity* player = new LivingEntity('@', 1, getmaxy(win)-2, win, 30, NULL);
-
+    //dichiarazione e inizializzazione delle variabili utili all'esecuzione del gioco
     int preUserInput = '0';
     int userInput = '0';
-    bool gameState = true;
+    int menuSelected = 1;
+    GameState gs = PAUSE;
+    bool afterRestart = true;
+    bool secret = false;
+    int precLifePoints = 0;
+    int precLevelNumber = 0;
 
-    levels->initializeLevel();
-    levels->printEntities();
+    printTitle(win);
 
-    while(userInput != 'q' && gameState){
-
-        if(player->posX == getmaxx(win)-1){
-            //togliere la win principale e stampare la secretWin, vedere se lasciarla stampata sempre e aprire solo la porta
-        }
-
-        if(player->posY == 0){
-            player->posX = 1;
-            player->posY = getmaxy(win)-2;
-            levels->clearWindowFromEntities(player);
-            if(levels->nextLevel == NULL){
-                Level* tmp = new Level(levels->levelNumber+1, win);
-                levels->nextLevel = tmp;
-                tmp->precLevel = levels;
-                levels = levels->nextLevel;
-                levels->initializeLevel();
-                levels->printEntities();
-            }else{
-                levels = levels->nextLevel;
-                levels->printEntities();
-            }
-        }else if(player->posY == getmaxy(win)-1){
-            player->posX = 1;
-            player->posY = getmaxy(win)-2;
-            levels->clearWindowFromEntities(player);
-            levels = levels->precLevel;
-            levels->printEntities();
-            if(levels->precLevel == NULL) box(levels->win, 0, 0);
-        }
-
-        mvwprintw(winTest, 1, 1, "Lifepoints: %d",player->lifePoints);
-        mvwprintw(winTest, 2, 1, "Level: %d",levels->levelNumber);
-        mvwprintw(winTest, 3, 1, "Game state: %d",gameState);
-        wrefresh(winTest);
-
-        if(levels->levelNumber > 1) levels->printLowerDoor(openedDoor);
-
-        if(levels->alreadyPassed) levels->printHigherDoor(openedDoor);
-        else levels->printHigherDoor(closedDoor);
-
-        if(levels->enemies == NULL) levels->printSecretDoor(openedDoor);
-        else levels->printSecretDoor(secretDoor);
-
-        levels->checkCollisions(player);
-        gameState = levels->deleteUselessEntities(player);
-
-        player->printEntity();//forse inutile
-        player->printEntityBullets();
-
-        levels->printEnemiesBullets();
-
-        preUserInput = userInput;
+    //while utilizzato per il Menù di inizio gioco
+    while(true){
+        initializeFirstEndMenu(win, menuSelected);
         userInput = wgetch(win);
-        if(preUserInput == ' ' && userInput == ' '){
-            userInput = '0';
+        manageFirstEndMenu(win, userInput, menuSelected, gs);
+        if(gs == IN_GAME){
+            resetWindow(win);
+            break;
+        }else if(gs == QUIT){
+            endwin();
+            return 0;
+        }
+    }
+
+    //dichiarazione e inizializzazione Player
+    Player* player = new Player('@', 1, mainWinHeight/2, false, win, 30, NULL);
+
+    //dichiarazione e inizializzazione del primo livello
+    initializeMainWin(win);
+    Level* levels = new Level(1, win);
+    levels->initializeLevel();
+
+    while(true){
+        //controllo per verificare se bisogna spostarsi nella secretRoom
+        if(player->moveToSecret()){
+            secret = true;
+            player->applyRoomChange();
+            resetWindow(win);
+            initializeSecretWin(win);
+            initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+            player->resetPosition(2, mainWinHeight/4);
+            levels->printSecretEntities();
         }
 
-        //PLAYER UPDATES
-        player->displayMove(userInput, levels->alreadyPassed, (levels->levelNumber > 1), (levels->enemies == NULL), levels->walls);
-        player->updateBulletPosition(levels->walls);
+        //controllo per verificare se bisogna spostarsi nella stanza principale dalla secretRoom
+        if(secret && player->moveToMain()){
+            secret = false;
+            player->applyRoomChange();
+            resetWindow(win);
+            initializeMainWin(win);
+            initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+            player->resetPosition(mainWinWidth-3, mainWinHeight/2);
+            levels->printEntities();
+        }
 
-        //ENEMIES UPDATES
-        levels->updateEnemiesBullets();
-        levels->updateEnemiesPosition(player);
-        levels->printEntities();
+        //controllo per regolare il transito tra livelli
+        if(player->moveToNextLevel()){
+            player->resetPosition(mainWinWidth/2-1, mainWinHeight-4);
+            wclear(win);
+            levels = levels->moveToNextLevel(levels);
+        }else if(player->moveToPrecLevel()){
+            player->resetPosition(mainWinWidth/2-1, 4);
+            wclear(win);
+            levels = levels->moveToPrecLevel(levels);
+        }
 
-        if(levels->powers == NULL) levels->alreadyPassed = true;
+        //operazioni effettuate quando il gioco è in pausa
+        if(gs == PAUSE) {
+            userInput = wgetch(win);
+            manageInGameMenu(win, userInput, menuSelected, gs);
+            if(gs == IN_GAME){
+                resetWindow(win);
+                if(secret){
+                    initializeSecretWin(win);
+                    initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+                }
+                else{
+                    initializeMainWin(win);
+                    initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+                }
+            }
+        }else if(gs == IN_GAME){//operazioni effettuate quando il gioco è in esecuzione
+            //controllo fatto affinché non venga eseguito inutilmente wclear facendo laggare il gioco
+            if(precLifePoints != player->getLifePoints() || precLevelNumber != levels->getLevelNumber()){
+                initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+            }
+            precLifePoints = player->getLifePoints();
+            precLevelNumber = levels->getLevelNumber();
+
+            if(!secret){
+                if(afterRestart){
+                    afterRestart = false;
+                    player->resetPosition(mainWinWidth/2-1, mainWinHeight-4);
+                }
+                wattron(win, COLOR_PAIR(playerColor));
+                player->print();
+                wattroff(win, COLOR_PAIR(playerColor));
+                levels->printEntities();
+
+                levels->manageNextLevelAccess();
+                levels->managePrecLevelAccess();
+                levels->manageSecretRoomAccess();
+            }else{
+                initializeSecretWin(win);
+                levels->printLowerDoor(openedDoor);
+                wattron(win, COLOR_PAIR(playerColor));
+                player->print();
+                wattroff(win, COLOR_PAIR(playerColor));
+                levels->printSecretEntities();
+            }
+
+            //stampa dei proiettili delle varie LivingEntity
+            player->printEntityBullets();
+            levels->printEnemiesBullets(secret);
+
+            //gestione input dell'utente con controllo per non far sparare raffiche di proiettili
+            preUserInput = userInput;
+            userInput = wgetch(win);
+            if(preUserInput == ' ' && userInput == ' '){
+                userInput = '0';
+            }
+
+            //aggiornamento della posizione del Player e della posizione dei suoi proiettili
+            if(!secret) {
+                player->displayMove(userInput, levels->isAlreadyPassed(), levels->isGreaterThanOne(), levels->isSecretRoomAccessible(), levels->getWalls(), levels->getLevelNumber());
+                player->updateBulletPosition(levels->getWalls());
+            }else{
+                player->displayMove(userInput, levels->isAlreadyPassed(), true, levels->isSecretRoomAccessible(), NULL, levels->getLevelNumber());
+                player->updateBulletPosition(NULL);
+            }
+
+            //aggiornamento della posizione dei nemici, dei loro proiettili, dei poteri e degli artefatti
+            levels->updateEnemiesPosition(player, secret);
+            levels->updateEnemiesBullets(secret);
+
+            //funzione che verifica se il Player si muove su Artifacts e Powers ed esegue un check sulle entità, eliminandole se serve
+            levels->checkCollisions(player, secret);
+            gs = levels->deleteUselessEntities(player);
+
+            //controllo che verifica se il livello attuale è stato passato, collezionando tutti i poteri
+            levels->checkPassedLevel();
+
+            if(userInput == 'g'){
+                gs = PAUSE;
+                resetWindow(winTest);
+                resetWindow(win);
+                menuSelected = 1;
+                initializeInGameMenu(win, menuSelected);
+            }
+
+            if(gs == LOSS){
+                resetWindow(winTest);
+                resetWindow(win);
+                menuSelected = 1;
+                userInput = -1;
+                while(userInput == -1){
+                    printGameOver();
+                    userInput = getch();
+                }
+                usleep(2500000);
+                move(getmaxy(stdscr)/5*2+1, getmaxx(stdscr)/2-45);
+                clrtobot();
+                initializeFirstEndMenu(win, menuSelected);
+            }
+        }else if(gs == LOSS) {
+            userInput = wgetch(win);
+            manageFirstEndMenu(win, userInput, menuSelected, gs);
+            if(gs == IN_GAME) {
+                gs = RESTART;
+            }
+        }else if(gs == RESTART){//
+            restartGame(levels, player, win);
+            resetWindow(win);
+            initializeMainWin(win);
+            initializeInfoWin(winTest, player->getLifePoints(), levels->getLevelNumber());
+            levels->initializeLevel();
+            afterRestart = true;
+            secret = false;
+            gs = IN_GAME;
+        }else break; //caso in cui GameState == QUIT
     }
 
     delete player;
     delete levels;
+    delwin(win);
+    delwin(winTest);
 
     endwin();
 

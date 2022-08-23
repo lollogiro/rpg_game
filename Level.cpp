@@ -2,22 +2,28 @@
 // Created by lollo on 04/07/2022.
 //
 
-#include "Level.h"
+#include "Level.hpp"
+#include "constants.hpp"
 #include <cmath>
-#include <cstring>
-#include "constants.h"
 
 Level::Level(int levelNumber, WINDOW* win){
     this->levelNumber = levelNumber;
     this->artifacts = NULL;
     this->powers = NULL;
     this->enemies = NULL;
-    if(levelNumber % 2) this->walls = NULL;
-    else this->walls = template1(win);
+    if(levelNumber % 2 == 0) this->walls = template1(win);
+    else this->walls = NULL;
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;
     this->precLevel = NULL;
+}
+
+void Level::manageNextLevelAccess(){
+    if(alreadyPassed) {
+        printHigherDoor(openedDoor);
+    }
+    else printHigherDoor(closedDoor);
 }
 
 void Level::printHigherDoor(char doorString[]){
@@ -28,12 +34,24 @@ void Level::printHigherDoor(char doorString[]){
     }
 }
 
+void Level::managePrecLevelAccess(){
+    if(levelNumber > 1) {
+        printLowerDoor(openedDoor);
+    }
+}
+
+
 void Level::printLowerDoor(char doorString[]){
     int startPosition = ((getmaxx(win)-2)/2)-2;
     int endPosition = ((getmaxx(win)-2)/2)+3;
     for (int i = startPosition; i <= endPosition; ++i) {
         mvwaddch(win, getmaxy(win)-1, i, doorString[i-startPosition]);
     }
+}
+
+void Level::manageSecretRoomAccess(){
+    if(enemies == NULL || (enemies->next == NULL && enemies->getSecret())) printSecretDoor(openedDoor);
+    else printSecretDoor(secretDoor);
 }
 
 void Level::printSecretDoor(char doorString[]){
@@ -44,146 +62,192 @@ void Level::printSecretDoor(char doorString[]){
     }
 }
 
-//TODO: stampare in una box piccola differente, tanti artefatti e un solo nemico al suo interno
-void Level::printSecretRoom(){
-
-}
-
 void Level::initializeLevel(){
     for (int i = 0; i < (levelNumber/4)+1; ++i) {
-        initializeArtifact();
+        initializeArtifact(false);
     }
-    for (int i = 0; i < 5; ++i) {
-        initializePower();
+    Artifact* tmpSecret1 = new Artifact('A', mainWinWidth/4, mainWinHeight/4, true, win, 10, NULL);
+    tmpSecret1->next = artifacts;
+    artifacts = tmpSecret1;
+    for (int i = 0; i < 4; ++i) {
+        initializePower(false);
+    }
+    for (int i = 0; i < 2; i++){
+        Power* tmpSecret2 = new Power('P' ,mainWinWidth/6*2, mainWinHeight/6*(i+1), true, win, NULL);
+        tmpSecret2->next = powers;
+        powers = tmpSecret2;
     }
     int enemiesUB = 2;
-    if(levelNumber > 3) enemiesUB = /*(int)log2(levelNumber)*/(levelNumber/4)+1;
+    if(levelNumber > 3) enemiesUB = (levelNumber/4)+1;
     for (int i = 0; i < enemiesUB; ++i) {
-        initializeEnemy();
+        initializeEnemy(false);
     }
-    printTemplate1(walls);
+    Enemy* tmpSecret3 = new Enemy('E' ,mainWinWidth/6, mainWinHeight/4, true, win, ((int)log2(levelNumber)+2)*levelNumber*2, NULL, NULL);
+    tmpSecret3->next = enemies;
+    enemies = tmpSecret3;
 }
 
-void Level::initializeArtifact(){
+void Level::initializeArtifact(bool secret){
     int posYNew = 0, posXNew = 0;
     do{
-        posYNew = rand() % (getmaxy(win) - 2) + 1;
-        posXNew = rand() % (getmaxx(win) - 2) + 1;
+        if(!secret) {
+            posYNew = rand() % (getmaxy(win) - 2) + 1;
+            posXNew = rand() % (getmaxx(win) - 2) + 1;
+        }else{
+            posYNew = rand() % (getmaxy(win)/2 - 2) + 1;
+            posXNew = rand() % (getmaxx(win)/2 - 2) + 1;
+        }
     }while(!artifacts->checkArtifactPosition(posXNew, posYNew, walls, artifacts));
-    Artifact* tmp = new Artifact('A', posXNew, posYNew, win, 10, NULL);
+    Artifact* tmp = new Artifact('A', posXNew, posYNew, secret, win, ((int)log2(levelNumber)+1)*2, NULL);
     tmp->next = artifacts;
     artifacts = tmp;
 }
 
-void Level::initializePower(){
+void Level::initializePower(bool secret){
     int posYNew = 0, posXNew = 0;
     do{
-        posYNew = rand() % (getmaxy(win) - 2) + 1;
-        posXNew = rand() % (getmaxx(win) - 2) + 1;
+        if(!secret) {
+            posYNew = rand() % (getmaxy(win) - 2) + 1;
+            posXNew = rand() % (getmaxx(win) - 2) + 1;
+        }else{
+            posYNew = rand() % (getmaxy(win)/2 - 2) + 1;
+            posXNew = rand() % (getmaxx(win)/2 - 2) + 1;
+        }
     }while(!powers->checkPowerPosition(posXNew, posYNew, walls, powers, artifacts));
-    Power* tmp = new Power('P' ,posXNew, posYNew, win, NULL);
+    Power* tmp = new Power('P' ,posXNew, posYNew, secret, win, NULL);
     tmp->next = powers;
     powers = tmp;
 }
 
-void Level::initializeEnemy(){
+void Level::initializeEnemy(bool secret){
     int posXNew=rand()%(getmaxx(win)-2)+1, posYNew=0;
     do{
-        if (posXNew<(getmaxx(win)-2)/3){
-            posYNew=rand()%((getmaxy(win)-2)/2)+1;
-        }
-        else {
-            posYNew=rand()%(getmaxy(win)-2)+1;
+        if(!secret) {
+            if (posXNew<(getmaxx(win)-2)/3){
+                posYNew=rand()%((getmaxy(win)-2)/2)+1;
+            }
+            else {
+                posYNew=rand()%(getmaxy(win)-2)+1;
+            }
+        }else{
+            if (posXNew<(getmaxx(win)/2-2)/3){
+                posYNew=rand()%((getmaxy(win)/2-2)/2)+1;
+            }
+            else {
+                posYNew=rand()%(getmaxy(win)/2-2)+1;
+            }
         }
     }while(!enemies->checkEnemyPosition(posXNew, posYNew, walls, enemies, powers, artifacts));
-    Enemy* tmp = new Enemy('E' ,posXNew, posYNew, win, 10, NULL, NULL);
+    Enemy* tmp = new Enemy('E' ,posXNew, posYNew, secret, win, ((int)log2(levelNumber)+2)*levelNumber, NULL, NULL);
     tmp->next = enemies;
     enemies = tmp;
 }
 
-void Level::printArtifacts(){
+void Level::printArtifacts(bool secret){
     Artifact* tmp = artifacts;
     while(tmp != NULL){
-        tmp->printEntity();
+        if(tmp->checkSecret(secret)){
+            wattron(win, COLOR_PAIR(artifactColor));
+            tmp->print();
+            wattroff(win, COLOR_PAIR(artifactColor));
+        };
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::printPowers(){
+void Level::printPowers(bool secret){
     Power* tmp = powers;
     while(tmp != NULL){
-        tmp->printEntity();
+        if(tmp->checkSecret(secret)){
+            wattron(win, COLOR_PAIR(powerColor));
+            tmp->print();
+            wattroff(win, COLOR_PAIR(powerColor));
+        }
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::printEnemies(){
+void Level::printEnemies(bool secret){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->printEntity();
+        if(tmp->checkSecret(secret)){
+            wattron(win, COLOR_PAIR(enemyColor));
+            tmp->print();
+            wattroff(win, COLOR_PAIR(enemyColor));
+        }
         tmp = tmp->next;
     }
     delete tmp;
 }
 
 void Level::printEntities(){
-    printArtifacts();
-    printPowers();
-    printEnemies();
+    printArtifacts(false);
+    printPowers(false);
+    printEnemies(false);
     box(win, 0, 0);
-    printTemplate1(walls);
+    if(levelNumber % 2 == 0) {
+        printTemplate1(walls, win);
+    }
 }
 
-void Level::printEnemiesBullets(){
+void Level::printSecretEntities(){
+    printArtifacts(true);
+    printPowers(true);
+    printEnemies(true);
+}
+
+//TODO: printWalls fatto dalla carol
+
+void Level::printEnemiesBullets(bool secret){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->printEntityBullets();
+        if(tmp->checkSecret(secret)) tmp->printEntityBullets();
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::updateEnemiesBullets(){
+void Level::updateEnemiesBullets(bool secret){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->updateBulletPosition(walls);
+        if(tmp->checkSecret(secret)) tmp->updateBulletPosition(walls);
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::updateEnemiesPosition(LivingEntity* player){
+void Level::updateEnemiesPosition(LivingEntity* player, bool secret){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        tmp->moveChooser(player, walls);
+        if(tmp->checkSecret(secret)) tmp->moveChooser(player, walls, levelNumber);
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::checkCollisionsLivingEntity(LivingEntity* hit, LivingEntity* shooter){
-    int posXHit = hit->posX, posYHit = hit->posY;
+void Level::checkCollisionsLivingEntity(LivingEntity* hit, LivingEntity* shooter, bool secret){
+    int posXHit = hit->getPosX(), posYHit = hit->getPosY();
     Bullet* tmp = shooter->bullets;
     while(tmp != NULL){
-        if(tmp->posX == posXHit && tmp->posY == posYHit){
-            hit->lifePoints -= tmp->damage;
-            tmp->posX = -1000;//per invalidare il bullet
+        if(tmp->getPosX() == posXHit && tmp->getPosY() == posYHit && (hit->checkSecret(secret) == shooter->checkSecret(secret))){
+            hit->modifyLifepoints(tmp->getDamage(), true);
+            tmp->invalidBullet();
         }
         tmp = tmp->next;
     }
     delete tmp;
 }
 
-void Level::checkCollisionsArtifacts(LivingEntity* player){
+void Level::checkCollisionsArtifacts(LivingEntity* player, bool secret){
     if(artifacts != NULL){
         Artifact* tmp = artifacts;
         Artifact* prec = NULL;
         while(tmp != NULL){
-            if(player->posX == tmp->posX && player->posY == tmp->posY){
-                player->lifePoints += tmp->givenLifePoints;
-                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+            if(player->getPosX() == tmp->getPosX() && player->getPosY() == tmp->getPosY() && (player->checkSecret(secret) == tmp->checkSecret(secret))){
+                player->modifyLifepoints(tmp->getGivenLifePoints(), false);
+                tmp->clear();
                 Artifact* old = tmp;
                 if(prec == NULL) artifacts = artifacts->next;
                 else prec->next = tmp->next;
@@ -199,13 +263,13 @@ void Level::checkCollisionsArtifacts(LivingEntity* player){
     }
 }
 
-void Level::checkCollisionsPowers(LivingEntity* player){
+void Level::checkCollisionsPowers(LivingEntity* player, bool secret){
     if(powers != NULL){
         Power* tmp = powers;
         Power* prec = NULL;
         while(tmp != NULL){
-            if(player->posX == tmp->posX && player->posY == tmp->posY){
-                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+            if(player->getPosX() == tmp->getPosX() && player->getPosY() == tmp->getPosY() && (player->checkSecret(secret) == tmp->checkSecret(secret))){
+                tmp->clear();
                 Power* old = tmp;
                 if(prec == NULL) powers = powers->next;
                 else prec->next = tmp->next;
@@ -221,16 +285,16 @@ void Level::checkCollisionsPowers(LivingEntity* player){
     }
 }
 
-void Level::checkCollisions(LivingEntity* player){
+void Level::checkCollisions(LivingEntity* player, bool secret){
     Enemy* tmp = enemies;
     while(tmp != NULL){
-        checkCollisionsLivingEntity(player, tmp);//FUNZIONA
-        checkCollisionsLivingEntity(tmp, player);
+        checkCollisionsLivingEntity(player, tmp, secret);//FUNZIONA
+        checkCollisionsLivingEntity(tmp, player, secret);
         tmp = tmp->next;
     }
     delete tmp;
-    checkCollisionsArtifacts(player);
-    checkCollisionsPowers(player);
+    checkCollisionsArtifacts(player, secret);
+    checkCollisionsPowers(player, secret);
     deleteUselessEntities(player);
 }
 
@@ -239,9 +303,9 @@ void Level::deleteNotValidEnemies(){
         Enemy* tmp = enemies;
         Enemy* prec = NULL;
         while(tmp != NULL){
-            if(tmp->lifePoints <= 0){
-                //TODO: cancellare anche bullet dell'enemy per non sprecare memoria(?)
-                mvwaddch(win, tmp->posY, tmp->posX, ' ');
+            if(!tmp->isValid()){
+                delete tmp->bullets;
+                tmp->clear();
                 Enemy* old = tmp;
                 if(prec == NULL) enemies = enemies->next;
                 else prec->next = tmp->next;
@@ -257,45 +321,54 @@ void Level::deleteNotValidEnemies(){
     }
 }
 
-bool Level::deleteUselessEntities(LivingEntity* player){
-    if(player->lifePoints <= 0){
+GameState Level::deleteUselessEntities(LivingEntity* player){
+    if(!player->isValid()){
         //GAME OVER
-        return false;
+        return LOSS;
     }
     deleteNotValidEnemies();
-    return true;
+    return IN_GAME;
 }
 
-void Level::clearWindowFromEntities(LivingEntity* player){
-    Enemy* tmp = enemies;
-    while(tmp != NULL){
-        mvwaddch(win, tmp->posY, tmp->posX, ' ');
-        tmp = tmp->next;
+Level* Level::moveToNextLevel(Level* levels){
+    if(levels->nextLevel == NULL){
+        Level* tmp = new Level(levels->getLevelNumber()+1, win);
+        levels->nextLevel = tmp;
+        tmp->precLevel = levels;
+        levels = levels->nextLevel;
+        levels->initializeLevel();
+    }else{
+        levels = levels->nextLevel;
     }
-    delete tmp;
-    Artifact* tmp1 = artifacts;
-    while(tmp1 != NULL){
-        mvwaddch(win, tmp1->posY, tmp1->posX, ' ');
-        tmp1 = tmp1->next;
-    }
-    delete tmp1;
-    Power* tmp2 = powers;
-    while(tmp2 != NULL){
-        mvwaddch(win, tmp2->posY, tmp2->posX, ' ');
-        tmp2 = tmp2->next;
-    }
-    delete tmp2;
-    Bullet* tmp3 = player->bullets;
-    while(tmp3 != NULL){
-        tmp3->posX = -1000;
-        tmp3 = tmp3->next;
-    }
-    player->deleteNotValidBullet(walls);
-    delete tmp3;
-    Wall* tmp4 = walls;
-    while(tmp4 != NULL){
-        mvwaddch(win, tmp4->posY, tmp4->posX, ' ');
-        tmp4 = tmp4->next;
-    }
-    delete tmp4;
+    return levels;
+}
+
+Level* Level::moveToPrecLevel(Level *levels){
+    levels = levels->precLevel;
+    if(levels->precLevel == NULL) box(win, 0, 0);
+    return levels;
+}
+
+void Level::checkPassedLevel(){
+    if(powers == NULL) alreadyPassed = true;
+}
+
+int Level::getLevelNumber(){
+    return levelNumber;
+}
+
+bool Level::isAlreadyPassed(){
+    return alreadyPassed;
+}
+
+bool Level::isGreaterThanOne(){
+    return levelNumber > 1;
+}
+
+bool Level::isSecretRoomAccessible(){
+    return enemies == NULL || (enemies->next == NULL && enemies->getSecret());
+}
+
+Wall *Level::getWalls(){
+    return walls;
 }

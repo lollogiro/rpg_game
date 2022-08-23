@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/lollo/Desktop/progetto_programmazione
+CMAKE_SOURCE_DIR = /mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/CMakeFiles /mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug/CMakeFiles /mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lollo/Desktop/progetto_programmazione/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -304,6 +304,33 @@ LivingEntity.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/progetto_programmazione.dir/build.make CMakeFiles/progetto_programmazione.dir/LivingEntity.cpp.s
 .PHONY : LivingEntity.cpp.s
 
+Player.o: Player.cpp.o
+
+.PHONY : Player.o
+
+# target to build an object file
+Player.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/progetto_programmazione.dir/build.make CMakeFiles/progetto_programmazione.dir/Player.cpp.o
+.PHONY : Player.cpp.o
+
+Player.i: Player.cpp.i
+
+.PHONY : Player.i
+
+# target to preprocess a source file
+Player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/progetto_programmazione.dir/build.make CMakeFiles/progetto_programmazione.dir/Player.cpp.i
+.PHONY : Player.cpp.i
+
+Player.s: Player.cpp.s
+
+.PHONY : Player.s
+
+# target to generate assembly for a file
+Player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/progetto_programmazione.dir/build.make CMakeFiles/progetto_programmazione.dir/Player.cpp.s
+.PHONY : Player.cpp.s
+
 Power.o: Power.cpp.o
 
 .PHONY : Power.o
@@ -439,6 +466,9 @@ help:
 	@echo "... LivingEntity.o"
 	@echo "... LivingEntity.i"
 	@echo "... LivingEntity.s"
+	@echo "... Player.o"
+	@echo "... Player.i"
+	@echo "... Player.s"
 	@echo "... Power.o"
 	@echo "... Power.i"
 	@echo "... Power.s"

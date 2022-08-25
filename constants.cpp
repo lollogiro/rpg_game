@@ -86,36 +86,31 @@ Wall* template2(WINDOW* win){
     Wall* tmp = new Wall('q', 0, 0, win);
         for (int i = 1; i <= 6; ++i) {
             tmp->posX = i;
-            tmp->posY = 7;
+            tmp->posY = 2;
             tmp->next = NULL;
             interiorWalls = listInsert(interiorWalls, tmp);
             tmp->posX = getmaxx(win)-1-i;
-            tmp->posY = 19;
+            tmp->posY = 30;
             tmp->next = NULL;
             interiorWalls = listInsert(interiorWalls, tmp);
     }
     //MURI VERTICALI
     tmp->mapSymbol = 'x';
     for (int i = 1; i <= 8; ++i){
-        tmp->posX = 28;
+        tmp->posX = 24;
         tmp->posY = i;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
-        tmp->posX = 71;
+        tmp->posX = 67;
         tmp->posY = getmaxy(win)-1-i;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
     }
 
-tmp->posX=23;
-tmp->posY=9;
+tmp->posX=28;
+tmp->posY=7;
 tmp->next= NULL;
 interiorWalls = listInsert(interiorWalls, tmp);
-tmp->posX=71;
-tmp->posY=4;
-tmp->next=NULL;
-interiorWalls = listInsert(interiorWalls, tmp);
-
 return interiorWalls;
 
 
@@ -126,14 +121,13 @@ return interiorWalls;
 void printTemplate2(Wall* tmp){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(tmp->win, 7, 0, ACS_LTEE);
-        mvwaddch(tmp->win, 19 , getmaxx(tmp->win)-1, ACS_RTEE);
+        mvwaddch(tmp->win, 2, 0, ACS_LTEE);
+        mvwaddch(tmp->win, 30 , getmaxx(tmp->win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(tmp->win, 0, 28, ACS_TTEE);
-        mvwaddch(tmp->win, getmaxy(tmp->win)-1, 71, ACS_BTEE);
+        mvwaddch(tmp->win, 0, 24, ACS_TTEE);
+        mvwaddch(tmp->win, getmaxy(tmp->win)-1, 67, ACS_BTEE);
 
-        mvwaddch(tmp->win, 23, 9, ACS_TTEE);
-        mvwaddch(tmp->win, 71, 4, ACS_TTEE);
+        mvwaddch(tmp->win, 28, 7, ACS_TTEE);
         while(tmp != NULL){
             mvwaddch(tmp->win, tmp->posY, tmp->posX, NCURSES_ACS(tmp->mapSymbol));
             tmp = tmp->next;
@@ -146,18 +140,18 @@ Wall* template3(WINDOW* win){
     Wall* tmp = new Wall('q', 0, 0, win);
     for (int i = 1; i <= 6; ++i) {
         tmp->posX = i;
-        tmp->posY = 7;
+        tmp->posY = 5;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
         tmp->posX = getmaxx(win)-1-i;
-        tmp->posY = 19;
+        tmp->posY = 22;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
     }
     //MURI VERTICALI
     tmp->mapSymbol = 'x';
     for (int i = 1; i <= 8; ++i){
-        tmp->posX = 28;
+        tmp->posX = 29;
         tmp->posY = i;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
@@ -167,13 +161,9 @@ Wall* template3(WINDOW* win){
         interiorWalls = listInsert(interiorWalls, tmp);
     }
 
-    tmp->posX=28;
+    tmp->posX=24;
     tmp->posY=6;
     tmp->next= NULL;
-    interiorWalls = listInsert(interiorWalls, tmp);
-    tmp->posX=69;
-    tmp->posY=10;
-    tmp->next=NULL;
     interiorWalls = listInsert(interiorWalls, tmp);
 
     return interiorWalls;
@@ -186,14 +176,13 @@ Wall* template3(WINDOW* win){
 void printTemplate3(Wall* tmp){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(tmp->win, 7, 0, ACS_LTEE);
-        mvwaddch(tmp->win, 19 , getmaxx(tmp->win)-1, ACS_RTEE);
+        mvwaddch(tmp->win, 5, 0, ACS_LTEE);
+        mvwaddch(tmp->win, 22 , getmaxx(tmp->win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(tmp->win, 0, 28, ACS_TTEE);
+        mvwaddch(tmp->win, 0, 29, ACS_TTEE);
         mvwaddch(tmp->win, getmaxy(tmp->win)-1, 71, ACS_BTEE);
 
-        mvwaddch(tmp->win, 28, 6, ACS_TTEE);
-        mvwaddch(tmp->win, 71, 4, ACS_TTEE);
+        mvwaddch(tmp->win, 24, 6, ACS_TTEE);
         while(tmp != NULL){
             mvwaddch(tmp->win, tmp->posY, tmp->posX, NCURSES_ACS(tmp->mapSymbol));
             tmp = tmp->next;
@@ -219,25 +208,20 @@ Wall* template4(WINDOW* win){
     //MURI VERTICALI
     tmp->mapSymbol = 'x';
     for (int i = 1; i <= 8; ++i){
-        tmp->posX = 28;
+        tmp->posX = 32;
         tmp->posY = i;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
-        tmp->posX = 71;
+        tmp->posX = 68;
         tmp->posY = getmaxy(win)-1-i;
         tmp->next = NULL;
         interiorWalls = listInsert(interiorWalls, tmp);
     }
 
-    tmp->posX=37;
-    tmp->posY=2;
+    tmp->posX=32;
+    tmp->posY=5;
     tmp->next= NULL;
     interiorWalls = listInsert(interiorWalls, tmp);
-    tmp->posX=75;
-    tmp->posY=9;
-    tmp->next=NULL;
-    interiorWalls = listInsert(interiorWalls, tmp);
-
     return interiorWalls;
 
 
@@ -251,11 +235,10 @@ void printTemplate4(Wall* tmp){
         mvwaddch(tmp->win, 7, 0, ACS_LTEE);
         mvwaddch(tmp->win, 19 , getmaxx(tmp->win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(tmp->win, 0, 28, ACS_TTEE);
-        mvwaddch(tmp->win, getmaxy(tmp->win)-1, 71, ACS_BTEE);
+        mvwaddch(tmp->win, 0, 32, ACS_TTEE);
+        mvwaddch(tmp->win, getmaxy(tmp->win)-1, 68, ACS_BTEE);
 
-        mvwaddch(tmp->win, 28, 6, ACS_TTEE);
-        mvwaddch(tmp->win, 71, 4, ACS_TTEE);
+        mvwaddch(tmp->win, 32, 5, ACS_TTEE);
         while(tmp != NULL){
             mvwaddch(tmp->win, tmp->posY, tmp->posX, NCURSES_ACS(tmp->mapSymbol));
             tmp = tmp->next;

@@ -264,7 +264,7 @@ Wall* template2(WINDOW* win){
     for (int i = 1; i <= 6; ++i) {
         tmp = new Wall('q', i, 9, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win)-1-i, 30, false, win);
+        tmp = new Wall('q', getmaxx(win)-1-i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
@@ -285,11 +285,10 @@ void printTemplate2(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
         mvwaddch(win, 9, 0, ACS_LTEE);
-        mvwaddch(win, 30 , getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 30, getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
         mvwaddch(win, 0, 24, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 67, ACS_BTEE);
-
 
         while(tmp != NULL){
             tmp->print();
@@ -297,8 +296,6 @@ void printTemplate2(Wall* tmp, WINDOW* win){
         }
     }
 }
-
-
 
 Wall* template3(WINDOW* win){
     Wall* interiorWalls = NULL;
@@ -320,6 +317,7 @@ Wall* template3(WINDOW* win){
         tmp = new Wall('x', 71, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
+
     return interiorWalls;
 }
 
@@ -327,8 +325,7 @@ void printTemplate3(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
         mvwaddch(win, 9, 0, ACS_LTEE);
-        mvwaddch(win, 40 , getmaxx(win)-1, ACS_RTEE);
-
+        mvwaddch(win, 40, getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
         mvwaddch(win, 0, 29, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 71, ACS_BTEE);
@@ -339,8 +336,6 @@ void printTemplate3(Wall* tmp, WINDOW* win){
         }
     }
 }
-
-
 
 Wall* template4(WINDOW* win){
     Wall* interiorWalls = NULL;
@@ -361,21 +356,21 @@ Wall* template4(WINDOW* win){
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 68, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
+    }
 
     return interiorWalls;
 }
 
 void printTemplate4(Wall* tmp, WINDOW* win){
-    if (tmp != NULL) {
+    if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
         mvwaddch(win, 7, 0, ACS_LTEE);
-        mvwaddch(win, 19, getmaxx(win) - 1, ACS_RTEE);
+        mvwaddch(win, 19, getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
         mvwaddch(win, 0, 32, ACS_TTEE);
-        mvwaddch(win, getmaxy(win) - 1, 68, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 68, ACS_BTEE);
 
-
-        while (tmp != NULL) {
+        while(tmp != NULL){
             tmp->print();
             tmp = tmp->next;
         }

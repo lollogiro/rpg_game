@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/progetto_programmazione.dir/Entity.cpp.o"
   "CMakeFiles/progetto_programmazione.dir/Level.cpp.o"
   "CMakeFiles/progetto_programmazione.dir/LivingEntity.cpp.o"
+  "CMakeFiles/progetto_programmazione.dir/Player.cpp.o"
   "CMakeFiles/progetto_programmazione.dir/Power.cpp.o"
   "CMakeFiles/progetto_programmazione.dir/Wall.cpp.o"
   "CMakeFiles/progetto_programmazione.dir/constants.cpp.o"

@@ -11,12 +11,27 @@ Level::Level(int levelNumber, WINDOW* win){
     this->artifacts = NULL;
     this->powers = NULL;
     this->enemies = NULL;
-    if(levelNumber % 2 == 0) this->walls = template1(win);
     else this->walls = NULL;
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;
     this->precLevel = NULL;
+    switch(levelNumber % 4) {
+        case 0:
+            this->walls = template1(win);
+            break;
+        case 1:
+            this->walls = template2(win);
+            break;
+        case 2:
+            this->walls = template3(win);
+            break;
+        case 3:
+            this->walls = template4(win);
+            break;
+        default:
+            break;
+    }
 }
 
 void Level::manageNextLevelAccess(){
@@ -187,8 +202,26 @@ void Level::printEntities(){
     printPowers(false);
     printEnemies(false);
     box(win, 0, 0);
-    if(levelNumber % 2 == 0) {
-        printTemplate1(walls, win);
+    switch(levelNumber % 4) {
+        case 0:
+            printTemplate1(template1(win));
+            break;
+        case 1:
+            printTemplate2(template2(win));
+            break;
+        case 2:
+            printTemplate3(template3(win));
+            break;
+        case 3:
+            printTemplate4(template4(win));
+            break;
+        default:
+            break;
+    }
+
+
+
+
     }
 }
 

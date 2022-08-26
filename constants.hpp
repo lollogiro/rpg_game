@@ -59,4 +59,17 @@ Wall* template1(WINDOW* win);
 
 void printTemplate1(Wall* tmp1, WINDOW* win);
 
+Wall* template2(WINDOW* win);
+
+void printTemplate2(Wall* tmp1, WINDOW* win);
+
+Wall* template3(WINDOW* win);
+
+void printTemplate3(Wall* tmp1, WINDOW* win);
+
+Wall* template4(WINDOW* win);
+
+void printTemplate4(Wall* tmp1, WINDOW* win);
+
+
 #endif //TEMPLATE_MAPPE_CONSTANTS_H

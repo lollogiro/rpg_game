@@ -366,21 +366,18 @@ Wall* template4(WINDOW* win){
 }
 
 void printTemplate4(Wall* tmp, WINDOW* win){
-    if(tmp != NULL){
+    if (tmp != NULL) {
         //MURI ORIZZONTALI x BORDI
         mvwaddch(win, 7, 0, ACS_LTEE);
-        mvwaddch(win, 19 , getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 19, getmaxx(win) - 1, ACS_RTEE);
         //MURI VERTICALI x BORDI
         mvwaddch(win, 0, 32, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 68, ACS_BTEE);
+        mvwaddch(win, getmaxy(win) - 1, 68, ACS_BTEE);
 
 
-        while(tmp != NULL){
+        while (tmp != NULL) {
             tmp->print();
             tmp = tmp->next;
         }
     }
 }
-
-
-//TODO: fare template 2,3 e 4

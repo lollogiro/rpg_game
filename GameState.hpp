@@ -1,0 +1,16 @@
+//
+// Created by lollo on 09/08/2022.
+//
+
+#ifndef PROGETTO_PROGRAMMAZIONE_GAMESTATE_HPP
+#define PROGETTO_PROGRAMMAZIONE_GAMESTATE_HPP
+
+enum GameState{
+    PAUSE,
+    IN_GAME,
+    LOSS,
+    RESTART,
+    QUIT
+};
+
+#endif //PROGETTO_PROGRAMMAZIONE_GAMESTATE_HPP

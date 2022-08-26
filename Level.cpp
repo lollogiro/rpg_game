@@ -218,11 +218,6 @@ void Level::printEntities(){
         default:
             break;
     }
-
-
-
-
-    }
 }
 
 void Level::printSecretEntities(){

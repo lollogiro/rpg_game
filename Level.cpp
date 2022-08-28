@@ -16,7 +16,7 @@ Level::Level(int levelNumber, WINDOW* win){
     this->win = win;
     this->nextLevel = NULL;
     this->precLevel = NULL;
-    switch(levelNumber % 4) {
+    switch(levelNumber % 4){
         case 0:
             this->walls = template1(win);
             break;
@@ -202,7 +202,7 @@ void Level::printEntities(){
     printPowers(false);
     printEnemies(false);
     box(win, 0, 0);
-    switch(levelNumber % 4) {
+    switch(levelNumber % 4){
         case 0:
             printTemplate1(template1(win));
             break;

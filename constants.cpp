@@ -274,6 +274,12 @@ Wall* template2(WINDOW* win){
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
 
     }
+    for (int i = 24; i <= 27; ++i) {
+        tmp = new Wall('q', i, 2, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+
+
 
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);

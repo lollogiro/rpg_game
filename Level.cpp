@@ -204,16 +204,16 @@ void Level::printEntities(){
     box(win, 0, 0);
     switch(levelNumber % 4){
         case 0:
-            printTemplate1(template1(win));
+            printTemplate1(template1(win),win);
             break;
         case 1:
-            printTemplate2(template2(win));
+            printTemplate2(template1(win),win);
             break;
         case 2:
-            printTemplate3(template3(win));
+            printTemplate3(template3(win),win);
             break;
         case 3:
-            printTemplate4(template4(win));
+            printTemplate4(template4(win),win);
             break;
         default:
             break;

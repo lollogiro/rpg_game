@@ -11,7 +11,7 @@ Level::Level(int levelNumber, WINDOW* win){
     this->artifacts = NULL;
     this->powers = NULL;
     this->enemies = NULL;
-    else this->walls = NULL;
+    this->walls = NULL;
     this->alreadyPassed = false;
     this->win = win;
     this->nextLevel = NULL;

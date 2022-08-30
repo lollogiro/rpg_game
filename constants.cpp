@@ -244,7 +244,6 @@ Wall* template1(WINDOW* win){
         tmp = new Wall('x', 62, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-
     for (int i = 24; i >= 21; --i){
         tmp = new Wall('x', 4, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);

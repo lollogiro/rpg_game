@@ -301,8 +301,8 @@ void printTemplate2(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
         mvwaddch(win, 9, 0, ACS_LTEE);
-        mvwaddch(win, 6, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 20, 0, ACS_LTEE);
+        mvwaddch(win, 3, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 18, 0, ACS_LTEE);
         mvwaddch(win, 25, getmaxx(win)-1, ACS_RTEE);
 
         //MURI VERTICALI x BORDI

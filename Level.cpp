@@ -207,7 +207,7 @@ void Level::printEntities(){
             printTemplate1(template1(win),win);
             break;
         case 1:
-            printTemplate2(template1(win),win);
+            printTemplate2(template2(win),win);
             break;
         case 2:
             printTemplate3(template3(win),win);

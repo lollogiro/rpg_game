@@ -253,6 +253,8 @@ void printTemplate1(Wall* tmp, WINDOW* win){
         mvwaddch(win, getmaxy(win)-1, 86, ACS_BTEE);
         mvwaddch(win, 0, 94, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 32, ACS_BTEE);
+        mvwaddch(win, 0, 39, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 50, ACS_BTEE);
 
         while(tmp != NULL){
             tmp->print();

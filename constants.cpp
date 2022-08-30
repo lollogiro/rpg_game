@@ -232,6 +232,12 @@ Wall* template1(WINDOW* win){
         tmp = new Wall('x', 32, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
+    for (int i = 1; i <= 6; ++i){
+        tmp = new Wall('x', 39, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+        tmp = new Wall('x', 50, getmaxy(win)-1-i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
     return interiorWalls;
 }
 
@@ -272,18 +278,13 @@ Wall* template2(WINDOW* win){
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win) - 1 - i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-
     }
-
     for (int i = 1; i <= 14; ++i) {
         tmp = new Wall('q', i, 10, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win) - 1 - i, 40, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-
     }
-
-
 
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);

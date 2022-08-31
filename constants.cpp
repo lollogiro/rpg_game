@@ -205,8 +205,8 @@ Wall* template1(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 7 ; ++i) {
-        tmp = new Wall('q', i, 5, false, win);
+    for (int i = 1; i <= 21 ; ++i) {
+        tmp = new Wall('q', i, 13, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win)-1-i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
@@ -223,8 +223,20 @@ Wall* template1(WINDOW* win){
 
     }
 
-    for (int i = 80; i <= 95; ++i) {
+    for (int i = 80; i <= 101; ++i) {
         tmp = new Wall('q', i, 19, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+
+    }
+
+    for (int i = 48; i <= 64; ++i) {
+        tmp = new Wall('q', i, 22, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+
+    }
+
+    for (int i = 36; i <= 42; ++i) {
+        tmp = new Wall('q', i, 17, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
 
     }
@@ -234,7 +246,7 @@ Wall* template1(WINDOW* win){
     tmp = new Wall('x', 0, 0, false, win);
 
     for (int i = 1; i <= 15; ++i){
-        tmp = new Wall('x', 20, i, false, win);
+        tmp = new Wall('x', 30, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 80, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
@@ -242,16 +254,16 @@ Wall* template1(WINDOW* win){
     for (int i = 1; i <= 12; ++i){
         tmp = new Wall('x', 94, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 32, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 35, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 10; ++i){
+    for (int i = 1; i <= 9; ++i){
         tmp = new Wall('x', 50, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 62, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 65, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 23; i >= 17; --i){
+    for (int i = 23; i >= 20; --i){
         tmp = new Wall('x', 8, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
@@ -263,20 +275,23 @@ Wall* template1(WINDOW* win){
 void printTemplate1(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 5, 0, ACS_LTEE);
+        mvwaddch(win, 13, 0, ACS_LTEE);
         mvwaddch(win, 25 , getmaxx(win)-1, ACS_RTEE);
         mvwaddch(win, 24, 0, ACS_LTEE);
         mvwaddch(win, 10 , getmaxx(win)-1, ACS_RTEE);
         mvwaddch(win, 8, 50, ACS_LTEE);
-        mvwaddch(win, 22, 80, ACS_LTEE);
+        mvwaddch(win, 19, 80, ACS_LTEE);
+        mvwaddch(win, 22, 48, ACS_LTEE);
+        mvwaddch(win, 17, 36, ACS_LTEE);
+
 
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 20, ACS_TTEE);
+        mvwaddch(win, 0, 30, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 80, ACS_BTEE);
         mvwaddch(win, 0, 94, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 32, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 35, ACS_BTEE);
         mvwaddch(win, 0, 50, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 62, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 65, ACS_BTEE);
         mvwaddch(win, 4, 24, ACS_TTEE);
 
 
@@ -293,42 +308,58 @@ Wall* template2(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 7; ++i) {
-        tmp = new Wall('q', i, 9, false, win);
+    for (int i = 1; i <= 14; ++i) {
+        tmp = new Wall('q', i, 22, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win) - 1 - i, 3, false, win);
+        tmp = new Wall('q', getmaxx(win) - 1 - i, 9, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 10; ++i) {
-        tmp = new Wall('q', i, 15, false, win);
+    for (int i = 1; i <= 8; ++i) {
+        tmp = new Wall('q', i, 16, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+
+        for (int i = 1; i <= 21; ++i) {
         tmp = new Wall('q', getmaxx(win) - 1 - i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
-    for (int i = 8; i <= 14; ++i) {
-        tmp = new Wall('q', i, 5, false, win);
+    for (int i = 49; i <= 70; ++i) {
+        tmp = new Wall('q', i, 11, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
+    for (int i = 39; i <= 60; ++i) {
+        tmp = new Wall('q', i, 21, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 79; i <= 87; ++i) {
+        tmp = new Wall('q', i, 6, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 57; i <= 74; ++i) {
+        tmp = new Wall('q', i, 26, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+
 
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);
 
-    for (int i = 1; i <= 8; ++i){
-        tmp = new Wall('x', 24, i, false, win);
+    for (int i = 1; i <= 15; ++i){
+        tmp = new Wall('x', 49, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 67, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 75, getmaxy(win)-1-i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for (int i = 1; i <= 10 ; ++i){
+        tmp = new Wall('x',31 , i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+        tmp = new Wall('x',38, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
 
     for (int i = 1; i <= 13 ; ++i){
-        tmp = new Wall('x',8 , i, false, win);
-        interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x',79 , getmaxy(win)-1-i, false, win);
-        interiorWalls->listInsert(interiorWalls, tmp);
-    }
-
-    for (int i = 1; i <= 8 ; ++i){
-        tmp = new Wall('x',8 , i, false, win);
+        tmp = new Wall('x',87, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x',18 , getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
@@ -340,19 +371,22 @@ Wall* template2(WINDOW* win){
 void printTemplate2(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 9, 0, ACS_LTEE);
-        mvwaddch(win, 3, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 15, 0, ACS_LTEE);
+        mvwaddch(win, 22, 0, ACS_LTEE);
+        mvwaddch(win, 9, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 16, 0, ACS_LTEE);
         mvwaddch(win, 25, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 8, 5, ACS_LTEE);
+        mvwaddch(win, 11, 49, ACS_LTEE);
+        mvwaddch(win, 21, 39, ACS_LTEE);
+        mvwaddch(win, 6, 79, ACS_LTEE);
+        mvwaddch(win, 24, 57, ACS_LTEE);
 
 
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 24, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 67, ACS_BTEE);
-        mvwaddch(win, 0, 8, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 79, ACS_BTEE);
-        mvwaddch(win, 0, 8, ACS_TTEE);
+        mvwaddch(win, 0, 49, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 80, ACS_BTEE);
+        mvwaddch(win, 0, 31, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 38, ACS_BTEE);
+        mvwaddch(win, 0, 87, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 18, ACS_BTEE);
 
 
@@ -367,41 +401,57 @@ Wall* template3(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 7; ++i) {
-        tmp = new Wall('q', i, 9, false, win);
+    for (int i = 1; i <= 11; ++i) {
+        tmp = new Wall('q', i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win)-1-i, 5, false, win);
+        tmp = new Wall('q', getmaxx(win)-1-i, 10, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
-    for (int i = 1; i <= 11; ++i) {
-        tmp = new Wall('q', i, 7, false, win);
+    for (int i = 1; i <= 19; ++i) {
+        tmp = new Wall('q', i, 17, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win) - 1 - i,12 , false, win);
+        tmp = new Wall('q', getmaxx(win) - 1 - i,22 , false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+
+    for (int i = 54; i <= 65 ; ++i) {
+        tmp = new Wall('q', i, 9, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+
+    }
+    for (int i = 62; i <= 80; ++i) {
+        tmp = new Wall('q', i, 24, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);
 
-    for (int i = 1; i <= 4; ++i) {
-        tmp = new Wall('x', 29, i, false, win);
+    for (int i = 1; i <= 7; ++i) {
+        tmp = new Wall('x', 89, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 71, getmaxy(win) - 1 - i, false, win);
-        interiorWalls->listInsert(interiorWalls, tmp);
-    }
-    for (int i = 1; i <= 8; ++i){
-        tmp = new Wall('x', 80, i, false, win);
-        interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 16, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 18, getmaxy(win) - 1 - i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 15; ++i){
-        tmp = new Wall('x', 60, i, false, win);
+
+    for (int i = 1; i <= 8; ++i) {
+        tmp = new Wall('x', 37, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for (int i = 1; i <= 13; ++i){
+        tmp = new Wall('x', 41, getmaxy(win)-1-i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for (int i = 1; i <= 16; ++i){
+        tmp = new Wall('x', 53, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 80, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
+
 
     return interiorWalls;
 }
@@ -409,17 +459,19 @@ Wall* template3(WINDOW* win){
 void printTemplate3(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 9, 0, ACS_LTEE);
-        mvwaddch(win, 5, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 7, 0, ACS_LTEE);
-        mvwaddch(win, 12, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 25, 0, ACS_LTEE);
+        mvwaddch(win, 10, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 17, 0, ACS_LTEE);
+        mvwaddch(win, 22, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 19, 62, ACS_LTEE);
+        mvwaddch(win, 9, 54, ACS_LTEE);
 
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 29, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 71, ACS_BTEE);
-        mvwaddch(win, 0, 80, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 16, ACS_BTEE);
-        mvwaddch(win, 0, 60, ACS_TTEE);
+        mvwaddch(win, 0, 89, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 18, ACS_BTEE);
+        mvwaddch(win, 0, 37, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 41, ACS_BTEE);
+        mvwaddch(win, 0, 53, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 80, ACS_BTEE);
 
         while(tmp != NULL){
@@ -433,50 +485,81 @@ Wall* template4(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 15; ++i) {
-        tmp = new Wall('q', i, 7, false, win);
+    for (int i = 1; i <= 17; ++i) {
+        tmp = new Wall('q', i, 15, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win)-1-i, 36, false, win);
+        tmp = new Wall('q', getmaxx(win)-1-i, 24, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 10; ++i) {
-        tmp = new Wall('q', i, 24, false, win);
+    for (int i = 1; i <= 13; ++i) {
+        tmp = new Wall('q', i, 22, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win)-1-i,5, false, win);
+        tmp = new Wall('q', getmaxx(win)-1-i,8, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 70; i <= 80; ++i) {
+        tmp = new Wall('q', i, 21, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+
+    for (int i = 41; i <= 49; ++i) {
+        tmp = new Wall('q', i, 6, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 46; i <= 71; ++i) {
+        tmp = new Wall('q', i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
 
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);
-    for (int i = 1; i <= 11; ++i){
-        tmp = new Wall('x', 32, i, false, win);
+    for (int i = 1; i <= 9; ++i){
+        tmp = new Wall('x', 90, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 20, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 6; ++i){
+    for (int i = 1; i <= 13; ++i){
+        tmp = new Wall('x', 40, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+        tmp = new Wall('x', 46, getmaxy(win)-1-i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 1; i <= 16; ++i){
         tmp = new Wall('x', 64, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 43, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 81, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
 
+    for (int i = 9; i <= 16; ++i) {
+        tmp = new Wall('x', 110, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
     return interiorWalls;
 }
 
 void printTemplate4(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 7, 0, ACS_LTEE);
-        mvwaddch(win, 36, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 24, 0, ACS_LTEE);
-        mvwaddch(win, 5, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 15, 0, ACS_LTEE);
+        mvwaddch(win, 24, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 22, 0, ACS_LTEE);
+        mvwaddch(win, 8, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 21,70 , ACS_LTEE);
+        mvwaddch(win, 6, 41, ACS_LTEE);
+        mvwaddch(win, 25, 46, ACS_LTEE);
+
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 32, ACS_TTEE);
+        mvwaddch(win, 0, 90, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 20, ACS_BTEE);
+        mvwaddch(win, 0, 40, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 46, ACS_BTEE);
         mvwaddch(win, 0, 64, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 43, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 81, ACS_BTEE);
+        mvwaddch(win, 9, 110, ACS_TTEE);
+
 
 
         while(tmp != NULL){

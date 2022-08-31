@@ -13,6 +13,15 @@ void Wall::print(){
     mvwaddch(win, posY, posX, NCURSES_ACS(mapSymbol));
 }
 
+void Wall::printDoor(){
+    mvwaddch(win, posY, posX, mapSymbol);
+
+}
+
+void Wall::printOpenDoor(){
+    mvwaddch(win, posY, posX, ' ');
+}
+
 Wall* Wall::listInsert(Wall* walls, Wall* toIns){
     if(walls == NULL){
         walls = new Wall(toIns->mapSymbol, toIns->posX, toIns->posY, false, toIns->win);
@@ -25,4 +34,8 @@ Wall* Wall::listInsert(Wall* walls, Wall* toIns){
         tmp->next = tmpForSet;
     }
     return walls;
+}
+
+char Wall::getMapSymbol(){
+    return mapSymbol;
 }

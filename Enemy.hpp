@@ -5,7 +5,7 @@
 #ifndef PROGETTO_PROGRAMMAZIONE_ENEMY_HPP
 #define PROGETTO_PROGRAMMAZIONE_ENEMY_HPP
 
-#include "Power.hpp"
+#include "StaticEntity.hpp"
 #include "LivingEntity.hpp"
 
 #pragma once
@@ -22,7 +22,7 @@ public:
     /*
      * Metodo utilizzato per verificare se è possibile creare un Enemy nelle coordinate passate alla funzione
      */
-    bool checkEnemyPosition(int posX, int posY, Wall *interiorWalls, Enemy *enemies, Power *powers, Artifact *artifacts);
+    bool checkEnemyPosition(int posX, int posY, Wall *interiorWalls, Enemy *enemies, StaticEntity* powers, StaticEntity* artifacts);
 
     /*
      * Metodo che descrive l'AI del nemico con i criteri per cui debba seguire il Player nei suoi movimenti

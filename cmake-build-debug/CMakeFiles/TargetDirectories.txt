@@ -1,3 +1,0 @@
-/mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/Users/lollo/Desktop/progetto_programmazione_no_public/cmake-build-debug/CMakeFiles/progetto_programmazione.dir

@@ -1,7 +1,3 @@
-//
-// Created by lollo on 29/04/2022.
-//
-
 #ifndef PROGETTO_PROGRAMMAZIONE_ENTITY_HPP
 #define PROGETTO_PROGRAMMAZIONE_ENTITY_HPP
 

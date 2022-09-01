@@ -1,7 +1,3 @@
-//
-// Created by lollo on 04/07/2022.
-//
-
 #include "Entity.hpp"
 
 Entity::Entity(char mapSymbol, int posX, int posY, bool secret, WINDOW *win) {

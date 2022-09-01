@@ -1,7 +1,3 @@
-//
-// Created by lollo on 13/07/2022.
-//
-
 #ifndef TEMPLATE_MAPPE_WALL_H
 #define TEMPLATE_MAPPE_WALL_H
 
@@ -18,15 +14,23 @@ public:
      * Costruttore della classe Wall
      */
     Wall(char mapSymbol, int posX, int posY, bool secret, WINDOW* win);
+
     /*
      * Metodo utilizzato per stampare il muro sulla mappa tramite la funzione NCURSES_ACS di ncurses
      */
     void print();
 
+    //TODO: commentare
+    void printDoor();
+
+    void printOpenDoor();
+
     /*
      * Metodo utilizzato per l'inserimento in lista dei muri interni
      */
     Wall* listInsert(Wall* walls, Wall* toIns);
+
+    char getMapSymbol();
 };
 
 

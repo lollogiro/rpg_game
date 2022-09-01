@@ -70,7 +70,13 @@ public:
      */
     void modifyLifepoints(int points, bool hit);
 
+    /*
+     * Vari metodi di tipo getter
+     */
+
     bool isValid();
+
+    bool checkKamikazeOnPlayer(LivingEntity* player, LivingEntity* kamikaze);
 
     int getLifePoints();
 };

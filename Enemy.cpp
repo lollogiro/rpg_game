@@ -1,7 +1,3 @@
-//
-// Created by lollo on 05/07/2022.
-//
-
 #include "Enemy.hpp"
 #include <cstdlib>
 
@@ -10,7 +6,7 @@ Enemy::Enemy(char mapSymbol, int posX, int posY, bool secret, WINDOW *win, int l
     this->next = NULL;
 }
 
-bool Enemy::checkEnemyPosition(int posXToCheck, int posYToCheck, Wall* interiorWalls, Enemy *enemies, Power *powers, Artifact *artifacts){
+bool Enemy::checkEnemyPosition(int posXToCheck, int posYToCheck, Wall* interiorWalls, Enemy *enemies, StaticEntity* powers, StaticEntity* artifacts){
     bool check = true;
     while(check && artifacts != NULL){
         if(posXToCheck == artifacts->getPosX() && posYToCheck == artifacts->getPosY()){
@@ -36,6 +32,9 @@ bool Enemy::checkEnemyPosition(int posXToCheck, int posYToCheck, Wall* interiorW
         }
         interiorWalls = interiorWalls->next;
     }
+
+    if(posYToCheck < 12 && posXToCheck < 51) check = false;
+
     return check;
 }
 
@@ -51,13 +50,13 @@ void Enemy::followPlayer(LivingEntity* player, Wall* interiorWalls, int levelNum
             moveRight(false, false, false, interiorWalls); //muove il giocatore a destra e spara
             axisDirection.offset_x = 1;
             axisDirection.offset_y = 0;
-            if(shoot == 1) createBullet(axisDirection, interiorWalls, false, levelNumber);
+            if(shoot == 1 && !secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
         }
         else{
             moveLeft(false, false, interiorWalls); //muove il giocatore a sinistra e spara
             axisDirection.offset_x = -1;
             axisDirection.offset_y = 0;
-            if(shoot == 1) createBullet(axisDirection, interiorWalls, false, levelNumber);
+            if(shoot == 1 && !secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
         }
         //deleteNotValidBullet(interiorWalls);
     }
@@ -66,15 +65,14 @@ void Enemy::followPlayer(LivingEntity* player, Wall* interiorWalls, int levelNum
             moveDown(false, false, interiorWalls); //muove il giocatore sotto e spara
             axisDirection.offset_x = 0;
             axisDirection.offset_y = 1;
-            if(shoot == 1) createBullet(axisDirection, interiorWalls, false, levelNumber);
+            if(shoot == 1 && !secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
         }
         else{
             moveUp(false, false, interiorWalls); //muove il giocatore sopra e spara
             axisDirection.offset_x = 0;
             axisDirection.offset_y = -1;
-            if(shoot == 1) createBullet(axisDirection, interiorWalls, false, levelNumber);
+            if(shoot == 1 && !secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
         }
-        //deleteNotValidBullet(interiorWalls);
     }
     else {
         if (xDiff>yDiff){
@@ -110,43 +108,41 @@ void Enemy::randomMovement(Wall* interiorWalls, int levelNumber) { //muove di 1 
             else moveRight(false, false, false, interiorWalls);
             break;
         case 4:
-            //no movement
-            break;
-        case 5:
-            //no movement
-            break;
-        case 6:
             if (RandomBullet == 0) { //shoots up
                 axisDirection.offset_x = 0;
                 axisDirection.offset_y = -1;
-                createBullet(axisDirection, interiorWalls, false, levelNumber);
+                if(!secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
             }
             if (RandomBullet == 1){ //shoots down
                 axisDirection.offset_x = 0;
                 axisDirection.offset_y = 1;
-                createBullet(axisDirection, interiorWalls, false, levelNumber);
+                if(!secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
             }
             deleteNotValidBullet(interiorWalls);
             break;
-        case 7:
+        case 5:
             if (RandomBullet == 0) { //shoots right
                 axisDirection.offset_x = 1;
                 axisDirection.offset_y = 0;
-                createBullet(axisDirection, interiorWalls, false, levelNumber);
+                if(!secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
             }
             if (RandomBullet == 1){ //shoots left
                 axisDirection.offset_x = -1;
                 axisDirection.offset_y = 0;
-                createBullet(axisDirection, interiorWalls, false, levelNumber);
+                if(!secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
             }
             deleteNotValidBullet(interiorWalls);
+            break;
+        default:
+            //no movement
             break;
     }
 }
 
 void Enemy::moveChooser(LivingEntity* player, Wall* interiorWalls, int levelNumber){ //decide randomicamente tra il movimento random e tra il movimento verso il player
-    int x=rand()%8;
-    if (x<2){
+    //inizialmente 1/4 cosi cosi, 3/16 buono, 6/16 molto buono
+    int x=rand()%16;
+    if (x<6){
         followPlayer(player, interiorWalls, levelNumber);
     }
     else{

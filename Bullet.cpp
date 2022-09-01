@@ -1,7 +1,3 @@
-//
-// Created by lollo on 04/07/2022.
-//
-
 #include "Bullet.hpp"
 
 Bullet::Bullet(char mapSymbol, int posX, int posY, bool secret, WINDOW *win, int damage, int offset_x, int offset_y, Bullet *next)

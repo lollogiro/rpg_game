@@ -1,7 +1,3 @@
-//
-// Created by lollo on 04/07/2022.
-//
-
 #include "LivingEntity.hpp"
 #include "constants.hpp"
 #include <cmath>
@@ -89,7 +85,15 @@ void LivingEntity::createBullet(bulletAxisDirection axisDirection, Wall* interio
         }
         Bullet* tmpForSet = NULL;
         if(player) tmpForSet = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, false, win, 8, axisDirection.offset_x, axisDirection.offset_y, NULL);
-        else tmpForSet = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, false, win, ((int)log2(levelNumber+1)*2), axisDirection.offset_x, axisDirection.offset_y, NULL);
+        else {
+            //controllo per assegnare un danno diverso ai due tipi di nemici che possono sparare
+            if(mapSymbol == 'e') tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, false, win,
+                                   ((int) log2(levelNumber + 1) * 2), axisDirection.offset_x, axisDirection.offset_y,
+                                   NULL);
+            else tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, false, win,
+                                        ((int) log2(levelNumber + 1) * 2)*2, axisDirection.offset_x, axisDirection.offset_y,
+                                        NULL);
+        }
         tmp->next = tmpForSet;
     }
     deleteNotValidBullet(interiorWalls);
@@ -186,6 +190,10 @@ bool LivingEntity::isValid(){
     if(lifePoints > 0){
         return true;
     }else return false;
+}
+
+bool LivingEntity::checkKamikazeOnPlayer(LivingEntity* player, LivingEntity* kamikaze){
+    return player->posX == kamikaze->posX && player->posY == kamikaze->posY && player->secret;
 }
 
 int LivingEntity::getLifePoints(){

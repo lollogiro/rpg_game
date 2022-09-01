@@ -1,7 +1,3 @@
-//
-// Created by lollo on 18/08/2022.
-//
-
 #include "Player.hpp"
 #include "constants.hpp"
 

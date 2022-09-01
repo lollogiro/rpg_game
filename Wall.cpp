@@ -1,7 +1,3 @@
-//
-// Created by lollo on 13/07/2022.
-//
-
 #include <iostream>
 #include "Wall.hpp"
 
@@ -11,6 +7,15 @@ Wall::Wall(char mapSymbol, int posX, int posY, bool secret, WINDOW* win): Entity
 
 void Wall::print(){
     mvwaddch(win, posY, posX, NCURSES_ACS(mapSymbol));
+}
+
+void Wall::printDoor(){
+    mvwaddch(win, posY, posX, mapSymbol);
+
+}
+
+void Wall::printOpenDoor(){
+    mvwaddch(win, posY, posX, ' ');
 }
 
 Wall* Wall::listInsert(Wall* walls, Wall* toIns){
@@ -25,4 +30,8 @@ Wall* Wall::listInsert(Wall* walls, Wall* toIns){
         tmp->next = tmpForSet;
     }
     return walls;
+}
+
+char Wall::getMapSymbol(){
+    return mapSymbol;
 }

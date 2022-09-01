@@ -1,7 +1,3 @@
-//
-// Created by lollo on 13/07/2022.
-//
-
 #include <iostream>
 #include "constants.hpp"
 
@@ -28,7 +24,10 @@ void initializeColors(){
     init_pair(4, COLOR_GREEN, COLOR_BLACK);
 
 }
-void initializeInGameMenu(WINDOW* win, int menuSelected){
+void initializeInGameMenu(WINDOW* win, int menuSelected, bool secret){
+    if(secret) clearSecretWinUserInfo();
+    else clearMainWinUserInfo();
+
     wresize(win, inGameMenuHeight, inGameMenuWidth);
     mvwin(win, (getmaxy(stdscr)-inGameMenuHeight)/3, (getmaxx(stdscr)-inGameMenuWidth)/2);
     box(win, 0, 0);
@@ -83,7 +82,10 @@ void manageInGameMenu(WINDOW* win, int userInput, int &menuSelected, GameState &
     }
 }
 
-void initializeFirstEndMenu(WINDOW* win, int menuSelected){
+void initializeFirstEndMenu(WINDOW* win, int menuSelected, bool secret){
+    if(secret) clearSecretWinUserInfo();
+    else clearMainWinUserInfo();
+
     wresize(win, firstEndMenuWinHeight, firstEndMenuWinWidth);
     mvwin(win, (getmaxy(stdscr)-firstEndMenuWinHeight)/3, (getmaxx(stdscr)-firstEndMenuWinWidth)/2);
     box(win, 0, 0);
@@ -113,10 +115,6 @@ void manageFirstEndMenu(WINDOW* win, int userInput, int &menuSelected, GameState
             switch(menuSelected) {
                 case 1:
                     gs = IN_GAME;
-//                    wclear(win);
-//                    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-//                    wrefresh(win);
-//                    refresh();
                     break;
                 case 2:
                     gs = QUIT;
@@ -130,16 +128,47 @@ void manageFirstEndMenu(WINDOW* win, int userInput, int &menuSelected, GameState
     }
 }
 
-void initializeMainWin(WINDOW* win){
+void clearSecretWinUserInfo(){
+    //togliere scritta "Vai alla stanza principale
+    move(mainWinHeight/2+(getmaxy(stdscr)-mainWinHeight/2)/4*2+2, (getmaxx(stdscr)-mainWinWidth/2)/2+mainWinWidth/4-13);
+    clrtoeol();
+    refresh();
+}
+
+void initializeMainWin(WINDOW* win, int levelNumber){
+    clearSecretWinUserInfo();
     wresize(win, mainWinHeight, mainWinWidth);
-    mvwin(win, (getmaxy(stdscr)-mainWinHeight)/4*2, (getmaxx(stdscr)-mainWinWidth)/2);
+    mvwin(win, (getmaxy(stdscr)-4-mainWinHeight), (getmaxx(stdscr)-mainWinWidth)/2);
     box(win, 0, 0);
+    mvwaddstr(stdscr, getmaxy(stdscr)-4-mainWinHeight-2, (getmaxx(stdscr)/2)-11, "Vai al prossimo livello");
+    mvwaddstr(stdscr, getmaxy(stdscr)-4-mainWinHeight/2, getmaxx(win)+(getmaxx(stdscr)-mainWinWidth)/2+3, "Vai alla stanza segreta");
+    if(levelNumber > 1) mvwaddstr(stdscr, getmaxy(stdscr)-2, (getmaxx(stdscr)/2)-11, "Vai al livello precedente");
+}
+
+void clearMainWinUserInfo(){
+    //togliere scritta "Vai al prossimo livello"
+    move(getmaxy(stdscr)-4-mainWinHeight-2, (getmaxx(stdscr)/2)-11);
+    clrtoeol();
+
+    //togliere scritta "Vai alla stanza segreta"
+    move(getmaxy(stdscr)-4-mainWinHeight/2, mainWinWidth+(getmaxx(stdscr)-mainWinWidth)/2+3);
+    clrtoeol();
+
+    //togliere scritta "Vai al livello precedente"
+    move(getmaxy(stdscr)-5, (getmaxx(stdscr)/2)-11);
+    clrtoeol();
+
+    refresh();
 }
 
 void initializeSecretWin(WINDOW* win){
-    wresize(win, mainWinHeight/2, mainWinWidth/2);
-    mvwin(win, (getmaxy(stdscr)-mainWinHeight/2)/4*2, (getmaxx(stdscr)-mainWinWidth/2)/2);
+    clearMainWinUserInfo();
+
+    wresize(win, mainWinHeight/2, 120/2);
+    mvwin(win, (getmaxy(stdscr)-mainWinHeight/2)/4*2, (getmaxx(stdscr)-60)/2);
     box(win, 0, 0);
+
+    mvwaddstr(stdscr, getmaxy(win)+(getmaxy(stdscr)-mainWinHeight/2)/4*2+2, (getmaxx(stdscr)-mainWinWidth/2)/2+mainWinWidth/4-13, "Vai alla stanza principale");
 }
 
 void initializeInfoWin(WINDOW* winTest, int lifePoints, int levelNumber){
@@ -152,9 +181,10 @@ void initializeInfoWin(WINDOW* winTest, int lifePoints, int levelNumber){
     refresh();
 }
 
-void restartGame(Level* levels, Player* player, WINDOW* win){
-    delete levels;
-    levels = new Level(1, win);
+void restartGame(Level* &levels, Player* player, WINDOW* win){
+    levels->restartLevels(levels);
+    Level* newLevel = new Level(1, win);
+    levels = newLevel;
     player->restartPlayer();
 }
 
@@ -181,6 +211,8 @@ void printTitle(WINDOW* win){
 }
 
 void printGameOver(){
+    clearMainWinUserInfo();
+    clearSecretWinUserInfo();
     const char* t1 = " _______    ________   ___ __ __   ______       ______   __   __   ______   ______\n";
     const char* t2 = "/______/\\  /_______/\\ /__//_//_/\\ /_____/\\     /_____/\\ /_/\\ /_/\\ /_____/\\ /_____/\\\n";
     const char* t3 = "\\::::__\\/__\\::: _  \\ \\\\::\\| \\| \\ \\\\::::_\\/_    \\:::_ \\ \\\\:\\ \\\\ \\ \\\\::::_\\/_\\:::_ \\ \\\n";
@@ -200,89 +232,138 @@ void printGameOver(){
 
 }
 
+void printHigherDoor(WINDOW* win, char doorString[]){
+    int startPosition = ((getmaxx(win)-2)/2)-2;
+    int endPosition = ((getmaxx(win)-2)/2)+3;
+    for (int i = startPosition; i <= endPosition; ++i) {
+        mvwaddch(win, 0, i, doorString[i-startPosition]);
+    }
+}
+
+void printLowerDoor(WINDOW* win, char doorString[]){
+    int startPosition = ((getmaxx(win)-2)/2)-2;
+    int endPosition = ((getmaxx(win)-2)/2)+3;
+    for (int i = startPosition; i <= endPosition; ++i) {
+        mvwaddch(win, getmaxy(win)-1, i, doorString[i-startPosition]);
+    }
+}
+
+void printSecretDoor(WINDOW* win, char doorString[]){
+    int startPosition = ((getmaxy(win)-2)/2)-2;
+    int endPosition = ((getmaxy(win)-2)/2)+3;
+    for (int i = startPosition; i <= endPosition; ++i) {
+        mvwaddch(win, i, getmaxx(win)-1, doorString[i-startPosition]);
+    }
+}
 
 Wall* template1(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 8; ++i) {
-        tmp = new Wall('q', i, 5, false, win);
-        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+    for (int i = 1; i <= 10; ++i) {
         tmp = new Wall('q', getmaxx(win)-1-i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
     for (int i = 1; i <= 6; ++i) {
-        tmp = new Wall('q', i, 25, false, win);
+        tmp = new Wall('q', i, 20, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win)-1-i, 10, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+    for (int i = 1; i <= 30; ++i){
+        tmp = new Wall('q', 20+i, 17, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);
 
-    for (int i = 1; i <= 10; ++i){
-        tmp = new Wall('x', 26, i, false, win);
+    for (int i = 1; i <= 12; ++i){
+        tmp = new Wall('x', 66, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 86, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 60, 3+i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 6; ++i){
-        tmp = new Wall('x', 94, i, false, win);
+    for (int i = 1; i <= 8; ++i){
+        tmp = new Wall('x', 74, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 32, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
-    for (int i = 1; i <= 6; ++i){
-        tmp = new Wall('x', 39, i, false, win);
-        interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 50, getmaxy(win)-1-i, false, win);
+
+    //passaggio per artefatti
+    for(int i = 1; i < 20; ++i){
+        tmp = new Wall('q', i, 11, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
+    for(int i = 26; i < 51; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 1; i < 11; ++i){
+        tmp = new Wall('x', 50, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 20; i < 26; ++i){
+        tmp = new Wall('X', i, 11, false, win);
+        tmp->next = interiorWalls;
+        interiorWalls = tmp;
+    }
+
     return interiorWalls;
 }
 
 void printTemplate1(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 5, 0, ACS_LTEE);
         mvwaddch(win, 25 , getmaxx(win)-1, ACS_RTEE);
         mvwaddch(win, 20, 0, ACS_LTEE);
         mvwaddch(win, 10 , getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 26, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 86, ACS_BTEE);
-        mvwaddch(win, 0, 94, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 66, ACS_BTEE);
+        mvwaddch(win, 0, 74, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 32, ACS_BTEE);
-        mvwaddch(win, 0, 39, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 50, ACS_BTEE);
 
-        while(tmp != NULL){
-            tmp->print();
-            tmp = tmp->next;
+        if(tmp->getMapSymbol() == 'X'){
+            int i = 0;
+            while (tmp != NULL) {
+                if (i < 6) tmp->printDoor();
+                else tmp->print();
+                i++;
+                tmp = tmp->next;
+            }
+        }else{
+            while (tmp != NULL) {
+                tmp->print();
+                tmp = tmp->next;
+            }
         }
+        mvwaddch(win, 11, 0, ACS_LTEE);
+        mvwaddch(win, 0, 50, ACS_TTEE);
+        mvwaddch(win, 11, 50, ACS_LRCORNER);
+
     }
 }
-
-
 
 Wall* template2(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
     for (int i = 1; i <= 6; ++i) {
-        tmp = new Wall('q', i, 3, false, win);
+        tmp = new Wall('q', i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win) - 1 - i, 3, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
     for (int i = 1; i <= 10; ++i) {
-        tmp = new Wall('q', i, 30, false, win);
+        tmp = new Wall('q', i, 20, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win) - 1 - i, 25, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
     for (int i = 1; i <= 14; ++i) {
-        tmp = new Wall('q', i, 10, false, win);
+        tmp = new Wall('q', i+24, 18, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win) - 1 - i, 40, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
@@ -292,17 +373,38 @@ Wall* template2(WINDOW* win){
     tmp = new Wall('x', 0, 0, false, win);
 
     for (int i = 1; i <= 8; ++i){
-        tmp = new Wall('x', 24, i, false, win);
+        tmp = new Wall('x', 24, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 67, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 50, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
 
     for (int i = 1; i <= 13 ; ++i){
-        tmp = new Wall('x',8 , i, false, win);
+        tmp = new Wall('x',65 , i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x',71 , getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    //passaggio per artefatti
+    for(int i = 1; i < 20; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+    for(int i = 26; i < 51; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 1; i < 11; ++i){
+        tmp = new Wall('x', 50, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 20; i < 26; ++i){
+        tmp = new Wall('X', i, 11, false, win);
+        tmp->next = interiorWalls;
+        interiorWalls = tmp;
     }
 
     return interiorWalls;
@@ -311,24 +413,36 @@ Wall* template2(WINDOW* win){
 void printTemplate2(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 9, 0, ACS_LTEE);
+        mvwaddch(win, 20, 0, ACS_LTEE);
         mvwaddch(win, 3, getmaxx(win)-1, ACS_RTEE);
         mvwaddch(win, 30, 0, ACS_LTEE);
         mvwaddch(win, 25, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 10, 0, ACS_LTEE);
+        mvwaddch(win, 25, 0, ACS_LTEE);
         mvwaddch(win, 40, getmaxx(win)-1, ACS_RTEE);
 
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 24, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 67, ACS_BTEE);
-        mvwaddch(win, 0, 8, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 24, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 50, ACS_BTEE);
+        mvwaddch(win, 0, 65, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 71, ACS_BTEE);
 
-
-        while(tmp != NULL){
-            tmp->print();
-            tmp = tmp->next;
+        if(tmp->getMapSymbol() == 'X'){
+            int i = 0;
+            while (tmp != NULL) {
+                if (i < 6) tmp->printDoor();
+                else tmp->print();
+                i++;
+                tmp = tmp->next;
+            }
+        }else{
+            while (tmp != NULL) {
+                tmp->print();
+                tmp = tmp->next;
+            }
         }
+        mvwaddch(win, 11, 0, ACS_LTEE);
+        mvwaddch(win, 0, 50, ACS_TTEE);
+        mvwaddch(win, 11, 50, ACS_LRCORNER);
     }
 }
 
@@ -336,17 +450,21 @@ Wall* template3(WINDOW* win){
     Wall* interiorWalls = NULL;
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
-    for (int i = 1; i <= 7; ++i) {
-        tmp = new Wall('q', i, 9, false, win);
+    for (int i = 1; i <= 10; ++i) {
+        tmp = new Wall('q', i, 20, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win)-1-i, 5, false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+        tmp = new Wall('q', getmaxx(win)/2+i, getmaxy(win)/2+5, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
     for (int i = 1; i <= 11; ++i) {
-        tmp = new Wall('q', i, 7, false, win);
+        tmp = new Wall('q', i, 17, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
-        tmp = new Wall('q', getmaxx(win) - 1 - i,12 , false, win);
+        tmp = new Wall('q', getmaxx(win) - 1 - i,20 , false, win);
+        interiorWalls = tmp->listInsert(interiorWalls, tmp);
+        tmp = new Wall('q', 20+i, getmaxy(win)-1-6, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
@@ -354,16 +472,37 @@ Wall* template3(WINDOW* win){
     tmp = new Wall('x', 0, 0, false, win);
 
     for (int i = 1; i <= 4; ++i) {
-        tmp = new Wall('x', 29, i, false, win);
+        tmp = new Wall('x', 29, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 71, getmaxy(win) - 1 - i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
     }
     for (int i = 1; i <= 8; ++i){
-        tmp = new Wall('x', 80, i, false, win);
+        tmp = new Wall('x', 60, 10+i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 16, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    //passaggio per artefatti
+    for(int i = 1; i < 20; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+    for(int i = 26; i < 51; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 1; i < 11; ++i){
+        tmp = new Wall('x', 50, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 20; i < 26; ++i){
+        tmp = new Wall('X', i, 11, false, win);
+        tmp->next = interiorWalls;
+        interiorWalls = tmp;
     }
 
     return interiorWalls;
@@ -372,20 +511,32 @@ Wall* template3(WINDOW* win){
 void printTemplate3(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 9, 0, ACS_LTEE);
+        mvwaddch(win, 20, 0, ACS_LTEE);
         mvwaddch(win, 5, getmaxx(win)-1, ACS_RTEE);
-        mvwaddch(win, 7, 0, ACS_LTEE);
-        mvwaddch(win, 12, getmaxx(win)-1, ACS_RTEE);
+        mvwaddch(win, 17, 0, ACS_LTEE);
+        mvwaddch(win, 20, getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 29, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 29, ACS_BTEE);
         mvwaddch(win, getmaxy(win)-1, 71, ACS_BTEE);
-        mvwaddch(win, 0, 80, ACS_TTEE);
         mvwaddch(win, getmaxy(win)-1, 16, ACS_BTEE);
 
-        while(tmp != NULL){
-            tmp->print();
-            tmp = tmp->next;
+        if(tmp->getMapSymbol() == 'X'){
+            int i = 0;
+            while (tmp != NULL) {
+                if (i < 6) tmp->printDoor();
+                else tmp->print();
+                i++;
+                tmp = tmp->next;
+            }
+        }else{
+            while (tmp != NULL) {
+                tmp->print();
+                tmp = tmp->next;
+            }
         }
+        mvwaddch(win, 11, 0, ACS_LTEE);
+        mvwaddch(win, 0, 50, ACS_TTEE);
+        mvwaddch(win, 11, 50, ACS_LRCORNER);
     }
 }
 
@@ -394,7 +545,7 @@ Wall* template4(WINDOW* win){
     //MURI ORIZZONTALI
     Wall* tmp = new Wall('q', 0, 0, false, win);
     for (int i = 1; i <= 15; ++i) {
-        tmp = new Wall('q', i, 7, false, win);
+        tmp = new Wall('q', 53+i, 18, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
         tmp = new Wall('q', getmaxx(win)-1-i, 36, false, win);
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
@@ -406,11 +557,10 @@ Wall* template4(WINDOW* win){
         interiorWalls = tmp->listInsert(interiorWalls, tmp);
     }
 
-
     //MURI VERTICALI
     tmp = new Wall('x', 0, 0, false, win);
     for (int i = 1; i <= 11; ++i){
-        tmp = new Wall('x', 32, i, false, win);
+        tmp = new Wall('x', 75, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
         tmp = new Wall('x', 20, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
@@ -418,8 +568,29 @@ Wall* template4(WINDOW* win){
     for (int i = 1; i <= 6; ++i){
         tmp = new Wall('x', 64, i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
-        tmp = new Wall('x', 43, getmaxy(win)-1-i, false, win);
+        tmp = new Wall('x', 53, getmaxy(win)-1-i, false, win);
         interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    //passaggio per artefatti
+    for(int i = 1; i < 20; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+    for(int i = 26; i < 51; ++i){
+        tmp = new Wall('q', i, 11, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 1; i < 11; ++i){
+        tmp = new Wall('x', 50, i, false, win);
+        interiorWalls->listInsert(interiorWalls, tmp);
+    }
+
+    for(int i = 20; i < 26; ++i){
+        tmp = new Wall('X', i, 11, false, win);
+        tmp->next = interiorWalls;
+        interiorWalls = tmp;
     }
 
     return interiorWalls;
@@ -428,20 +599,31 @@ Wall* template4(WINDOW* win){
 void printTemplate4(Wall* tmp, WINDOW* win){
     if(tmp != NULL){
         //MURI ORIZZONTALI x BORDI
-        mvwaddch(win, 7, 0, ACS_LTEE);
         mvwaddch(win, 36, getmaxx(win)-1, ACS_RTEE);
         mvwaddch(win, 24, 0, ACS_LTEE);
         mvwaddch(win, 5, getmaxx(win)-1, ACS_RTEE);
         //MURI VERTICALI x BORDI
-        mvwaddch(win, 0, 32, ACS_TTEE);
+        mvwaddch(win, getmaxy(win)-1, 75, ACS_BTEE);
         mvwaddch(win, getmaxy(win)-1, 20, ACS_BTEE);
         mvwaddch(win, 0, 64, ACS_TTEE);
-        mvwaddch(win, getmaxy(win)-1, 43, ACS_BTEE);
+        mvwaddch(win, getmaxy(win)-1, 53, ACS_BTEE);
 
-
-        while(tmp != NULL){
-            tmp->print();
-            tmp = tmp->next;
+        if(tmp->getMapSymbol() == 'X'){
+            int i = 0;
+            while (tmp != NULL) {
+                if (i < 6) tmp->printDoor();
+                else tmp->print();
+                i++;
+                tmp = tmp->next;
+            }
+        }else{
+            while (tmp != NULL) {
+                tmp->print();
+                tmp = tmp->next;
+            }
         }
+        mvwaddch(win, 11, 0, ACS_LTEE);
+        mvwaddch(win, 0, 50, ACS_TTEE);
+        mvwaddch(win, 11, 50, ACS_LRCORNER);
     }
 }

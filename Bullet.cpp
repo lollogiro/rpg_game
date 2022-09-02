@@ -29,3 +29,4 @@ const bulletAxisDirection &Bullet::getAxisDirection(){
     return axisDirection;
 }
 
+

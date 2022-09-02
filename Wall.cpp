@@ -35,3 +35,4 @@ Wall* Wall::listInsert(Wall* walls, Wall* toIns){
 char Wall::getMapSymbol(){
     return mapSymbol;
 }
+

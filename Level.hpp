@@ -154,6 +154,9 @@ public:
      */
     Level* moveToPrecLevel(Level* levels);
 
+    /*
+     * Metodo utilizzato per resettare la lista levels, eliminando tutti i livelli
+     */
     void restartLevels(Level* levels);
 
     /*
@@ -166,7 +169,9 @@ public:
      */
     bool checkMainWinPowers();
 
-    //TODO: commentare
+    /*
+     * Metodo utilizzato per "aprire" il passaggio all'interno della stanza principale
+     */
     void openSmallRoom();
 
     /*

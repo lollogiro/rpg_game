@@ -53,6 +53,7 @@ public:
      * Metodo di tipo get utilizzato per ritornare l'attributo axisDirection
      */
     const bulletAxisDirection &getAxisDirection();
+
 };
 
 #endif //PROGETTO_PROGRAMMAZIONE_BULLET_HPP

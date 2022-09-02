@@ -58,3 +58,9 @@ void Player::resetPosition(int posX, int posY){
     this->posX = posX;
     this->posY = posY;
 }
+
+void Player::print(){
+    wattron(win, COLOR_PAIR(playerColor));
+    Entity::print();
+    wattroff(win, COLOR_PAIR(playerColor));
+}

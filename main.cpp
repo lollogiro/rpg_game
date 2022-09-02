@@ -8,7 +8,6 @@
 #include "Level.hpp"
 #include "constants.hpp"
 
-using namespace std;
 
 int main() {
     //inizializzazione variabili della libreria curses/ncurses
@@ -123,9 +122,7 @@ int main() {
                     afterRestart = false;
                     player->resetPosition(mainWinWidth/2-1, mainWinHeight-4);
                 }
-                wattron(win, COLOR_PAIR(playerColor));
                 player->print();
-                wattroff(win, COLOR_PAIR(playerColor));
                 levels->printEntities(secret);
 
                 levels->manageNextLevelAccess();
@@ -133,9 +130,7 @@ int main() {
                 levels->manageSecretRoomAccess();
             }else{
                 initializeSecretWin(win);
-                wattron(win, COLOR_PAIR(playerColor));
                 player->print();
-                wattroff(win, COLOR_PAIR(playerColor));
                 levels->printEntities(secret);
                 printLowerDoor(win, openedDoor);
             }
@@ -168,9 +163,10 @@ int main() {
             levels->checkCollisions(player, secret);
             gs = levels->deleteUselessEntities(player);
 
-            //controllo che verifica se il livello attuale è stato passato, collezionando tutti i poteri
+            //controllo che verifica se il livello attuale è stato passato
             levels->checkPassedLevel();
 
+            //controllo che verifica se è possibile aprire il passaggio
             if(levels->checkMainWinPowers() && !levels->isSmallRoomOpened()){
                 levels->openSmallRoom();
             }

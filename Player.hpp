@@ -45,6 +45,11 @@ public:
      * Metodo utilizzato per modificare la posizione del player
      */
     void resetPosition(int posX, int posY);
+
+    /*
+     * Metodo per stampare il player con il suo colore
+     */
+    void print();
 };
 
 

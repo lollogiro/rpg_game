@@ -117,16 +117,13 @@ void printLowerDoor(WINDOW* win, char doorString[]);
 void printSecretDoor(WINDOW * win, char doorString[]);
 
 /*
- * Metodo che serve a creare il primo template di muri interni
+ * Metodo che serve a creare i template di muri interni e a stamparli
  */
+
 Wall* template1(WINDOW* win);
 
-/*
- * Metodo che serve a stampare il primo template di muri interni
- */
 void printTemplate1(Wall* tmp1, WINDOW* win);
 
-//TODO: commentare
 
 Wall* template2(WINDOW* win);
 

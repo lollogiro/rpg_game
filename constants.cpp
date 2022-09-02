@@ -57,17 +57,11 @@ void manageInGameMenu(WINDOW* win, int userInput, int &menuSelected, GameState &
             switch(menuSelected){
                 case 1:
                     gs = IN_GAME;
-                    wclear(win);
-                    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-                    wrefresh(win);//INDISPENSABILE!!!
-                    refresh();
+                    resetWindow(win);
                     break;
                 case 2:
                     gs = RESTART;
-                    wclear(win);
-                    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-                    wrefresh(win);//INDISPENSABILE!!!
-                    refresh();
+                    resetWindow(win);
                     menuSelected = 1;
                     break;
                 case 3:
@@ -135,27 +129,28 @@ void clearSecretWinUserInfo(){
     refresh();
 }
 
+//TODO: cambiare gli 8 con 4 e i 6 con 2 per la consegna
 void initializeMainWin(WINDOW* win, int levelNumber){
     clearSecretWinUserInfo();
     wresize(win, mainWinHeight, mainWinWidth);
-    mvwin(win, (getmaxy(stdscr)-4-mainWinHeight), (getmaxx(stdscr)-mainWinWidth)/2);
+    mvwin(win, (getmaxy(stdscr)-8-mainWinHeight), (getmaxx(stdscr)-mainWinWidth)/2);
     box(win, 0, 0);
-    mvwaddstr(stdscr, getmaxy(stdscr)-4-mainWinHeight-2, (getmaxx(stdscr)/2)-11, "Vai al prossimo livello");
-    mvwaddstr(stdscr, getmaxy(stdscr)-4-mainWinHeight/2, getmaxx(win)+(getmaxx(stdscr)-mainWinWidth)/2+3, "Vai alla stanza segreta");
-    if(levelNumber > 1) mvwaddstr(stdscr, getmaxy(stdscr)-2, (getmaxx(stdscr)/2)-11, "Vai al livello precedente");
+    mvwaddstr(stdscr, getmaxy(stdscr)-8-mainWinHeight-2, (getmaxx(stdscr)/2)-11, "Vai al prossimo livello");
+    mvwaddstr(stdscr, getmaxy(stdscr)-8-mainWinHeight/2, getmaxx(win)+(getmaxx(stdscr)-mainWinWidth)/2+3, "Vai alla stanza segreta");
+    if(levelNumber > 1) mvwaddstr(stdscr, getmaxy(stdscr)-6, (getmaxx(stdscr)/2)-11, "Vai al livello precedente");
 }
 
 void clearMainWinUserInfo(){
     //togliere scritta "Vai al prossimo livello"
-    move(getmaxy(stdscr)-4-mainWinHeight-2, (getmaxx(stdscr)/2)-11);
+    move(getmaxy(stdscr)-8-mainWinHeight-2, (getmaxx(stdscr)/2)-11);
     clrtoeol();
 
     //togliere scritta "Vai alla stanza segreta"
-    move(getmaxy(stdscr)-4-mainWinHeight/2, mainWinWidth+(getmaxx(stdscr)-mainWinWidth)/2+3);
+    move(getmaxy(stdscr)-8-mainWinHeight/2, mainWinWidth+(getmaxx(stdscr)-mainWinWidth)/2+3);
     clrtoeol();
 
     //togliere scritta "Vai al livello precedente"
-    move(getmaxy(stdscr)-5, (getmaxx(stdscr)/2)-11);
+    move(getmaxy(stdscr)-6, (getmaxx(stdscr)/2)-11);
     clrtoeol();
 
     refresh();

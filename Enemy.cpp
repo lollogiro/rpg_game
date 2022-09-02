@@ -58,7 +58,6 @@ void Enemy::followPlayer(LivingEntity* player, Wall* interiorWalls, int levelNum
             axisDirection.offset_y = 0;
             if(shoot == 1 && !secret) createBullet(axisDirection, interiorWalls, false, levelNumber);
         }
-        //deleteNotValidBullet(interiorWalls);
     }
     else if(xDiff==0){
         if(yDiff<=0){
@@ -139,8 +138,7 @@ void Enemy::randomMovement(Wall* interiorWalls, int levelNumber) { //muove di 1 
     }
 }
 
-void Enemy::moveChooser(LivingEntity* player, Wall* interiorWalls, int levelNumber){ //decide randomicamente tra il movimento random e tra il movimento verso il player
-    //inizialmente 1/4 cosi cosi, 3/16 buono, 6/16 molto buono
+void Enemy::moveChooser(LivingEntity* player, Wall* interiorWalls, int levelNumber){
     int x=rand()%16;
     if (x<6){
         followPlayer(player, interiorWalls, levelNumber);

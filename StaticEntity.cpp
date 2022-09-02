@@ -7,7 +7,7 @@ StaticEntity::StaticEntity(char mapSymbol, int posX, int posY, bool secret, WIND
 bool StaticEntity::checkStaticEntityPosition(int posXToCheck, int posYToCheck, Wall* interiorWalls, StaticEntity *powers, StaticEntity *artifacts){
     bool check = true;
     while(check && artifacts != NULL){
-        if(posXToCheck == artifacts->getPosX() && posYToCheck == artifacts->getPosY()){
+        if(posXToCheck == artifacts->posX && posYToCheck == artifacts->posY){
             check=false;
         }
         artifacts = artifacts->next;
@@ -33,3 +33,4 @@ bool StaticEntity::checkStaticEntityPosition(int posXToCheck, int posYToCheck, W
 int StaticEntity::getGivenLifePoints(){
     return givenLifePoints;
 }
+

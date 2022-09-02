@@ -71,12 +71,20 @@ public:
     void modifyLifepoints(int points, bool hit);
 
     /*
-     * Vari metodi di tipo getter
+     * Metodo per vedere se l'entità è ancora valida
      */
 
     bool isValid();
 
+    /*
+     * Metodo per verificare se il nemico di tipo kamikaze è nella stessa posizione del player
+     */
+
     bool checkKamikazeOnPlayer(LivingEntity* player, LivingEntity* kamikaze);
+
+    /*
+     * Metodo di tipo getter
+     */
 
     int getLifePoints();
 };

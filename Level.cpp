@@ -39,20 +39,17 @@ void Level::manageSecretRoomAccess(){
 }
 
 void Level::initializeLevel(){
-    for (int i = 0; i < 2; ++i) {
-        initializeArtifact(false);
-    }
-    for (int i = 0; i < 2; i++){
-        StaticEntity* tmpArt = new StaticEntity('A' ,mainWinWidth/6*2, mainWinHeight/6*(i+1), true, win, ((int)log2(levelNumber)+1), NULL);
-        tmpArt->next = artifacts;
-        artifacts = tmpArt;
-    }
-    for (int i = 0; i < 2; i++){
-        StaticEntity* tmpArt = new StaticEntity('A' ,15*(i+1), 5, false, win, ((int)log2(levelNumber)+1), NULL);
-        tmpArt->next = artifacts;
-        artifacts = tmpArt;
-    }
+    initializeInteriorWalls();
 
+    for (int i = 0; i < 2; ++i) {
+        initializeArtifact(false, false, 0);
+    }
+    for (int i = 0; i < 2; i++){
+        initializeArtifact(false, true, i);
+    }
+    for (int i = 0; i < 2; i++){
+        initializeArtifact(true, false, i);
+    }
     for (int i = 0; i < (levelNumber/4)+2; ++i) {
         initializePower(false);
     }
@@ -71,7 +68,6 @@ void Level::initializeLevel(){
     kamikaze->next = enemies;
     enemies = kamikaze;
 
-    initializeInteriorWalls();
 }
 
 void Level::initializeInteriorWalls(){
@@ -93,41 +89,49 @@ void Level::initializeInteriorWalls(){
     }
 }
 
-void Level::initializeArtifact(bool secret){//TODO: aggiungere parametro smallRoom-> qui cambiare criteri per checkStaticEntity position
+void Level::initializeArtifact(bool secret, bool smallRoom, int inc){
     int posYNew = 0, posXNew = 0;
-    do{
-       posYNew = rand() % (getmaxy(win) - 2) + 1;
-       posXNew = rand() % (getmaxx(win) - 2) + 1;
-    }while(!artifacts->checkStaticEntityPosition(posXNew, posYNew, walls, NULL, artifacts) || (posYNew < 11 && posXNew < 45));
-    StaticEntity* tmp = new StaticEntity('A', posXNew, posYNew, secret, win, ((int)log2(levelNumber)+1), NULL);
+    if(!secret && !smallRoom){
+        do {
+            posYNew = rand() % (getmaxy(win) - 2) + 1;
+            posXNew = rand() % (getmaxx(win) - 2) + 1;
+        } while (!artifacts->checkStaticEntityPosition(posXNew, posYNew, walls, NULL, artifacts));
+    }
+    StaticEntity* tmp;
+    if(!secret && !smallRoom) tmp = new StaticEntity('a', posXNew, posYNew, secret, win, ((int)log2(levelNumber))+1, NULL);
+    else if(!secret && smallRoom) tmp = new StaticEntity('A' ,15*(inc+1), 5, false, win, ((int)log2(levelNumber)+1)*2, NULL);
+    else tmp = new StaticEntity('A' ,mainWinWidth/6*2, mainWinHeight/6*(inc+1), true, win, ((int)log2(levelNumber)+1)*2, NULL);
     tmp->next = artifacts;
     artifacts = tmp;
 }
 
 void Level::initializePower(bool secret){
     int posYNew = 0, posXNew = 0;
-    do{
-        posYNew = rand() % (getmaxy(win) - 2) + 1;
-        posXNew = rand() % (getmaxx(win) - 2) + 1;
-    }while(!powers->checkStaticEntityPosition(posXNew, posYNew, walls, powers, artifacts)  || (posYNew < 11 && posXNew < 45));
-    StaticEntity* tmp = new StaticEntity('P' ,posXNew, posYNew, secret, win, 30, NULL);
+    if(!secret){
+        do {
+            posYNew = rand() % (getmaxy(win) - 2) + 1;
+            posXNew = rand() % (getmaxx(win) - 2) + 1;
+        } while (!powers->checkStaticEntityPosition(posXNew, posYNew, walls, powers, artifacts));
+    }
+    StaticEntity* tmp;
+    if(!secret) tmp = new StaticEntity('P' ,posXNew, posYNew, secret, win, 30, NULL);
+    else tmp = new StaticEntity('P', mainWinWidth/4, mainWinHeight/4, true, win, 30, NULL);
     tmp->next = powers;
     powers = tmp;
 }
 
 void Level::initializeEnemy(bool muchStronger){
     int posXNew=rand()%(getmaxx(win)-2)+1, posYNew=0;
-    do{
-        if(posXNew<(getmaxx(win)-2)/3){
-            posYNew=rand()%((getmaxy(win)-2)/2)+1;
-        }
-        else{
-            posYNew=rand()%(getmaxy(win)-2)+1;
-        }
-    }while((!enemies->checkEnemyPosition(posXNew, posYNew, walls, enemies, powers, artifacts) || (posYNew < 12 && posXNew < 46)) && !muchStronger);
+    if(!muchStronger){
+        do {
+            if (posXNew < (getmaxx(win) - 2) / 3) {
+                posYNew = rand() % ((getmaxy(win) - 2) / 2) + 1;
+            } else {
+                posYNew = rand() % (getmaxy(win) - 2) + 1;
+            }
+        } while (!enemies->checkEnemyPosition(posXNew, posYNew, walls, enemies, powers, artifacts));
+    }
     Enemy* tmp;
-
-    //TODO: se muchStronger passare un flag alla funzione check affinché venga stampato nella smallRoom
     if(muchStronger) tmp = new Enemy('E' ,22, 1, false, win, ((int)log2(levelNumber)+2)*levelNumber*2, NULL, NULL);
     else tmp = new Enemy('e' ,posXNew, posYNew, false, win, ((int)log2(levelNumber)+2)*levelNumber, NULL, NULL);
     tmp->next = enemies;
@@ -363,6 +367,14 @@ Level* Level::moveToPrecLevel(Level *levels){
     levels = levels->precLevel;
     if(levels->precLevel == NULL) box(win, 0, 0);
     return levels;
+}
+
+void Level::restartLevels(Level* levels){
+    while(levels->precLevel != NULL){
+        levels = levels->precLevel;
+        delete levels->nextLevel;
+        levels->nextLevel = NULL;
+    }
 }
 
 void Level::checkPassedLevel(){

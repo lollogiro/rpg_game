@@ -20,15 +20,24 @@ public:
      */
     void print();
 
-    //TODO: commentare
+    /*
+     * Metodo utilizzato per stampare la porta chiusa interna alla stanza principale
+     */
     void printDoor();
 
+    /*
+     * Metodo utilizzato per stampare la porta aperta interna alla stanza principale
+     */
     void printOpenDoor();
 
     /*
      * Metodo utilizzato per l'inserimento in lista dei muri interni
      */
     Wall* listInsert(Wall* walls, Wall* toIns);
+
+    /*
+     * Metodo di tipo getter
+     */
 
     char getMapSymbol();
 };

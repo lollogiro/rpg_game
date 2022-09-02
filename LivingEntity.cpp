@@ -76,21 +76,21 @@ void LivingEntity::moveRight(bool openedDoor, bool levelGreaterThanOne, bool sec
 
 void LivingEntity::createBullet(bulletAxisDirection axisDirection, Wall* interiorWalls, bool player, int levelNumber){
     if(bullets == NULL){
-        if(player) bullets = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, false, win, 8, axisDirection.offset_x, axisDirection.offset_y, NULL);
-        else bullets = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, false, win, ((int)log2(levelNumber)+1)*2, axisDirection.offset_x, axisDirection.offset_y, NULL);
+        if(player) bullets = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, secret, win, 8, axisDirection.offset_x, axisDirection.offset_y, NULL);
+        else bullets = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, secret, win, ((int)log2(levelNumber)+1)*2, axisDirection.offset_x, axisDirection.offset_y, NULL);
     }else{
         Bullet* tmp = bullets;
         while(tmp->next != NULL){
             tmp = tmp->next;
         }
         Bullet* tmpForSet = NULL;
-        if(player) tmpForSet = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, false, win, 8, axisDirection.offset_x, axisDirection.offset_y, NULL);
+        if(player) tmpForSet = new Bullet('~', posX+axisDirection.offset_x, posY+axisDirection.offset_y, secret, win, 8, axisDirection.offset_x, axisDirection.offset_y, NULL);
         else {
             //controllo per assegnare un danno diverso ai due tipi di nemici che possono sparare
-            if(mapSymbol == 'e') tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, false, win,
+            if(mapSymbol == 'e') tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, secret, win,
                                    ((int) log2(levelNumber + 1) * 2), axisDirection.offset_x, axisDirection.offset_y,
                                    NULL);
-            else tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, false, win,
+            else tmpForSet = new Bullet('~', posX + axisDirection.offset_x, posY + axisDirection.offset_y, secret, win,
                                         ((int) log2(levelNumber + 1) * 2)*2, axisDirection.offset_x, axisDirection.offset_y,
                                         NULL);
         }
@@ -144,7 +144,7 @@ void LivingEntity::deleteNotValidBullet(Wall* interiorWalls){
 void LivingEntity::printEntityBullets(){
     Bullet* tmp = bullets;
     while(tmp != NULL){
-        tmp->printBullet();
+        if(tmp->checkSecret(secret)) tmp->printBullet();
         tmp = tmp->next;
     }
     delete tmp;

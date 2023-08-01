@@ -1,4 +1,4 @@
-# Progetto di programmazione
+# Progetto di programmazione (Gioco RPG)
 
 Per compilare il programma è necessario eseguire il makefile presente nella cartella ed in seguito eseguire il file **rpg** creato durante la compilazione.
 
